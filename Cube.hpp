@@ -38,7 +38,7 @@ public:
 
     std::string to_string();
 
-    bool equal(Cube* other);
+    bool equals(Cube* other);
 
     // operations on the "cube"
     int* get_front();
