@@ -16,3 +16,7 @@ bool HashTable::contains(Cube* cube){
   else
     return false;
 }
+
+int HashTable::size(){
+  return this->table.size();
+}
