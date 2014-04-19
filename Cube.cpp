@@ -263,7 +263,7 @@ void Cube::clock(char chr) {
     after[2] = before[1];
     after[3] = before[2];
 
-    //edges
+    // edges
     after[4] = before[7];
     after[5] = before[4];
     after[6] = before[5];
@@ -288,7 +288,7 @@ void Cube::counter(char chr) {
     after[2] = before[3];
     after[3] = before[0];
 
-    //edges
+    // edges
     after[4] = before[5];
     after[5] = before[6];
     after[6] = before[7];
@@ -313,7 +313,7 @@ void Cube::hundred(char chr) {
     after[2] = before[0];
     after[3] = before[1];
 
-    //edges
+    // edges
     after[4] = before[6];
     after[5] = before[7];
     after[6] = before[4];
