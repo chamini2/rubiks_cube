@@ -1,6 +1,4 @@
-#include <iostream>     // std::cout, std::cin, std::endl
-#include <queue>        // std::queue, std::push, std::pop, std::front
-#include <string>       // std::string, std:to_string
+#include "generate.h"
 
 class Cube {
 /*
@@ -528,19 +526,15 @@ void Cube::switch_set(char chr, int* face) {
 
 std::string Cube::to_string() {
     std::string str = "corners\t";
-    // std::cout << "corners\t";
 
     for (int i = 0; i < 8; ++i) {
-        str += " " + std::to_string(this->corners[i]);
-        // std::cout << " " << this->corners[i];
+        str += " " + int_to_string(this->corners[i]);
     }
 
     str += "\nedges\t";
-    // std::cout << "\nedges\t";
 
     for (int i = 0; i < 12; ++i) {
-        str += " " + std::to_string(this->edges[i]);
-        // std::cout << " " << this->edges[i];
+        str += " " + int_to_string(this->edges[i]);
     }
 
     std::cout << std::endl << "---------------" << std::endl;
