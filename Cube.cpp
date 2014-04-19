@@ -52,7 +52,7 @@ Cube* Cube::clone() {
     return copy;
 }
 
-bool Cube::equal(Cube* other) {
+bool Cube::equals(Cube* other) {
 
     for (int i = 0; i < 8; ++i)
     {
