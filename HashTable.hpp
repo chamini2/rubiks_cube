@@ -8,6 +8,7 @@ public:
   ~HashTable();
   void insert(Cube*);
   bool contains(Cube*);
+  int size();
   
 private:
   std::unordered_map<std::string,Cube*> table;
