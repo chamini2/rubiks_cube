@@ -1,10 +1,13 @@
-main: clean generate extra
-	g++-4.2 extra.o generate.o -o $@
+top: clean extra Cube main
+	g++-4.2 extra.o Cube.o main.o -o main
 
-generate: generate.cpp
-	g++-4.2 -c generate.cpp
+main: main.cpp main.hpp
+	g++-4.2 -c main.cpp
 
-extra: extra.cpp
+Cube: Cube.cpp Cube.hpp
+	g++-4.2 -c Cube.cpp
+
+extra: extra.cpp extra.hpp
 	g++-4.2 -c extra.cpp
 
 clean:
