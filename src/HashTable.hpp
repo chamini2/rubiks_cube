@@ -8,6 +8,7 @@ public:
 
     void insert(Cube*);
     bool contains(Cube*);
+    bool empty();
     int size();
 
 private:

@@ -1,10 +1,9 @@
-#include "main.hpp"
+#include "HashTable.hpp"
 
 int main(int argc, char const *argv[])
 {
     std::queue<Cube*> queue;
     Cube* cube = new Cube;
-
     HashTable hash;
 
     cube->next_corners(&queue);
