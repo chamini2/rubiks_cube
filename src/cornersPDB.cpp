@@ -1,19 +1,13 @@
 #include "HashTable.hpp"
-#include <tuple>
+#include <fstream>
 
-int main(int argc, char const *argv[])
-{
-    BFS();
-    return 0;
-}
-
-void BFS() {
+void BFS(std::ofstream *file) {
     std::queue<std::tuple<Cube*,int>> queue;
     HashTable closed;
 
     Cube* cube = new Cube;
-    int level = 0;
-    auto node = std::make_tuple(cube, level)
+    int level = 0, last_level = -1;
+    auto node = std::make_tuple(cube, level);
 
     queue.push(node);
 
@@ -21,12 +15,27 @@ void BFS() {
         std::tie (cube, level) = queue.front();
         queue.pop();
 
-        if (!closed.contains(cube)) {
+        // Esto también tiene segmentation fault 11 porque OBVIAMENTE (no?) no está en el hastbale
+        // if (!closed.contains(cube)) {
             closed.insert(cube);
 
-            std::cout << cube.printable() << " " << level;
+            if (level != last_level) {
+                last_level = level;
+                std::cout << "LEVEL " << last_level << std::endl << std::flush;
+            }
 
-            cube->next_corners(&queue);
-        }
+            (*file) << cube->corners_to_string() << " [" << level << "]\n";
+
+            cube->next_corners(&queue, level);
+        // }
     }
+}
+
+int main(int argc, char const *argv[]) {
+    std::ofstream file ("../pdbs/cPDB.txt");
+
+    BFS(&file);
+    file.close();
+
+    return 0;
 }

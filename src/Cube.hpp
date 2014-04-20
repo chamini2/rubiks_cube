@@ -1,5 +1,6 @@
 #include <iostream>     // std::cout, std::cin, std::endl
 #include <queue>        // std::queue, std::push, std::pop, std::front
+#include <tuple>
 #include "extra.hpp"    // int_to_string
 
 class Cube {
@@ -36,6 +37,8 @@ public:
     Cube* clone();
 
     std::string to_string();
+    std::string corners_to_string();
+    std::string edges_to_string();
     std::string printable();
 
     bool equals(Cube* other);
@@ -46,7 +49,7 @@ public:
     void hundred(char);
 
     // for the PDB
-    void next_corners(std::queue<Cube*>*);
+    void next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level);
 
 private:
     int *corners;

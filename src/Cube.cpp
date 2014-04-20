@@ -323,7 +323,7 @@ void Cube::hundred(char chr) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Cube::next_corners(std::queue<Cube*> *cubes) {
+void Cube::next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level) {
     Cube* cube;
     char faces[] = {'f','b','r','l','t','d'};
 
@@ -332,29 +332,29 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
 
             cube = this->clone();
             cube->clock(faces[i+1]);
-            cubes->push(cube);
+            cubes->push(std::make_tuple(cube,level+1));
 
             cube = this->clone();
             cube->counter(faces[i+1]);
-            cubes->push(cube);
+            cubes->push(std::make_tuple(cube,level+1));
 
             cube = this->clone();
             cube->hundred(faces[i+1]);
-            cubes->push(cube);
+            cubes->push(std::make_tuple(cube,level+1));
 
             if (faces[i] != last) {
 
                 cube = this->clone();
                 cube->clock(faces[i]);
-                cubes->push(cube);
+                cubes->push(std::make_tuple(cube,level+1));
 
                 cube = this->clone();
                 cube->counter(faces[i]);
-                cubes->push(cube);
+                cubes->push(std::make_tuple(cube,level+1));
 
                 cube = this->clone();
                 cube->hundred(faces[i]);
-                cubes->push(cube);
+                cubes->push(std::make_tuple(cube,level+1));
             }
         }
     }
@@ -405,11 +405,21 @@ void Cube::switch_set(char chr, int* face) {
 ////////////////////////////////////////////////////////////////////////////////
 
 std::string Cube::to_string() {
+    return this->corners_to_string() + this->edges_to_string();
+}
+
+std::string Cube::corners_to_string() {
     std::string str = "";
 
     for (int i = 0; i < 8; ++i) {
         str += " " + int_to_string(this->corners[i]);
     }
+
+    return str;
+}
+
+std::string Cube::edges_to_string() {
+    std::string str = "";
 
     for (int i = 0; i < 12; ++i) {
         str += " " + int_to_string(this->edges[i]);
@@ -431,7 +441,5 @@ std::string Cube::printable() {
         str += " " + int_to_string(this->edges[i]);
     }
 
-    str+= "\n---------------\n";
-
-    return str;
+    return str + "\n";
 }
