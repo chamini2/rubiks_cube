@@ -30,11 +30,6 @@ Cube::Cube() {
     last = ' ';
 }
 
-Cube::~Cube() {
-    delete[] corners;
-    delete[] edges;
-}
-
 Cube* Cube::clone() {
 
     Cube* copy = new Cube;
@@ -332,7 +327,7 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
     Cube* cube;
     char faces[] = {'f','b','r','l','t','d'};
 
-    for (int i = 0; i < 3; i += 2) {
+    for (int i = 0; i < 6; i += 2) {
         if (faces[i+1] != last) {
 
             cube = this->clone();
@@ -363,35 +358,6 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
             }
         }
     }
-
-    // if (last != 't' && last != 'd') {
-    //     cube = this->clone();
-    //     cube->clock('t');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->counter('t');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->hundred('t');
-    //     cubes->push(cube);
-    // }
-
-    // if (last != 'd') {
-    //     cube = this->clone();
-    //     cube->clock('d');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->counter('d');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->hundred('d');
-    //     cubes->push(cube);
-    // }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -439,6 +405,20 @@ void Cube::switch_set(char chr, int* face) {
 ////////////////////////////////////////////////////////////////////////////////
 
 std::string Cube::to_string() {
+    std::string str = "";
+
+    for (int i = 0; i < 8; ++i) {
+        str += " " + int_to_string(this->corners[i]);
+    }
+
+    for (int i = 0; i < 12; ++i) {
+        str += " " + int_to_string(this->edges[i]);
+    }
+
+    return str;
+}
+
+std::string Cube::printable() {
     std::string str = "corners\t";
 
     for (int i = 0; i < 8; ++i) {
@@ -451,7 +431,7 @@ std::string Cube::to_string() {
         str += " " + int_to_string(this->edges[i]);
     }
 
-    std::cout << std::endl << "---------------" << std::endl;
+    str+= "\n---------------\n";
 
-    return str + "\n";
+    return str;
 }

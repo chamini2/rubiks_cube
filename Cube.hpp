@@ -31,12 +31,11 @@ class Cube {
 public:
     // Constructor
     Cube();
-    // Destructor
-    ~Cube();
 
     Cube* clone();
 
     std::string to_string();
+    std::string printable();
 
     bool equals(Cube* other);
 
