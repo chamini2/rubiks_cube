@@ -1,13 +1,13 @@
 #include "HashTable.hpp"
 
-HashTable::HashTable(){}
+    HashTable::HashTable() {}
 
-void HashTable::insert(Cube* cube){
+void HashTable::insert(Cube* cube) {
     std::string key = cube->to_string();
-    this->table.emplace(key,cube);
+    this->table.emplace(key, cube);
 }
 
-bool HashTable::contains(Cube* cube){
+bool HashTable::contains(Cube* cube) {
     std::string key = cube->to_string();
     Cube* cube_obtained = this->table[key];
 
@@ -18,6 +18,6 @@ bool HashTable::contains(Cube* cube){
         return false;
 }
 
-int HashTable::size(){
+int HashTable::size() {
     return this->table.size();
 }

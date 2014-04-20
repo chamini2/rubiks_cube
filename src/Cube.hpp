@@ -29,44 +29,44 @@ class Cube {
 
  */
 
-public:
-    // Constructor
-    Cube();
+  public:
+      // Constructor
+      Cube();
 
-    Cube* clone();
+      Cube* clone();
 
-    std::string to_string();
-    std::string printable();
+      std::string to_string();
+      std::string printable();
 
-    bool equals(Cube* other);
+      bool equals(Cube* other);
 
-    // operations on the cube
-    void clock(char);
-    void counter(char);
-    void hundred(char);
+      // operations on the cube
+      void clock(char);
+      void counter(char);
+      void hundred(char);
 
-    // for the PDB
-    void next_corners(std::queue<Cube*>*);
+      // for the PDB
+      void next_corners(std::queue<Cube*>*);
 
-private:
-    int *corners;
-    int *edges;
-    char last;
+  private:
+      int *corners;
+      int *edges;
+      char last;
 
-    int* switch_get(char);
-    void switch_set(char, int*);
+      int* switch_get(char);
+      void switch_set(char, int*);
 
-    // getters and setters for the faces of the cube
-    int* get_front();
-    void set_front(int*);
-    int* get_back();
-    void set_back(int*);
-    int* get_right();
-    void set_right(int*);
-    int* get_left();
-    void set_left(int*);
-    int* get_top();
-    void set_top(int*);
-    int* get_down();
-    void set_down(int*);
+      // getters and setters for the faces of the cube
+      int* get_front();
+      void set_front(int*);
+      int* get_back();
+      void set_back(int*);
+      int* get_right();
+      void set_right(int*);
+      int* get_left();
+      void set_left(int*);
+      int* get_top();
+      void set_top(int*);
+      int* get_down();
+      void set_down(int*);
 };
