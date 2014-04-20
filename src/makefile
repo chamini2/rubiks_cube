@@ -7,15 +7,15 @@ pdb: clean extra HashTable Cube pdb.o
 ########################################
 
 main.o: main.cpp
-	g++ -c -std=c++0x -stdlib=libc++ main.cpp
+	g++ -c -std=c++0x main.cpp
 
 pdb.o: pdb.cpp
-	g++ -c -std=c++0x -stdlib=libc++ pdb.cpp
+	g++ -c -std=c++0x pdb.cpp
 
 ########################################
 
 Cube: Cube.cpp Cube.hpp
-	g++ -c -std=c++0x -stdlib=libc++ Cube.cpp
+	g++ -c -std=c++0x Cube.cpp
 
 HashTable: HashTable.cpp HashTable.hpp
 	g++ -c -std=gnu++11 HashTable.cpp

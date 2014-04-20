@@ -16,13 +16,13 @@ int main(int argc, char const *argv[])
     std::cout << "LEVEL 0\n\n" << cube->printable() << "LEVEL 1\n\n";
 
     for (int i = 0; i < queue.size(); ++i) {
-        std::tie (cube, level) = queue.front();
+        node = std::tie(cube, level) = queue.front();
         queue.pop();
 
         std::cout << cube->printable();
 
         hash.insert(cube);
-        queue.push(cube);
+        queue.push(node);
     }
 
     std::cout << hash.size() << std::endl;
