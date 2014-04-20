@@ -1,7 +1,23 @@
 #include "HashTable.hpp"
 #include <fstream>
 
-void BFS(std::ofstream *file) {
+void BFS_corners(std::ofstream *file);
+
+void BFS_edges(std::ofstream *file);
+
+int main(int argc, char const *argv[]) {
+    std::ofstream file ("../pdbs/cPDB.txt");
+
+    BFS_corners(&file);
+    file.close();
+
+    file.open("../pdbs/ePDB.txt");
+    //BFS_edges(&file);
+    file.close();
+    return 0;
+}
+
+void BFS_corners(std::ofstream *file) {
     std::queue<std::tuple<Cube*,int>> queue;
     HashTable closed;
 
@@ -29,13 +45,4 @@ void BFS(std::ofstream *file) {
             cube->next_corners(&queue, level);
         // }
     }
-}
-
-int main(int argc, char const *argv[]) {
-    std::ofstream file ("../pdbs/cPDB.txt");
-
-    BFS(&file);
-    file.close();
-
-    return 0;
 }
