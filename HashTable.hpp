@@ -4,12 +4,12 @@
 class HashTable {
 
 public:
-  HashTable();
-  ~HashTable();
-  void insert(Cube*);
-  bool contains(Cube*);
-  int size();
-  
+    HashTable();
+
+    void insert(Cube*);
+    bool contains(Cube*);
+    int size();
+
 private:
-  std::unordered_map<std::string,Cube*> table;
+    std::unordered_map<std::string,Cube*> table;
 };
