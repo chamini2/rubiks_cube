@@ -122,7 +122,7 @@ void Cube::set_back(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_right() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[1];
     face[1] = corners[2];
@@ -152,7 +152,7 @@ void Cube::set_right(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_left() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[3];
     face[1] = corners[0];
@@ -182,7 +182,7 @@ void Cube::set_left(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_top() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[3];
     face[1] = corners[2];
@@ -212,7 +212,7 @@ void Cube::set_top(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_down() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[4];
     face[1] = corners[5];
@@ -263,7 +263,6 @@ void Cube::clock(char chr) {
 
     last = chr;
     delete[] before;
-
 }
 
 void Cube::counter(char chr) {
@@ -288,7 +287,6 @@ void Cube::counter(char chr) {
 
     last = chr;
     delete[] before;
-
 }
 
 void Cube::hundred(char chr) {
@@ -313,18 +311,16 @@ void Cube::hundred(char chr) {
 
     last = chr;
     delete[] before;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Cube::next_corners(std::queue<Cube*> *cubes) {
     Cube* cube;
-    char faces[] = {'f','b','r','l','t','d'};
+    char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
 
     for (int i = 0; i < 6; i += 2) {
         if (faces[i+1] != last) {
-
             cube = this->clone();
             cube->clock(faces[i+1]);
             cubes->push(cube);
@@ -338,7 +334,6 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
             cubes->push(cube);
 
             if (faces[i] != last) {
-
                 cube = this->clone();
                 cube->clock(faces[i]);
                 cubes->push(cube);
@@ -358,7 +353,6 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
 ////////////////////////////////////////////////////////////////////////////////
 
 int* Cube::switch_get(char chr) {
-
     switch (chr) {
         case 'f':
             return this->get_front();
@@ -378,7 +372,6 @@ int* Cube::switch_get(char chr) {
 }
 
 void Cube::switch_set(char chr, int* face) {
-
     switch (chr) {
         case 'f':
             return this->set_front(face);

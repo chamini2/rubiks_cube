@@ -41,9 +41,9 @@ class Cube {
       bool equals(Cube* other);
 
       // operations on the cube
-      void clock(char);
-      void counter(char);
-      void hundred(char);
+      void clock(char chr);
+      void counter(char chr);
+      void hundred(char chr);
 
       // for the PDB
       void next_corners(std::queue<Cube*>*);
@@ -53,20 +53,20 @@ class Cube {
       int *edges;
       char last;
 
-      int* switch_get(char);
-      void switch_set(char, int*);
+      int* switch_get(char chr);
+      void switch_set(char chr, int* face);
 
       // getters and setters for the faces of the cube
       int* get_front();
-      void set_front(int*);
+      void set_front(int* face);
       int* get_back();
-      void set_back(int*);
+      void set_back(int* face);
       int* get_right();
-      void set_right(int*);
+      void set_right(int* face);
       int* get_left();
-      void set_left(int*);
+      void set_left(int* face);
       int* get_top();
-      void set_top(int*);
+      void set_top(int* face);
       int* get_down();
-      void set_down(int*);
+      void set_down(int* face);
 };

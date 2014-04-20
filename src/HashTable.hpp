@@ -5,8 +5,8 @@ class HashTable {
     public:
         HashTable();
 
-        void insert(Cube*);
-        bool contains(Cube*);
+        void insert(Cube* cube);
+        bool contains(Cube* cube);
         int size();
 
     private:
