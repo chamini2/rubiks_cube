@@ -1,7 +1,8 @@
 #include <iostream>     // std::cout, std::cin, std::endl
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include "extra.hpp"      // int_to_string
-
+#ifndef _CUBE_HEADER_H
+#define _CUBE_HEADER_H
 class Cube {
 /*
     Vamos a definir que un cubo tiene las siguientes caras,
@@ -70,3 +71,4 @@ private:
     void switch_set(char, int*);
 
 };
+#endif
