@@ -1,7 +1,6 @@
 #include "HashTable.hpp"
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
     std::queue<std::tuple<Cube*,int>> queue;
     HashTable hash;
 
