@@ -33,11 +33,12 @@ int main(int argc, char const *argv[])
         else
             std::cout << "no\n";
     }
-    
+
+    // Aquí hay un segmentation fault 11 porque no está en el hashtable
     if (hash.contains(new Cube))
-      std::cout << "NO DEBERIA ESTAR";
+        std::cout << "NO DEBERIA ESTAR";
     else
-      std::cout << "BIEN";
+        std::cout << "BIEN";
 
     return 0;
 }

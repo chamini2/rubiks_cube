@@ -72,3 +72,4 @@ class Cube {
       void set_down(int* face);
 };
 #endif
+
