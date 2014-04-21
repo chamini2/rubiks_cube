@@ -1,0 +1,10 @@
+#include <sstream>
+#include <string>
+
+<<<<<<< HEAD
+
+std::string int_to_string(int number);
+// Node* make_root_node(Cube* cube);
+=======
+std::string int_to_string(int number);
+>>>>>>> master

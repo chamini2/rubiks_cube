@@ -51,7 +51,7 @@ void BFS_corners(std::ofstream *file) {
 
                 node = std::make_tuple(cube, level+1);
                 queue.push(node);
-            }            
+            }
         // }
     }
 }
