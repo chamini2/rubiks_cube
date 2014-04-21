@@ -1,8 +1,8 @@
 top: clean extra Cube main HashTable
 	g++ extra.o HashTable.o Cube.o main.o -o main
 
-main: main.cpp
-	g++ -c main.cpp
+main: main.cpp main.hpp
+	g++ -std=gnu++11 -c main.cpp
 
 Cube: Cube.cpp Cube.hpp
 	g++ -c Cube.cpp
@@ -16,4 +16,3 @@ extra: extra.cpp extra.hpp
 clean:
 	@rm main 2> /dev/null || true
 	@rm *.o  2> /dev/null || true
-
