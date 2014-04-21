@@ -9,12 +9,16 @@ void HashTable::insert(Cube* cube){
 
 bool HashTable::contains(Cube* cube){
   std::string key = cube->to_string();
-  Cube* cube_obtained;
-  cube_obtained = this->table[key]; 
-  if (cube->equals(cube_obtained))
-    return true;
-  else
+  auto rango = this->table.equal_range(key);
+  if (rango.first == this->table.end())
     return false;
+  else
+    while (rango.first != rango.second) {
+      if (rango.first->second->to_string() == key)
+	return true;
+      rango.first++;
+    }
+  return false;
 }
 
 int HashTable::size(){
