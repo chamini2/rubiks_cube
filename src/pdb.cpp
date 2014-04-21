@@ -6,8 +6,9 @@ void BFS_corners(std::ofstream *file);
 void BFS_edges(std::ofstream *file);
 
 int main(int argc, char const *argv[]) {
-    std::ofstream file ("../pdbs/cPDB.txt");
+    std::ofstream file;
 
+    file.open("../pdbs/cPDB.txt");
     BFS_corners(&file);
     file.close();
 

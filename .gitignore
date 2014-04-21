@@ -15,3 +15,5 @@
 *.o
 main
 pdb
+
+pdbs/*.txt
