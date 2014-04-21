@@ -1,18 +1,17 @@
 #include "Cube.hpp"
 
 Cube::Cube() {
+    corners = new int[8];
+    edges   = new int[12];
 
-    corners = new int [8];
-    edges   = new int [12];
-
-    corners[0] = 0; // white  - blue  - orange
-    corners[1] = 1; // white  - blue  - red
-    corners[2] = 2; // yellow - blue  - red
-    corners[3] = 3; // yellow - blue  - orange
-    corners[4] = 4; // white  - green - orange
-    corners[5] = 5; // white  - green - red
-    corners[6] = 6; // yellow - green - red
-    corners[7] = 7; // yellow - green - orange
+    corners[0] = 0;  // white  - blue  - orange
+    corners[1] = 1;  // white  - blue  - red
+    corners[2] = 2;  // yellow - blue  - red
+    corners[3] = 3;  // yellow - blue  - orange
+    corners[4] = 4;  // white  - green - orange
+    corners[5] = 5;  // white  - green - red
+    corners[6] = 6;  // yellow - green - red
+    corners[7] = 7;  // yellow - green - orange
 
     edges[0]  = 0;  // blue   - white
     edges[1]  = 1;  // blue   - red
@@ -24,19 +23,13 @@ Cube::Cube() {
     edges[7]  = 7;  // yellow - orange
     edges[8]  = 8;  // white  - green
     edges[9]  = 9;  // green  - red
-    edges[10] = 10; // yellow - green
-    edges[11] = 11; // green  - orange
+    edges[10] = 10;  // yellow - green
+    edges[11] = 11;  // green  - orange
 
     last = ' ';
 }
 
-Cube::~Cube() {
-    delete[] corners;
-    delete[] edges;
-}
-
 Cube* Cube::clone() {
-
     Cube* copy = new Cube;
 
     for (int i = 0; i < 8; ++i) {
@@ -53,15 +46,12 @@ Cube* Cube::clone() {
 }
 
 bool Cube::equals(Cube* other) {
-
-    for (int i = 0; i < 8; ++i)
-    {
+    for (int i = 0; i < 8; ++i) {
         if (this->corners[i] != other->corners[i])
             return false;
     }
 
-    for (int i = 0; i < 12; ++i)
-    {
+    for (int i = 0; i < 12; ++i) {
         if (this->edges[i] != other->edges[i])
             return false;
     }
@@ -72,7 +62,7 @@ bool Cube::equals(Cube* other) {
 ////////////////////////////////////////////////////////////////////////////////
 
 int* Cube::get_front() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[0];
     face[1] = corners[1];
@@ -102,7 +92,7 @@ void Cube::set_front(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_back() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[2];
     face[1] = corners[3];
@@ -132,7 +122,7 @@ void Cube::set_back(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_right() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[1];
     face[1] = corners[2];
@@ -162,7 +152,7 @@ void Cube::set_right(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_left() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[3];
     face[1] = corners[0];
@@ -192,7 +182,7 @@ void Cube::set_left(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_top() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[3];
     face[1] = corners[2];
@@ -222,7 +212,7 @@ void Cube::set_top(int *face) {
 ////////////////////////////////////////
 
 int* Cube::get_down() {
-    int* face = new int [8];
+    int* face = new int[8];
 
     face[0] = corners[4];
     face[1] = corners[5];
@@ -263,7 +253,7 @@ void Cube::clock(char chr) {
     after[2] = before[1];
     after[3] = before[2];
 
-    //edges
+    // edges
     after[4] = before[7];
     after[5] = before[4];
     after[6] = before[5];
@@ -273,7 +263,6 @@ void Cube::clock(char chr) {
 
     last = chr;
     delete[] before;
-
 }
 
 void Cube::counter(char chr) {
@@ -288,7 +277,7 @@ void Cube::counter(char chr) {
     after[2] = before[3];
     after[3] = before[0];
 
-    //edges
+    // edges
     after[4] = before[5];
     after[5] = before[6];
     after[6] = before[7];
@@ -298,7 +287,6 @@ void Cube::counter(char chr) {
 
     last = chr;
     delete[] before;
-
 }
 
 void Cube::hundred(char chr) {
@@ -313,7 +301,7 @@ void Cube::hundred(char chr) {
     after[2] = before[0];
     after[3] = before[1];
 
-    //edges
+    // edges
     after[4] = before[6];
     after[5] = before[7];
     after[6] = before[4];
@@ -323,18 +311,16 @@ void Cube::hundred(char chr) {
 
     last = chr;
     delete[] before;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Cube::next_corners(std::queue<Cube*> *cubes) {
     Cube* cube;
-    char faces[] = {'f','b','r','l','t','d'};
+    char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
 
-    for (int i = 0; i < 3; i += 2) {
+    for (int i = 0; i < 6; i += 2) {
         if (faces[i+1] != last) {
-
             cube = this->clone();
             cube->clock(faces[i+1]);
             cubes->push(cube);
@@ -348,7 +334,6 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
             cubes->push(cube);
 
             if (faces[i] != last) {
-
                 cube = this->clone();
                 cube->clock(faces[i]);
                 cubes->push(cube);
@@ -363,41 +348,11 @@ void Cube::next_corners(std::queue<Cube*> *cubes) {
             }
         }
     }
-
-    // if (last != 't' && last != 'd') {
-    //     cube = this->clone();
-    //     cube->clock('t');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->counter('t');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->hundred('t');
-    //     cubes->push(cube);
-    // }
-
-    // if (last != 'd') {
-    //     cube = this->clone();
-    //     cube->clock('d');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->counter('d');
-    //     cubes->push(cube);
-
-    //     cube = this->clone();
-    //     cube->hundred('d');
-    //     cubes->push(cube);
-    // }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 int* Cube::switch_get(char chr) {
-
     switch (chr) {
         case 'f':
             return this->get_front();
@@ -417,7 +372,6 @@ int* Cube::switch_get(char chr) {
 }
 
 void Cube::switch_set(char chr, int* face) {
-
     switch (chr) {
         case 'f':
             return this->set_front(face);
@@ -439,6 +393,20 @@ void Cube::switch_set(char chr, int* face) {
 ////////////////////////////////////////////////////////////////////////////////
 
 std::string Cube::to_string() {
+    std::string str = "";
+
+    for (int i = 0; i < 8; ++i) {
+        str += " " + int_to_string(this->corners[i]);
+    }
+
+    for (int i = 0; i < 12; ++i) {
+        str += " " + int_to_string(this->edges[i]);
+    }
+
+    return str;
+}
+
+std::string Cube::printable() {
     std::string str = "corners\t";
 
     for (int i = 0; i < 8; ++i) {
@@ -451,7 +419,7 @@ std::string Cube::to_string() {
         str += " " + int_to_string(this->edges[i]);
     }
 
-    std::cout << std::endl << "---------------" << std::endl;
+    str+= "\n---------------\n";
 
-    return str + "\n";
+    return str;
 }

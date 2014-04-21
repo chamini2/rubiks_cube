@@ -2,6 +2,10 @@
 
 HashTable::HashTable(){}
 
+HashTable::~HashTable(){
+  this->table.~unordered_multimap();
+}
+
 void HashTable::insert(Cube* cube){
   std::string key = cube->to_string();
   this->table.emplace(key,cube);
