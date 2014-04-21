@@ -34,7 +34,7 @@ void BFS_corners(std::ofstream *file) {
 
         // Esto también tiene segmentation fault 11 porque OBVIAMENTE (no?) no
         // está en el hastable
-        // if (!closed.contains(cube)) {
+        if (!closed.contains(cube)) {
             closed.insert(cube);
 
             if (level != last_level) {
@@ -53,6 +53,6 @@ void BFS_corners(std::ofstream *file) {
                 node = std::make_tuple(cube, level+1);
                 queue.push(node);
             }
-        // }
+        }
     }
 }

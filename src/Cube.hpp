@@ -2,75 +2,77 @@
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
 #include "extra.hpp"    // int_to_string
-
+#ifndef CUBE_H
+#define CUBE_H
 class Cube {
 /*
-    Vamos a definir que un cubo tiene las siguientes caras,
-    que comienzan de los colores:
-    front  = white
-    back   = yellow
-    left   = orange
-    right  = red
-    top    = blue
-    down   = green
+Vamos a definir que un cubo tiene las siguientes caras,
+que comienzan de los colores:
+front  = white
+back   = yellow
+left   = orange
+right  = red
+top    = blue
+down   = green
 
-           ____________
-          /   /   /   /\
-         /___/___/___/  \
-        /   / T /   /\  /\
-      L/___/___/___/  \/  \B
-      /   /   /   /\  /\  /\
-     /___/___/___/  \/  \/  \
-     \   \   \   \  /\R /\  /
-      \___\___\___\/  \/  \/
-       \   \ F \   \  /\  /
-        \___\___\___\/  \/D
-         \   \   \   \  /
-          \___\___\___\/
+____________
+/   /   /   /\
+/___/___/___/  \
+/   / T /   /\  /\
+L/___/___/___/  \/  \B
+/   /   /   /\  /\  /\
+/___/___/___/  \/  \/  \
+\   \   \   \  /\R /\  /
+\___\___\___\/  \/  \/
+\   \ F \   \  /\  /
+\___\___\___\/  \/D
+\   \   \   \  /
+\___\___\___\/
 
- */
+*/
 
-public:
-    // Constructor
-    Cube();
+    public:
+        // Constructor
+        Cube();
 
-    Cube* clone();
+        Cube* clone();
 
-    std::string to_string();
-    std::string corners_to_string();
-    std::string edges_to_string();
-    std::string printable();
+        std::string to_string();
+        std::string corners_to_string();
+        std::string edges_to_string();
+        std::string printable();
 
-    bool equals(Cube* other);
+        bool operator==(Cube* other);
 
-    // operations on the cube
-    void clock(char);
-    void counter(char);
-    void hundred(char);
+        // operations on the cube
+        void clock(char);
+        void counter(char);
+        void hundred(char);
 
-    // for the PDB
-    void next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level);
-    std::queue<Cube*> succ_corners();
+        // for the PDB
+        void next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level);
+        std::queue<Cube*> succ_corners();
 
-private:
-    int *corners;
-    int *edges;
-    char last;
+    private:
+        int *corners;
+        int *edges;
+        char last;
 
-    int* switch_get(char);
-    void switch_set(char, int*);
+        int* switch_get(char);
+        void switch_set(char, int*);
 
-    // getters and setters for the faces of the cube
-    int* get_front();
-    void set_front(int*);
-    int* get_back();
-    void set_back(int*);
-    int* get_right();
-    void set_right(int*);
-    int* get_left();
-    void set_left(int*);
-    int* get_top();
-    void set_top(int*);
-    int* get_down();
-    void set_down(int*);
+        // getters and setters for the faces of the cube
+        int* get_front();
+        void set_front(int*);
+        int* get_back();
+        void set_back(int*);
+        int* get_right();
+        void set_right(int*);
+        int* get_left();
+        void set_left(int*);
+        int* get_top();
+        void set_top(int*);
+        int* get_down();
+        void set_down(int*);
 };
+#endif
