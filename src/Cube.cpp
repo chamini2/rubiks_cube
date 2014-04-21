@@ -46,7 +46,7 @@ Cube* Cube::clone() {
 }
 
 // Change this operator depending on PDB or IDA*
-bool Cube::operator==(Cube* other) {
+bool Cube::equals(Cube* other) {
     // for corners PDB
     for (int i = 0; i < 8; ++i) {
         if (this->corners[i] != other->corners[i])

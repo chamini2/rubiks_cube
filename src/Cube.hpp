@@ -42,7 +42,7 @@ L/___/___/___/  \/  \B
         std::string edges_to_string();
         std::string printable();
 
-        bool operator==(Cube* other);
+        bool equals(Cube* other);
 
         // operations on the cube
         void clock(char);

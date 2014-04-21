@@ -7,7 +7,7 @@ void popular(){
   std::queue<Cube*> cubes;
   Cube* cube = new Cube;
   
-  cube->next_corners(&cubes);  
+  cubes = cube->succ_corners();  
   elementos_prueba = cubes.size();
   int t  = cubes.size();
   for (int i = 0; i < t; ++i) {
@@ -22,7 +22,7 @@ void probar(){
   std::queue<Cube*> cubes;
   Cube* cube = new Cube;
 
-  cube->next_corners(&cubes);
+  cubes = cube->succ_corners();  
 
   std::cout << "Se generaron los mismos cubos para probar si todos estan contenidos." << std::endl;
   std::cout << cubes.size() << " cubos generados para probar." << std::endl;

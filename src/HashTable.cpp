@@ -15,7 +15,7 @@ bool HashTable::contains(Cube* cube){
         return false;
     else
         while (rango.first != rango.second) {
-            if (rango.first->second == cube)
+	  if (rango.first->second->equals(cube))
                 return true;
 
             rango.first++;
