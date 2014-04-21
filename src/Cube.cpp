@@ -324,8 +324,7 @@ void Cube::hundred(char chr) {
 ////////////////////////////////////////////////////////////////////////////////
 
 void Cube::next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level) {
-    Cube* cube;
-    char faces[] = {'f','b','r','l','t','d'};
+Cube* cube;     char faces[] = {'f','b','r','l','t','d'};
 
     for (int i = 0; i < 6; i += 2) {
         if (faces[i+1] != last) {
@@ -360,7 +359,49 @@ void Cube::next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level) {
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/*
+ *  Dejo succ_cornes muy parecido a next_corners hasta que borremos el
+ *  otro.
+ */
+
+std::queue<Cube*> Cube::succ_corners() {
+    std::queue<Cube*> queue;
+    Cube* cube;
+    char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
+
+    for (int i = 0; i < 6; i += 2) {
+        if (faces[i+1] != last) {
+            cube = this->clone();
+            cube->clock(faces[i+1]);
+            queue.push(cube);
+
+            cube = this->clone();
+            cube->counter(faces[i+1]);
+            queue.push(cube);
+
+            cube = this->clone();
+            cube->hundred(faces[i+1]);
+            queue.push(cube);
+
+            if (faces[i] != last) {
+                cube = this->clone();
+                cube->clock(faces[i]);
+                queue.push(cube);
+
+                cube = this->clone();
+                cube->counter(faces[i]);
+                queue.push(cube);
+
+                cube = this->clone();
+                cube->hundred(faces[i]);
+                queue.push(cube);
+            }
+        }
+    }
+    return queue;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 
 int* Cube::switch_get(char chr) {
 

@@ -50,6 +50,7 @@ public:
 
     // for the PDB
     void next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level);
+    std::queue<Cube*> succ_corners();
 
 private:
     int *corners;
