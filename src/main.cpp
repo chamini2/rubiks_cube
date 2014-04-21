@@ -5,7 +5,7 @@ int main(int argc, char const *argv[]) {
     HashTable hash;
 
     Cube* cube = new Cube;
-    int level = 0;
+    int level = 0, size;
     auto node = std::make_tuple(cube, level);
 
     cube->next_corners(&queue, 0);
@@ -14,7 +14,8 @@ int main(int argc, char const *argv[]) {
 
     std::cout << "LEVEL 0\n\n" << cube->printable() << "LEVEL 1\n\n";
 
-    for (int i = 0; i < queue.size(); ++i) {
+    size = queue.size();
+    for (int i = 0; i < size; ++i) {
         node = std::tie(cube, level) = queue.front();
         queue.pop();
 

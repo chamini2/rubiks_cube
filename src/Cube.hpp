@@ -2,39 +2,40 @@
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
 #include "extra.hpp"    // int_to_string
+
 #ifndef CUBE_H
 #define CUBE_H
+
 class Cube {
 /*
-Vamos a definir que un cubo tiene las siguientes caras,
-que comienzan de los colores:
-front  = white
-back   = yellow
-left   = orange
-right  = red
-top    = blue
-down   = green
+    Vamos a definir que un cubo tiene las siguientes caras,
+    que comienzan de los colores:
+        front = white
+        back  = yellow
+        left  = orange
+        right = red
+        top   = blue
+        down  = green
 
-____________
-/   /   /   /\
-/___/___/___/  \
-/   / T /   /\  /\
-L/___/___/___/  \/  \B
-/   /   /   /\  /\  /\
-/___/___/___/  \/  \/  \
-\   \   \   \  /\R /\  /
-\___\___\___\/  \/  \/
-\   \ F \   \  /\  /
-\___\___\___\/  \/D
-\   \   \   \  /
-\___\___\___\/
+          ____________
+         /   /   /   /\
+        /___/___/___/  \
+       /   / T /   /\  /\
+     L/___/___/___/  \/  \B
+     /   /   /   /\  /\  /\
+    /___/___/___/  \/  \/  \
+    \   \   \   \  /\R /\  /
+     \___\___\___\/  \/  \/
+      \   \ F \   \  /\  /
+       \___\___\___\/  \/D
+        \   \   \   \  /
+         \___\___\___\/
 
 */
 
     public:
         // Constructor
         Cube();
-
         Cube* clone();
 
         std::string to_string();
@@ -42,16 +43,14 @@ L/___/___/___/  \/  \B
         std::string edges_to_string();
         std::string printable();
 
-        bool operator==(Cube* other);
+        bool equals(Cube* other);
 
         // operations on the cube
         void clock(char);
         void counter(char);
         void hundred(char);
 
-        // for the PDB
-        void next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level);
-        std::queue<Cube*> succ_corners();
+        std::queue<Cube*> succ();
 
     private:
         int *corners;

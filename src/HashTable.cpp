@@ -3,23 +3,39 @@
 HashTable::HashTable(){}
 
 void HashTable::insert(Cube* cube){
-    std::string key = cube->to_string();
+    // IDA*
+    // std::string key = cube->to_string();
+
+    // corner PDB
+    std::string key = cube->corners_to_string();
+
+    // edge PDB
+    // std::string key = cube->edges_to_string();
     this->table.emplace(key,cube);
 }
 
 bool HashTable::contains(Cube* cube){
-    std::string key = cube->to_string();
-    auto rango = this->table.equal_range(key);
+    // IDA*
+    // std::string key = cube->to_string();
 
-    if (rango.first == this->table.end())
+    // corner PDB
+    std::string key = cube->corners_to_string();
+
+    // edge PDB
+    // std::string key = cube->edges_to_string();
+    auto range = this->table.equal_range(key);
+
+    if (range.first == this->table.end()){
         return false;
-    else
-        while (rango.first != rango.second) {
-            if (rango.first->second == cube)
+    } else {
+        while (range.first != range.second) {
+            if (range.first->second->equals(cube)){
                 return true;
+            }
 
-            rango.first++;
+            range.first++;
         }
+    }
 
     return false;
 }

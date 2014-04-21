@@ -23,7 +23,7 @@ void BFS_corners(std::ofstream *file) {
     HashTable closed;
 
     Cube* cube = new Cube;
-    int level = 0, last_level = -1;
+    int size, level = 0, last_level = -1;
     auto node = std::make_tuple(cube, level);
 
     queue.push(node);
@@ -32,8 +32,6 @@ void BFS_corners(std::ofstream *file) {
         std::tie (cube, level) = queue.front();
         queue.pop();
 
-        // Esto también tiene segmentation fault 11 porque OBVIAMENTE (no?) no
-        // está en el hastable
         if (!closed.contains(cube)) {
             closed.insert(cube);
 
@@ -45,8 +43,10 @@ void BFS_corners(std::ofstream *file) {
             (*file) << cube->corners_to_string() << " [" << level << "]\n";
 
             /*cube->next_corners(&queue, level);*/
-            std::queue<Cube*> succ = cube->succ_corners();
-            for (int i = 0; i < succ.size(); ++i) {
+            std::queue<Cube*> succ = cube->succ();
+            size = succ.size();
+
+            for (int i = 0; i < size; ++i) {
                 cube = succ.front();
                 succ.pop();
 

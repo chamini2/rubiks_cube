@@ -46,7 +46,7 @@ Cube* Cube::clone() {
 }
 
 // Change this operator depending on PDB or IDA*
-bool Cube::operator==(Cube* other) {
+bool Cube::equals(Cube* other) {
     // for corners PDB
     for (int i = 0; i < 8; ++i) {
         if (this->corners[i] != other->corners[i])
@@ -317,48 +317,7 @@ void Cube::hundred(char chr) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Cube::next_corners(std::queue<std::tuple<Cube*,int>> *cubes, int level) {
-Cube* cube;     char faces[] = {'f','b','r','l','t','d'};
-
-    for (int i = 0; i < 6; i += 2) {
-        if (faces[i+1] != last) {
-
-            cube = this->clone();
-            cube->clock(faces[i+1]);
-            cubes->push(std::make_tuple(cube,level+1));
-
-            cube = this->clone();
-            cube->counter(faces[i+1]);
-            cubes->push(std::make_tuple(cube,level+1));
-
-            cube = this->clone();
-            cube->hundred(faces[i+1]);
-            cubes->push(std::make_tuple(cube,level+1));
-
-            if (faces[i] != last) {
-
-                cube = this->clone();
-                cube->clock(faces[i]);
-                cubes->push(std::make_tuple(cube,level+1));
-
-                cube = this->clone();
-                cube->counter(faces[i]);
-                cubes->push(std::make_tuple(cube,level+1));
-
-                cube = this->clone();
-                cube->hundred(faces[i]);
-                cubes->push(std::make_tuple(cube,level+1));
-            }
-        }
-    }
-}
-
-/*
- *  Dejo succ_cornes muy parecido a next_corners hasta que borremos el
- *  otro.
- */
-
-std::queue<Cube*> Cube::succ_corners() {
+std::queue<Cube*> Cube::succ() {
     std::queue<Cube*> queue;
     Cube* cube;
     char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
