@@ -7,6 +7,7 @@ class HashTable {
     public:
         HashTable();
         ~HashTable();
+
         void insert(Cube*);
         bool contains(Cube*);
         bool empty();
