@@ -42,7 +42,8 @@ void BFS_corners(std::ofstream *file) {
             }
 
             if (level == 3) {
-                break;
+	      delete cube; 
+	      break;
             }
 
             (*file) << cube->corners_to_string() << " [" << level << "]\n";
