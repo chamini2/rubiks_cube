@@ -6,6 +6,10 @@ void print_array(int *array, int n);
 void unrank(int n, int r, int *array);
 
 int main(int argc, char const *argv[]) {
+    if (argc != 3) {
+        std::cout << "Wrong number of arguments: 2 expected." << std::endl;
+        return -1;
+    }
     int n = atoi(argv[1]);
     int rank = atoi(argv[2]);
     int *array = new int[n];
