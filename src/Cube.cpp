@@ -4,14 +4,14 @@ Cube::Cube() {
     corners = new int[8];
     edges   = new int[12];
 
-    corners[0] = 0; // white  - blue  - orange
-    corners[1] = 1; // white  - blue  - red
-    corners[2] = 2; // yellow - blue  - red
-    corners[3] = 3; // yellow - blue  - orange
-    corners[4] = 4; // white  - green - orange
-    corners[5] = 5; // white  - green - red
-    corners[6] = 6; // yellow - green - red
-    corners[7] = 7; // yellow - green - orange
+    corners[0] = 33; // white  - blue  - orange
+    corners[1] = 34; // white  - blue  - red
+    corners[2] = 35; // yellow - blue  - red
+    corners[3] = 36; // yellow - blue  - orange
+    corners[4] = 37; // white  - green - orange
+    corners[5] = 38; // white  - green - red
+    corners[6] = 39; // yellow - green - red
+    corners[7] = 40; // yellow - green - orange
 
     edges[0]  = 0;  // blue   - white
     edges[1]  = 1;  // blue   - red
@@ -241,77 +241,131 @@ void Cube::set_down(int *face) {
     edges[11]  = face[7];
 }
 
+int swap(int cubie, char axis) {
+    switch (axis) {
+        // Axis C
+        case 'f':
+        case 'b':
+            // Axis C
+            if (32 <= cubie && cubie < 64) {
+            // Axis B
+            } else if (64 <= cubie && cubie < 128) {
+                cubie -= 64;
+                cubie += 128;
+            // Axis A
+            } else if (64 <= cubie && cubie < 128) {
+                cubie -= 128;
+                cubie += 64;
+            }
+
+        // Axis B
+        case 'r':
+        case 'l':
+            // Axis C
+            if (32 <= cubie && cubie < 64) {
+                cubie -= 32;
+                cubie += 128;
+            // Axis B
+            } else if (64 <= cubie && cubie < 128) {
+            // Axis A
+            } else if (64 <= cubie && cubie < 128) {
+                cubie -= 128;
+                cubie += 32;
+            }
+
+        // Axis A
+        case 't':
+        case 'd':
+            // Axis C
+            if (32 <= cubie && cubie < 64) {
+                cubie -= 32;
+                cubie += 64;
+            // Axis B
+            } else if (64 <= cubie && cubie < 128) {
+                cubie -= 64;
+                cubie += 32;
+            // Axis A
+            } else if (64 <= cubie && cubie < 128) {
+            }
+
+        default:
+            throw -1;
+    }
+
+    return cubie;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
-void Cube::clock(char chr) {
+void Cube::clock(char face) {
     int* before;
     int after[8];
 
-    before = switch_get(chr);
+    before = switch_get(face);
 
     // corners
-    after[0] = before[3];
-    after[1] = before[0];
-    after[2] = before[1];
-    after[3] = before[2];
+    after[0] = swap(before[3], face);
+    after[1] = swap(before[0], face);
+    after[2] = swap(before[1], face);
+    after[3] = swap(before[2], face);
 
     // edges
-    after[4] = before[7];
-    after[5] = before[4];
-    after[6] = before[5];
-    after[7] = before[6];
+    after[4] = swap(before[7], face);
+    after[5] = swap(before[4], face);
+    after[6] = swap(before[5], face);
+    after[7] = swap(before[6], face);
 
-    switch_set(chr, after);
+    switch_set(face, after);
 
-    last = chr;
+    last = face;
     delete[] before;
 }
 
-void Cube::counter(char chr) {
+void Cube::counter(char face) {
     int* before;
     int after[8];
 
-    before = switch_get(chr);
+    before = switch_get(face);
 
     // corners
-    after[0] = before[1];
-    after[1] = before[2];
-    after[2] = before[3];
-    after[3] = before[0];
+    after[0] = swap(before[1], face);
+    after[1] = swap(before[2], face);
+    after[2] = swap(before[3], face);
+    after[3] = swap(before[0], face);
 
     // edges
-    after[4] = before[5];
-    after[5] = before[6];
-    after[6] = before[7];
-    after[7] = before[4];
+    after[4] = swap(before[5], face);
+    after[5] = swap(before[6], face);
+    after[6] = swap(before[7], face);
+    after[7] = swap(before[4], face);
 
-    switch_set(chr, after);
+    switch_set(face, after);
 
-    last = chr;
+    last = face;
     delete[] before;
 }
 
-void Cube::hundred(char chr) {
+void Cube::hundred(char face) {
     int* before;
     int after[8];
 
-    before = switch_get(chr);
+    before = switch_get(face);
 
     // corners
-    after[0] = before[2];
-    after[1] = before[3];
-    after[2] = before[0];
-    after[3] = before[1];
+    after[0] = swap(before[2], face);
+    after[1] = swap(before[3], face);
+    after[2] = swap(before[0], face);
+    after[3] = swap(before[1], face);
 
     // edges
-    after[4] = before[6];
-    after[5] = before[7];
-    after[6] = before[4];
-    after[7] = before[5];
+    after[4] = swap(before[6], face);
+    after[5] = swap(before[7], face);
+    after[6] = swap(before[4], face);
+    after[7] = swap(before[5], face);
 
-    switch_set(chr, after);
+    switch_set(face, after);
 
-    last = chr;
+    last = face;
     delete[] before;
 }
 

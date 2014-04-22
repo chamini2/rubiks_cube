@@ -31,7 +31,26 @@ class Cube {
         \   \   \   \  /
          \___\___\___\/
 
-*/
+
+    LTF:
+        LT = X
+        FT = Y
+        LF = Z
+
+        T = XY = A
+        L = YZ = B
+        F = XZ = C
+
+////////////////////////////////////////
+
+    cubie    X  orientation
+    |_|_|_| |_| |_|_|_|_|
+     A B C        0 - 7
+
+    C -> goal orientation
+
+ */
+
 
     public:
         // Constructor
@@ -46,9 +65,9 @@ class Cube {
         bool equals(Cube* other);
 
         // operations on the cube
-        void clock(char);
-        void counter(char);
-        void hundred(char);
+        void clock(char face);
+        void counter(char face);
+        void hundred(char face);
 
         std::queue<Cube*> succ();
 
