@@ -51,6 +51,8 @@ void BFS_corners(std::ofstream *file) {
             succ = cube->succ();
             size = succ->size();
 
+	    delete cube;
+
             for (int i = 0; i < size; ++i) {
                 cube = succ->front();
                 succ->pop();
