@@ -15,6 +15,7 @@ int main(int argc, char const *argv[]) {
     file.open("../pdbs/ePDB.txt");
     //BFS_edges(&file);
     file.close();
+
     return 0;
 }
 
@@ -42,8 +43,8 @@ void BFS_corners(std::ofstream *file) {
             }
 
             if (level == 3) {
-	      delete cube; 
-	      break;
+                delete cube;
+                break;
             }
 
             (*file) << cube->corners_to_string() << " [" << level << "]\n";
@@ -60,8 +61,8 @@ void BFS_corners(std::ofstream *file) {
 
                 node = std::make_tuple(cube, level+1);
                 queue.push(node);
-
             }
+
             delete succ;
         } else {
             delete cube;
@@ -70,7 +71,9 @@ void BFS_corners(std::ofstream *file) {
 
     while (!queue.empty()) {
         std::tie (cube, level) = queue.front();
+
         queue.pop();
+
         delete cube;
     }
 }

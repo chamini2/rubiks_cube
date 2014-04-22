@@ -3,8 +3,9 @@
 HashTable::HashTable(){}
 
 HashTable::~HashTable(){
-  for ( auto it = this->table.begin(); it != this->table.end(); ++it )
-    delete[] it->second;
+    for ( auto it = this->table.begin(); it != this->table.end(); ++it ) {
+        delete[] it->second;
+    }
 }
 
 void HashTable::insert(Cube* cube){
@@ -16,7 +17,7 @@ void HashTable::insert(Cube* cube){
 
     // edge PDB
     // std::string key = cube->edges_to_string();
-    this->table.emplace(key,cube->get_corners());
+    this->table.emplace(key, cube->get_corners());
 }
 
 bool HashTable::contains(Cube* cube){
