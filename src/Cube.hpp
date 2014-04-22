@@ -72,8 +72,8 @@ class Cube {
         std::queue<Cube*> succ();
 
     private:
-        int *corners;
-        int *edges;
+        uint8_t *corners;
+        uint8_t *edges;
         char last;
 
         int* switch_get(char);

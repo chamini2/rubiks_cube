@@ -1,8 +1,8 @@
 #include "Cube.hpp"
 
 Cube::Cube() {
-    corners = new int[8];
-    edges   = new int[12];
+    corners = new uint8_t[8];
+    edges   = new uint8_t[12];
 
     corners[0] = 33; // white  - blue  - orange
     corners[1] = 34; // white  - blue  - red
@@ -258,6 +258,8 @@ int swap(int cubie, char axis) {
                 cubie += 64;
             }
 
+            break;
+
         // Axis B
         case 'r':
         case 'l':
@@ -273,6 +275,8 @@ int swap(int cubie, char axis) {
                 cubie += 32;
             }
 
+            break;
+
         // Axis A
         case 't':
         case 'd':
@@ -287,6 +291,8 @@ int swap(int cubie, char axis) {
             // Axis A
             } else if (64 <= cubie && cubie < 128) {
             }
+
+            break;
 
         default:
             throw -1;
