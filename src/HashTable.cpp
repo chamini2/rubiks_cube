@@ -2,6 +2,11 @@
 
 HashTable::HashTable(){}
 
+HashTable::~HashTable(){
+  for ( auto it = this->table.begin(); it != this->table.end(); ++it )
+    delete[] it->second;
+}
+
 void HashTable::insert(Cube* cube){
     // IDA*
     // std::string key = cube->to_string();
