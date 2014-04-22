@@ -47,7 +47,7 @@ class Cube {
     |_|_|_| |_| |_|_|_|_|
      A B C        0 - 7
 
-    C -> goal orientation
+    C -> goal orientation for all corners and eight edges
 
  */
 
@@ -80,21 +80,23 @@ class Cube {
         uint8_t *edges;
         char last;
 
-        int* switch_get(char);
-        void switch_set(char, int*);
+        int* switch_get(char chr);
+        void switch_set(char chr, int* face);
 
         // getters and setters for the faces of the cube
         int* get_front();
-        void set_front(int*);
+        void set_front(int* face);
         int* get_back();
-        void set_back(int*);
+        void set_back(int* face);
         int* get_right();
-        void set_right(int*);
+        void set_right(int* face);
         int* get_left();
-        void set_left(int*);
+        void set_left(int* face);
         int* get_top();
-        void set_top(int*);
+        void set_top(int* face);
         int* get_down();
-        void set_down(int*);
+        void set_down(int* face);
+
+        std::string color_face(int* face, char chr);
 };
 #endif

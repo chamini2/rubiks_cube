@@ -5,27 +5,27 @@ Cube::Cube() {
     corners = new uint8_t[8];
     edges   = new uint8_t[12];
 
-    corners[0] = 33; // white  - blue  - orange
-    corners[1] = 34; // white  - blue  - red
-    corners[2] = 35; // yellow - blue  - red
-    corners[3] = 36; // yellow - blue  - orange
-    corners[4] = 37; // white  - green - orange
-    corners[5] = 38; // white  - green - red
-    corners[6] = 39; // yellow - green - red
-    corners[7] = 40; // yellow - green - orange
+    corners[0] = 32; // white  - blue  - orange
+    corners[1] = 33; // white  - blue  - red
+    corners[2] = 34; // yellow - blue  - red
+    corners[3] = 35; // yellow - blue  - orange
+    corners[4] = 36; // white  - green - orange
+    corners[5] = 37; // white  - green - red
+    corners[6] = 38; // yellow - green - red
+    corners[7] = 39; // yellow - green - orange
 
-    edges[0]  = 0;  // blue   - white
-    edges[1]  = 1;  // blue   - red
-    edges[2]  = 2;  // blue   - yellow
-    edges[3]  = 3;  // blue   - orange
-    edges[4]  = 4;  // white  - orange
-    edges[5]  = 5;  // white  - red
-    edges[6]  = 6;  // yellow - red
-    edges[7]  = 7;  // yellow - orange
-    edges[8]  = 8;  // white  - green
-    edges[9]  = 9;  // green  - red
-    edges[10] = 10; // yellow - green
-    edges[11] = 11; // green  - orange
+    edges[0]   = 32; // blue   - white
+    edges[1]   = 65; // blue   - red
+    edges[2]   = 34; // blue   - yellow
+    edges[3]   = 67; // blue   - orange
+    edges[4]   = 36; // white  - orange
+    edges[5]   = 37; // white  - red
+    edges[6]   = 38; // yellow - red
+    edges[7]   = 39; // yellow - orange
+    edges[8]   = 40; // white  - green
+    edges[9]   = 73; // green  - red
+    edges[10]  = 42; // yellow - green
+    edges[11]  = 75; // green  - orange
 
     last = ' ';
 }
@@ -51,18 +51,16 @@ Cube* Cube::clone() {
     return copy;
 }
 
-// Change this operator depending on PDB or IDA*
 bool Cube::equals(Cube* other) {
-    // for corners PDB
     for (int i = 0; i < 8; ++i) {
         if (this->corners[i] != other->corners[i])
             return false;
     }
 
-    // for (int i = 0; i < 12; ++i) {
-    //     if (this->edges[i] != other->edges[i])
-    //         return false;
-    // }
+    for (int i = 0; i < 12; ++i) {
+        if (this->edges[i] != other->edges[i])
+            return false;
+    }
 
     return true;
 }
@@ -247,64 +245,78 @@ void Cube::set_down(int *face) {
     edges[11]  = face[7];
 }
 
-int swap(int cubie, char axis) {
-    switch (axis) {
+////////////////////////////////////////////////////////////////////////////////
+
+char get_corner_orientation(int cubie) {
+    if (32 <= cubie && cubie < 64) {
+        return 'c';
+    } else if (64 <= cubie && cubie < 128) {
+        return 'b';
+    } else if (128 <= cubie) {
+        return 'a';
+    }
+
+    return ' ';
+}
+
+int get_corner_cubie(int cubie) {
+    if (32 <= cubie && cubie < 64) {
+        return cubie - 32;
+    } else if (64 <= cubie && cubie < 128) {
+        return cubie - 64;
+    } else if (128 <= cubie) {
+        return cubie - 128;
+    }
+
+    return -1;
+}
+
+int swap(int cubie, char face) {
+    char axis = get_corner_orientation(cubie);
+    cubie = get_corner_cubie(cubie);
+    switch (face) {
         // Axis C
         case 'f':
         case 'b':
-            // Axis C
-            if (32 <= cubie && cubie < 64) {
-            // Axis B
-            } else if (64 <= cubie && cubie < 128) {
-                cubie -= 64;
-                cubie += 128;
-            // Axis A
-            } else if (64 <= cubie && cubie < 128) {
-                cubie -= 128;
-                cubie += 64;
+            switch (axis) {
+                case 'c':
+                    return cubie + 32;
+                case 'b':
+                    return cubie + 128;
+                case 'a':
+                    return cubie + 64;
+                default:
+                    throw -1;
             }
-
-            break;
-
         // Axis B
         case 'r':
         case 'l':
-            // Axis C
-            if (32 <= cubie && cubie < 64) {
-                cubie -= 32;
-                cubie += 128;
-            // Axis B
-            } else if (64 <= cubie && cubie < 128) {
-            // Axis A
-            } else if (64 <= cubie && cubie < 128) {
-                cubie -= 128;
-                cubie += 32;
+            switch (axis) {
+                case 'c':
+                    return cubie + 128;
+                case 'b':
+                    return cubie + 64;
+                case 'a':
+                    return cubie + 32;
+                default:
+                    throw -1;
             }
-
-            break;
-
         // Axis A
         case 't':
         case 'd':
-            // Axis C
-            if (32 <= cubie && cubie < 64) {
-                cubie -= 32;
-                cubie += 64;
-            // Axis B
-            } else if (64 <= cubie && cubie < 128) {
-                cubie -= 64;
-                cubie += 32;
-            // Axis A
-            } else if (64 <= cubie && cubie < 128) {
+            switch (axis) {
+                case 'c':
+                    return cubie + 64;
+                case 'b':
+                    return cubie + 32;
+                case 'a':
+                    return cubie + 128;
+                default:
+                    throw -1;
             }
-
-            break;
-
         default:
             throw -1;
     }
-
-    return cubie;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -501,6 +513,8 @@ std::string Cube::printable() {
 
     return str + "\n";
 }
+
+////////////////////////////////////////
 
 uint8_t* Cube::get_corners() {
     uint8_t *array = new uint8_t[8];
