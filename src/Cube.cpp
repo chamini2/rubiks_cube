@@ -30,6 +30,11 @@ Cube::Cube() {
     last = ' ';
 }
 
+Cube::~Cube(){
+  delete[] corners;
+  delete[] edges;
+}
+
 Cube* Cube::clone() {
     Cube* copy = new Cube;
 

@@ -55,6 +55,7 @@ class Cube {
     public:
         // Constructor
         Cube();
+        ~Cube();
         Cube* clone();
 
         std::string to_string();
