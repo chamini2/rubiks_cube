@@ -3,31 +3,35 @@
 
 void array_swap(int &a, int &b);
 void print_array(int *array, int n);
-void unrank(int n, int r, int *array);
+int* unrank(int n, int r);
 
 int main(int argc, char const *argv[]) {
-    if (argc != 3) {
-        std::cout << "Wrong number of arguments: 2 expected." << std::endl;
-        return -1;
-    }
-    int n = atoi(argv[1]);
-    int rank = atoi(argv[2]);
-    int *array = new int[n];
-    int *array2 = new int[n];
+    int n;
+    int rank;
+    int *array;
 
-    //  Arreglo identidad
-    for (unsigned i = 0; i < n; ++i) {
-        array[i] = i;
-        array2[i] = i;
+    if (argc == 3) {
+        n = atoi(argv[1]);
+        rank = atoi(argv[2]);
+    } else if (argc == 2) {
+        n = atoi(argv[1]);
+        rank = factorial(n) - 1;
+    } else {
+        n = 8;
+        rank = factorial(n) - 1;
     }
 
-    std::cout << rank << ": ";
-    unrank(n , rank, array2);
-    print_array(array2, n);
+    std::cout << "n: (" << n << ") rank: (" << rank << ")\n";
+
+    for (int i = 0; i <= rank; ++i) {
+        std::cout << i << ": ";
+        array = unrank(n , i);
+        print_array(array, n);
+        delete[] array;
+    }
 
     return 0;
 }
-
 
 void array_swap(int &a, int &b) {
     int temp;
@@ -43,9 +47,24 @@ void print_array(int *array, int n) {
     std::cout << std::endl;
 }
 
-void unrank(int n, int r, int *array) {
+////////////////////////////////////////
+
+void aux_unrank(int n, int r, int *array) {
     if (n > 0) {
         array_swap(array[n-1], array[r % n]);
-        unrank(n-1, floor(r/n), array);
+        aux_unrank(n-1, floor(r/n), array);
     }
+}
+
+int *unrank(int n, int r) {
+    int *array = new int[n];
+
+    //  Arreglo identidad
+    for (unsigned i = 0; i < n; ++i) {
+        array[i] = i;
+    }
+
+    aux_unrank(n, r, array);
+
+    return array;
 }
