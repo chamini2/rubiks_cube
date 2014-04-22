@@ -51,7 +51,7 @@ void BFS_corners(std::ofstream *file) {
             succ = cube->succ();
             size = succ->size();
 
-	    delete cube;
+            delete cube;
 
             for (int i = 0; i < size; ++i) {
                 cube = succ->front();
@@ -59,6 +59,7 @@ void BFS_corners(std::ofstream *file) {
 
                 node = std::make_tuple(cube, level+1);
                 queue.push(node);
+
             }
             delete succ;
         } else {

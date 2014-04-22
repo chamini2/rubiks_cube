@@ -514,7 +514,6 @@ bool Cube::equals_corners(uint8_t *other) {
         if (corners[i] != other[i]) {
             return false;
         }
-
-        return true;
     }
+    return true;
 }
