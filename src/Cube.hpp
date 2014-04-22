@@ -48,7 +48,7 @@ class Cube {
      A B C        0 - 7
 
     C -> goal orientation for all corners and eight edges
-
+    B -> goal orientation for other 4 edges
  */
 
 
