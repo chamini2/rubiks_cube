@@ -13,5 +13,5 @@ class HashTable {
         int size();
 
     private:
-        std::unordered_multimap<std::string, Cube*> table;
+        std::unordered_multimap<std::string, uint8_t*> table;
 };

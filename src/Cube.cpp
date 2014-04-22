@@ -1,4 +1,5 @@
 #include "Cube.hpp"
+#include <algorithm>
 
 Cube::Cube() {
     corners = new uint8_t[8];
@@ -377,8 +378,8 @@ void Cube::hundred(char face) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::queue<Cube*> Cube::succ() {
-    std::queue<Cube*> queue;
+std::queue<Cube*>* Cube::succ() {
+    std::queue<Cube*> *queue = new std::queue<Cube*>;
     Cube* cube;
     char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
 
@@ -386,28 +387,28 @@ std::queue<Cube*> Cube::succ() {
         if (faces[i+1] != last) {
             cube = this->clone();
             cube->clock(faces[i+1]);
-            queue.push(cube);
+            queue->push(cube);
 
             cube = this->clone();
             cube->counter(faces[i+1]);
-            queue.push(cube);
+            queue->push(cube);
 
             cube = this->clone();
             cube->hundred(faces[i+1]);
-            queue.push(cube);
+            queue->push(cube);
 
             if (faces[i] != last) {
                 cube = this->clone();
                 cube->clock(faces[i]);
-                queue.push(cube);
+                queue->push(cube);
 
                 cube = this->clone();
                 cube->counter(faces[i]);
-                queue.push(cube);
+                queue->push(cube);
 
                 cube = this->clone();
                 cube->hundred(faces[i]);
-                queue.push(cube);
+                queue->push(cube);
             }
         }
     }
@@ -494,4 +495,21 @@ std::string Cube::printable() {
     }
 
     return str + "\n";
+}
+
+uint8_t* Cube::get_corners() {
+    uint8_t *array = new uint8_t[8];
+    std::copy(this->corners, this->corners+8, array);
+
+    return array;
+}
+
+bool Cube::equals_corners(uint8_t *other) {
+    for (int i = 0; i < 8; ++i) {
+        if (corners[i] != other[i]) {
+            return false;
+        }
+
+        return true;
+    }
 }

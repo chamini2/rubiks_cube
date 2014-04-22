@@ -11,7 +11,7 @@ void HashTable::insert(Cube* cube){
 
     // edge PDB
     // std::string key = cube->edges_to_string();
-    this->table.emplace(key,cube);
+    this->table.emplace(key,cube->get_corners());
 }
 
 bool HashTable::contains(Cube* cube){
@@ -29,7 +29,7 @@ bool HashTable::contains(Cube* cube){
         return false;
     } else {
         while (range.first != range.second) {
-            if (range.first->second->equals(cube)){
+            if (cube->equals_corners(range.first->second)){
                 return true;
             }
 

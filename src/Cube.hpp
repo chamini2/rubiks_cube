@@ -69,7 +69,10 @@ class Cube {
         void counter(char face);
         void hundred(char face);
 
-        std::queue<Cube*> succ();
+        std::queue<Cube*>* succ();
+
+        uint8_t* get_corners();
+        bool equals_corners(uint8_t *other);
 
     private:
         uint8_t *corners;
