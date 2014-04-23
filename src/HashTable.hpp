@@ -1,12 +1,13 @@
 #include <unordered_map>
-#include "Cube.hpp"
 #include <iterator>
+#include "Cube.hpp"
+#include "rank.hpp"
 
 class HashTable {
 
     public:
         HashTable();
-        ~HashTable();
+        // ~HashTable();
 
         void insert(Cube*);
         bool contains(Cube*);
@@ -14,5 +15,5 @@ class HashTable {
         int size();
 
     private:
-        std::unordered_multimap<std::string, uint8_t*> table;
+        std::unordered_multimap<int,int> table;
 };
