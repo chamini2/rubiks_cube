@@ -27,7 +27,7 @@ void aux_unrank(int n, int r, int *array) {
     }
 }
 
-int *unrank( intsize, int r) {
+int *unrank(int size, int r) {
     int *array = new int[n];
 
     //  Arreglo identidad
