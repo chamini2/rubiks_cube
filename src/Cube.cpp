@@ -1,5 +1,5 @@
-#include "Cube.hpp"
 #include <algorithm>
+#include "Cube.hpp"
 
 Cube::Cube() {
     corners = new uint8_t[8];
@@ -30,7 +30,7 @@ Cube::Cube() {
     last = ' ';
 }
 
-Cube::~Cube(){
+Cube::~Cube() {
   delete[] corners;
   delete[] edges;
 }
@@ -247,74 +247,63 @@ void Cube::set_down(int *face) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-char get_corner_orientation(int cubie) {
-    if (32 <= cubie && cubie < 64) {
-        return 'c';
-    } else if (64 <= cubie && cubie < 128) {
-        return 'b';
-    } else if (128 <= cubie) {
-        return 'a';
-    }
+int rotate_cubie(int cubie, char face) {
+    int axis = cubie_to_orien(cubie);
+    cubie = cubie_to_pos(cubie);
 
-    return ' ';
-}
-
-int get_corner_cubie(int cubie) {
-    if (32 <= cubie && cubie < 64) {
-        return cubie - 32;
-    } else if (64 <= cubie && cubie < 128) {
-        return cubie - 64;
-    } else if (128 <= cubie) {
-        return cubie - 128;
-    }
-
-    return -1;
-}
-
-int swap(int cubie, char face) {
-    char axis = get_corner_orientation(cubie);
-    cubie = get_corner_cubie(cubie);
     switch (face) {
         // Axis C
         case 'f':
         case 'b':
             switch (axis) {
-                case 'c':
+                case 0:
                     return cubie + 32;
-                case 'b':
+                case 1:
                     return cubie + 128;
-                case 'a':
+                case 2:
                     return cubie + 64;
                 default:
+                    std::string err_msg = "rotate_cubie | axis = ";
+                    err_msg +=  axis;
+                    error(err_msg, __LINE__, __FILE__);
                     throw -1;
             }
         // Axis B
         case 'r':
         case 'l':
             switch (axis) {
-                case 'c':
+                case 0:
                     return cubie + 128;
-                case 'b':
+                case 1:
                     return cubie + 64;
-                case 'a':
+                case 2:
                     return cubie + 32;
                 default:
+                    std::string err_msg = "rotate_cubie | axis = ";
+                    err_msg += axis;
+                    error(err_msg, __LINE__, __FILE__);
                     throw -1;
             }
         // Axis A
         case 't':
         case 'd':
             switch (axis) {
-                case 'c':
+                case 0:
                     return cubie + 64;
-                case 'b':
+                case 1:
                     return cubie + 32;
-                case 'a':
+                case 2:
                     return cubie + 128;
                 default:
+                    std::string err_msg = "rotate_cubie | axis = ";
+                    err_msg += axis;
+                    error(err_msg, __LINE__, __FILE__);
                     throw -1;
             }
         default:
+            std::string err_msg = "rotate_cubie | face = ";
+            err_msg += face;
+            error(err_msg, __LINE__, __FILE__);
             throw -1;
     }
 }
@@ -328,16 +317,16 @@ void Cube::clock(char face) {
     before = switch_get(face);
 
     // corners
-    after[0] = swap(before[3], face);
-    after[1] = swap(before[0], face);
-    after[2] = swap(before[1], face);
-    after[3] = swap(before[2], face);
+    after[0] = rotate_cubie(before[3], face);
+    after[1] = rotate_cubie(before[0], face);
+    after[2] = rotate_cubie(before[1], face);
+    after[3] = rotate_cubie(before[2], face);
 
     // edges
-    after[4] = swap(before[7], face);
-    after[5] = swap(before[4], face);
-    after[6] = swap(before[5], face);
-    after[7] = swap(before[6], face);
+    after[4] = rotate_cubie(before[7], face);
+    after[5] = rotate_cubie(before[4], face);
+    after[6] = rotate_cubie(before[5], face);
+    after[7] = rotate_cubie(before[6], face);
 
     switch_set(face, after);
 
@@ -352,16 +341,16 @@ void Cube::counter(char face) {
     before = switch_get(face);
 
     // corners
-    after[0] = swap(before[1], face);
-    after[1] = swap(before[2], face);
-    after[2] = swap(before[3], face);
-    after[3] = swap(before[0], face);
+    after[0] = rotate_cubie(before[1], face);
+    after[1] = rotate_cubie(before[2], face);
+    after[2] = rotate_cubie(before[3], face);
+    after[3] = rotate_cubie(before[0], face);
 
     // edges
-    after[4] = swap(before[5], face);
-    after[5] = swap(before[6], face);
-    after[6] = swap(before[7], face);
-    after[7] = swap(before[4], face);
+    after[4] = rotate_cubie(before[5], face);
+    after[5] = rotate_cubie(before[6], face);
+    after[6] = rotate_cubie(before[7], face);
+    after[7] = rotate_cubie(before[4], face);
 
     switch_set(face, after);
 
@@ -376,16 +365,16 @@ void Cube::hundred(char face) {
     before = switch_get(face);
 
     // corners
-    after[0] = swap(before[2], face);
-    after[1] = swap(before[3], face);
-    after[2] = swap(before[0], face);
-    after[3] = swap(before[1], face);
+    after[0] = rotate_cubie(before[2], face);
+    after[1] = rotate_cubie(before[3], face);
+    after[2] = rotate_cubie(before[0], face);
+    after[3] = rotate_cubie(before[1], face);
 
     // edges
-    after[4] = swap(before[6], face);
-    after[5] = swap(before[7], face);
-    after[6] = swap(before[4], face);
-    after[7] = swap(before[5], face);
+    after[4] = rotate_cubie(before[6], face);
+    after[5] = rotate_cubie(before[7], face);
+    after[6] = rotate_cubie(before[4], face);
+    after[7] = rotate_cubie(before[5], face);
 
     switch_set(face, after);
 
@@ -449,6 +438,9 @@ int* Cube::switch_get(char chr) {
         case 'd':
             return this->get_down();
         default:
+            std::string err_msg = "switch_get | chr = ";
+            err_msg += chr;
+            error(err_msg, __LINE__, __FILE__);
             throw -1;
     }
 }
@@ -468,6 +460,9 @@ void Cube::switch_set(char chr, int* face) {
         case 'd':
             return this->set_down(face);
         default:
+            std::string err_msg = "switch_get | chr = ";
+            err_msg += chr;
+            error(err_msg, __LINE__, __FILE__);
             throw -1;
     }
 }
@@ -516,14 +511,14 @@ std::string Cube::printable() {
 
 ////////////////////////////////////////
 
-uint8_t* Cube::get_corners() {
-    uint8_t *array = new uint8_t[8];
+int* Cube::get_corners() {
+    int *array = new int[8];
     std::copy(this->corners, this->corners+8, array);
 
     return array;
 }
 
-bool Cube::equals_corners(uint8_t *other) {
+bool Cube::equals_corners(int *other) {
     for (int i = 0; i < 8; ++i) {
         if (corners[i] != other[i]) {
             return false;

@@ -1,4 +1,3 @@
-#include <iostream>     // std::cout, std::cin, std::endl
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
 #include "extra.hpp"    // int_to_string
@@ -72,8 +71,8 @@ class Cube {
 
         std::queue<Cube*>* succ();
 
-        uint8_t* get_corners();
-        bool equals_corners(uint8_t *other);
+        int* get_corners();
+        bool equals_corners(int *other);
 
     private:
         uint8_t *corners;
