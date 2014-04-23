@@ -3,7 +3,7 @@
 HashTable* ht = new HashTable();
 int elementos_prueba;
 
-void popular(){
+void popular() {
   std::queue<Cube*> cubes;
   Cube* cube = new Cube;
   
@@ -18,7 +18,7 @@ void popular(){
   std::cout << "Insertados " << elementos_prueba << " cubos en la tabla de hash." << std::endl;
 }
 
-void probar(){
+void probar() {
   std::queue<Cube*> cubes;
   Cube* cube = new Cube;
 
@@ -42,7 +42,7 @@ void probar(){
   
   std::cout << "Probando si hay otros cubos insertados" << std::endl;
   for (int i = 0 ; i < 5 ; i ++)
-    if (ht->contains(new Cube)){
+    if (ht->contains(new Cube)) {
       std::cout << "Encontrado cubo que no deberia estar." << std::endl;
       return;
     }
