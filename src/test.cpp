@@ -1,5 +1,7 @@
-#include "HashTable.hpp"
 #include <math.h>
+#include <iostream>
+#include <fstream>
+#include "extra.hpp"
 
 void array_swap(int &a, int &b);
 void print_array(int *array, int n);
@@ -11,6 +13,8 @@ int main(int argc, char const *argv[]) {
     int n;
     int top;
     int *array;
+
+    std::ifstream file("../pdbs/cPDB.txt");
 
     if (argc == 3) {
         n = atoi(argv[1]);
@@ -25,13 +29,30 @@ int main(int argc, char const *argv[]) {
 
     std::cout << "n: (" << n << ") top: (" << top << ")\n";
 
-    for (int i = 0; i <= top; ++i) {
-        std::cout << i << ": ";
-        array = unrank(n , i);
-        print_array(array, n);
+    array = new int[8];
+    // for (int i = 0; i < top; ++i)
+    for (;;) {
+        // std::cout << i << ": ";
+        // array = unrank(n , i);
+
+        for (int i = 0; i < n; ++i) {
+
+            if (file.eof()) {
+                std::cout << "END\n";
+                file.close();
+
+                return 0;
+            }
+
+            file >> array[i];
+        }
+
+        // print_array(array, n);
         std::cout << " " << rank(n, array) << "\n";
-        delete[] array;
+
+        // delete[] array;
     }
+    delete[] array;
 
     return 0;
 }
@@ -82,13 +103,55 @@ int aux_rank(int n, int *array, int *inverse) {
     array_swap(array[n-1], array[inverse[n-1]]);
     array_swap(inverse[s], inverse[n-1]);
 
-    return s+n*aux_rank(n-1, array, inverse);
+    return s + n * aux_rank(n-1, array, inverse);
+}
+
+int cubie_to_pos(int cubie) {
+    if (32 <= cubie && cubie < 64) {
+        return cubie - 32;
+    } else if (64 <= cubie && cubie < 128) {
+        return cubie - 64;
+    } else if (128 <= cubie) {
+        return cubie - 128;
+    }
+
+    return -1;
+}
+
+int cubie_to_orien(int cubie) {
+    if (32 <= cubie && cubie < 64) {
+        return 0;
+    } else if (64 <= cubie && cubie < 128) {
+        return 1;
+    } else if (128 <= cubie) {
+        return 2;
+    }
+
+    throw -1;
 }
 
 int rank(int n, int *array) {
-    int *inverse = inv_array(array, n);
+    int *inverse;
+    int *aux = new int[n];
+    int value, accum = 0;
 
-    return aux_rank(n, array, inverse);
+    for (int i = 0; i < n; ++i) {
+        aux[i] = cubie_to_pos(array[i]);
+    }
+
+    inverse = inv_array(aux, n);
+    value = aux_rank(n, aux, inverse);
+
+    delete[] inverse;
+    delete[] aux;
+
+    value *= pow(3,8);
+    for (int i = 0; i < n; ++i) {
+        accum = accum * 3 + cubie_to_orien(array[i]);
+    }
+    value += accum;
+
+    return value;
 }
 
 ////////////////////////////////////////
