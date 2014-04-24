@@ -6,7 +6,8 @@
  *     1           -> Corners PDB
  *     2           -> Edges PDB
  */
-HashTable::HashTable(int type) {
+HashTable::HashTable(int type)
+    :table(std::vector<bool>(264539520)) {
     this->type = type;
 }
 
@@ -20,19 +21,21 @@ void HashTable::insert(Cube* cube) {
 
     int key = rank_it(cube);
 
-    table[key] = key;
+    table[key] = true;
+    // table[key] = key;
 }
 
 bool HashTable::contains(Cube* cube) {
 
     int key = rank_it(cube);
 
+    return table[key];
     // it can only be 1 or 0
-    if (table.count(key) > 0) {
-        return true;
-    } else {
-        return false;
-    }
+    // if (table.count(key) > 0) {
+    //     return true;
+    // } else {
+    //     return false;
+    // }
 
 }
 

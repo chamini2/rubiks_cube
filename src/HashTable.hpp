@@ -1,4 +1,4 @@
-#include <map>
+#include <vector>
 #include "Cube.hpp"
 #include "rank.hpp"
 
@@ -14,7 +14,7 @@ class HashTable {
         int size();
 
     private:
-        std::map<int,int> table;
+        std::vector<bool> table;
         int type;
 
         int rank_it(Cube *cube);
