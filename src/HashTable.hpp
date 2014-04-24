@@ -6,7 +6,7 @@ class HashTable {
 
     public:
         HashTable(int type = 0); // defaults to IDA*
-        // ~HashTable();
+        ~HashTable();
 
         void insert(Cube*);
         bool contains(Cube*);
