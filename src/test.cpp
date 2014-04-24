@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]) {
     int top;
     int *array;
 
-    std::ifstream file("../pdbs/cPDB.txt");
+    std::ifstream file("input.txt");
 
     if (argc == 3) {
         n = atoi(argv[1]);
@@ -27,7 +27,7 @@ int main(int argc, char const *argv[]) {
         top = factorial(n) - 1;
     }
 
-    std::cout << "n: (" << n << ") top: (" << top << ")\n";
+    // std::cout << "n: (" << n << ") top: (" << top << ")\n";
 
     array = new int[8];
     // for (int i = 0; i < top; ++i)
@@ -38,16 +38,14 @@ int main(int argc, char const *argv[]) {
         for (int i = 0; i < n; ++i) {
 
             if (file.eof()) {
-                std::cout << "END\n";
                 file.close();
-
                 return 0;
             }
 
             file >> array[i];
         }
 
-        // print_array(array, n);
+        print_array(array, n);
         std::cout << " " << rank(n, array) << "\n";
 
         // delete[] array;
@@ -65,7 +63,7 @@ void array_swap(int &a, int &b) {
 }
 
 void print_array(int *array, int n) {
-    for (unsigned i = 0; i < n; ++i) {
+    for (int i = 0; i < n; ++i) {
         std::cout << array[i] << " ";
     }
 }
@@ -82,8 +80,8 @@ void aux_unrank(int n, int r, int *array) {
 int *unrank(int n, int r) {
     int *array = new int[n];
 
-    //  Arreglo identidad
-    for (unsigned i = 0; i < n; ++i) {
+    //  identity array
+    for (int i = 0; i < n; ++i) {
         array[i] = i;
     }
 
@@ -104,30 +102,6 @@ int aux_rank(int n, int *array, int *inverse) {
     array_swap(inverse[s], inverse[n-1]);
 
     return s + n * aux_rank(n-1, array, inverse);
-}
-
-int cubie_to_pos(int cubie) {
-    if (32 <= cubie && cubie < 64) {
-        return cubie - 32;
-    } else if (64 <= cubie && cubie < 128) {
-        return cubie - 64;
-    } else if (128 <= cubie) {
-        return cubie - 128;
-    }
-
-    return -1;
-}
-
-int cubie_to_orien(int cubie) {
-    if (32 <= cubie && cubie < 64) {
-        return 0;
-    } else if (64 <= cubie && cubie < 128) {
-        return 1;
-    } else if (128 <= cubie) {
-        return 2;
-    }
-
-    throw -1;
 }
 
 int rank(int n, int *array) {
@@ -159,7 +133,7 @@ int rank(int n, int *array) {
 int* inv_array(int* array, int size) {
     int *inverse = new int[size];
 
-    for (unsigned i = 0; i < size; ++i) {
+    for (int i = 0; i < size; ++i) {
         inverse[array[i]] = i;
     }
 

@@ -1,6 +1,14 @@
 #include "HashTable.hpp"
 
-HashTable::HashTable() {}
+/*
+ * type:
+ *     0 (default) -> IDA*
+ *     1           -> Corners PDB
+ *     2           -> Edges PDB
+ */
+HashTable::HashTable(int type) {
+    this->type = type;
+}
 
 // HashTable::~HashTable() {
 //     for ( auto it = this->table.begin(); it != this->table.end(); ++it ) {
@@ -9,53 +17,48 @@ HashTable::HashTable() {}
 // }
 
 void HashTable::insert(Cube* cube) {
-    // IDA*
-    // int key = rank(?, cube->???());
 
-    // corner PDB
-    int key = rank(8, cube->get_corners());
+    int key = rank_it(cube);
 
-    // edge PDB
-    // int key = rank(12, cube->get_edges());
-
-    this->table.emplace(key,key);
+    table[key] = key;
 }
 
 bool HashTable::contains(Cube* cube) {
-    // IDA*
-    // int key = rank(?, cube->???());
 
-    // corner PDB
-    int key = rank(8, cube->get_corners());
+    int key = rank_it(cube);
 
-    // edge PDB
-    // int key = rank(12, cube->get_edges());
-
-    auto range = this->table.equal_range(key);
-
-    if (range.first == this->table.end()) {
-        return false;
-
-    // If the else happens, since now the hash is unique, we can immediatly say 'true'
-    // though we should check that this is the ONLY element in the iterator (IDK how to)
-    } else {
-        // while (range.first != range.second) {
-        //     if (cube->equals_corners(range.first->second)) {
-        //         return true;
-        //     }
-
-        //     range.first++;
-        // }
+    // it can only be 1 or 0
+    if (table.count(key) > 0) {
         return true;
+    } else {
+        return false;
     }
 
-    return false;
 }
 
 bool HashTable::empty() {
-    return this->size() == 0;
+    return table.empty();
 }
 
 int HashTable::size() {
-    return this->table.size();
+    return table.size();
+}
+
+////////////////////////////////////////
+
+int HashTable::rank_it(Cube* cube) {
+    switch (type) {
+        // IDA*
+        case 0:
+            // int key = rank(?, cube->???());
+        // Corners PDB
+        case 1:
+            return rank(8, cube->get_corners());
+        // Edges PDB
+        case 2:
+            // return rank(12, cube->get_edges());
+        default:
+            error("rank_it | type = " + int_to_string(type), __LINE__, __FILE__);
+            throw -1;
+    }
 }

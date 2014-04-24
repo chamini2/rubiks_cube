@@ -1,12 +1,11 @@
-#include <unordered_map>
-#include <iterator>
+#include <map>
 #include "Cube.hpp"
 #include "rank.hpp"
 
 class HashTable {
 
     public:
-        HashTable();
+        HashTable(int type = 0); // defaults to IDA*
         // ~HashTable();
 
         void insert(Cube*);
@@ -15,5 +14,8 @@ class HashTable {
         int size();
 
     private:
-        std::unordered_multimap<int,int> table;
+        std::map<int,int> table;
+        int type;
+
+        int rank_it(Cube *cube);
 };
