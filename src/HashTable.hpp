@@ -14,8 +14,9 @@ class HashTable {
         int size();
 
     private:
-        std::vector<bool> table;
+        bool *table;
         int type;
+        int table_size;
 
         int rank_it(Cube *cube);
 };
