@@ -64,8 +64,10 @@ void BFS_corners(std::ofstream *file, int end) {
                 cube = succ->front();
                 succ->pop();
 
-                node = std::make_tuple(cube, level+1);
-                queue.push(node);
+                if (!closed->contains(cube)) {
+                    node = std::make_tuple(cube, level+1);
+                    queue.push(node);
+                }
             }
 
             delete succ;
