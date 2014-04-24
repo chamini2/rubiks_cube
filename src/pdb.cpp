@@ -25,19 +25,25 @@ int main(int argc, char const *argv[]) {
 }
 
 void BFS_corners(std::ofstream *file, int end) {
-    std::queue<std::tuple<Cube*,int>> queue;
+    std::queue<std::tuple<int,char,int>> queue;
     std::queue<Cube*> *succ;
     HashTable *closed =  new HashTable(1);
 
     Cube* cube = new Cube;
-    int size, level = 0, last_level = -1;
-    auto node = std::make_tuple(cube, level);
+    int info, size, level = 0, last_level = -1;
+    int *corners = cube->get_corners();
+    char last = cube->get_last();
+    auto node = std::make_tuple(rank(8,corners), last, level);
+
+    delete cube;
 
     queue.push(node);
 
     while (!queue.empty()) {
-        std::tie (cube, level) = queue.front();
+        std::tie (info, last, level) = queue.front();
         queue.pop();
+
+        cube = new Cube(info, 0, last);
 
         if (!closed->contains(cube)) {
             closed->insert(cube);
@@ -54,7 +60,6 @@ void BFS_corners(std::ofstream *file, int end) {
 
             (*file) << cube->corners_to_string() << " [" << level << "]\n";
 
-            /*cube->next_corners(&queue, level);*/
             succ = cube->succ();
             size = succ->size();
 
@@ -64,10 +69,14 @@ void BFS_corners(std::ofstream *file, int end) {
                 cube = succ->front();
                 succ->pop();
 
-                if (!closed->contains(cube)) {
-                    node = std::make_tuple(cube, level+1);
-                    queue.push(node);
-                }
+                corners = cube->get_corners();
+                info = rank(8, corners);
+                last = cube->get_last();
+                node = std::make_tuple(info, last, level+1);
+
+                queue.push(node);
+
+                delete cube;
             }
 
             delete succ;
@@ -77,11 +86,9 @@ void BFS_corners(std::ofstream *file, int end) {
     }
 
     while (!queue.empty()) {
-        std::tie (cube, level) = queue.front();
+        std::tie (info, last, level) = queue.front();
 
         queue.pop();
-
-        delete cube;
     }
 
     delete closed;

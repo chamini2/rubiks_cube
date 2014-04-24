@@ -2,8 +2,8 @@
 #include "Cube.hpp"
 
 Cube::Cube() {
-    corners = new uint8_t[8];
-    edges   = new uint8_t[12];
+    corners = new int[8];
+    edges   = new int[12];
 
     corners[0] = 32; // white  - blue  - orange
     corners[1] = 33; // white  - blue  - red
@@ -29,6 +29,13 @@ Cube::Cube() {
 
     last = ' ';
 }
+
+Cube::Cube(int corners, int edges, char last) {
+    this->corners = unrank(8 ,corners);
+    this->edges = unrank(12, edges);
+    this->last = last;
+}
+
 
 Cube::~Cube() {
   delete[] corners;
@@ -510,6 +517,10 @@ std::string Cube::printable() {
 }
 
 ////////////////////////////////////////
+
+char Cube::get_last() {
+    return last;
+}
 
 int* Cube::get_corners() {
     int *array = new int[8];

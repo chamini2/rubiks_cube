@@ -1,6 +1,7 @@
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
 #include "extra.hpp"    // int_to_string
+#include "rank.hpp"
 
 #ifndef CUBE_H
 #define CUBE_H
@@ -54,6 +55,7 @@ class Cube {
     public:
         // Constructor
         Cube();
+        Cube(int corners, int edges, char last);
         ~Cube();
         Cube* clone();
 
@@ -71,12 +73,13 @@ class Cube {
 
         std::queue<Cube*>* succ();
 
+        char get_last();
         int* get_corners();
         bool equals_corners(int *other);
 
     private:
-        uint8_t *corners;
-        uint8_t *edges;
+        int *corners;
+        int *edges;
         char last;
 
         int* switch_get(char chr);

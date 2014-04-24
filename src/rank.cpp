@@ -1,4 +1,3 @@
-#include <math.h>
 #include "rank.hpp"
 
 void array_swap(int &a, int &b) {
@@ -27,15 +26,24 @@ void aux_unrank(int n, int r, int *array) {
     }
 }
 
-int *unrank(int size, int r) {
+int *unrank(int size, int value) {
     int *array = new int[size];
+    int d, r, power = pow(3, 8);
 
-    //  Arreglo identidad
+    r = value / power;
+    d = value % power;
+
+    // Identity array
     for (int i = 0; i < size; ++i) {
         array[i] = i;
     }
 
     aux_unrank(size, r, array);
+
+    for (int i = size - 1; i >= 0; --i) {
+        array[i] += orien_to_axis(d % 3);
+        d = d / 3;
+    }
 
     return array;
 }
@@ -57,7 +65,7 @@ int aux_rank(int n, int *array, int *inverse) {
 int rank(int size, int *array) {
     int *inverse;
     int *aux = new int[size];
-    int value, accum = 0;
+    int value, orientation = 0;
 
     for (int i = 0; i < size; ++i) {
         aux[i] = cubie_to_pos(array[i]);
@@ -71,11 +79,11 @@ int rank(int size, int *array) {
 
     value *= pow(3,8);
     for (int i = 0; i < size; ++i) {
-        accum = accum * 3 + cubie_to_orien(array[i]);
+        orientation = orientation * 3 + cubie_to_orien(array[i]);
     }
-    value += accum;
+    value += orientation;
 
-    delete array;
+    delete[] array;
 
     return value;
 }

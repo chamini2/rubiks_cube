@@ -12,7 +12,8 @@ int* inv_array(int* array, int size);
 int main(int argc, char const *argv[]) {
     int n;
     int top;
-    int *array;
+    int *array, *nuevo;
+    int variable;
 
     std::ifstream file("input.txt");
 
@@ -46,9 +47,27 @@ int main(int argc, char const *argv[]) {
         }
 
         print_array(array, n);
-        std::cout << " " << rank(n, array) << "\n";
+        variable = rank(n, array);
+        std::cout << " " << variable << "  ";
 
-        // delete[] array;
+        nuevo = unrank(n, variable);
+        print_array(nuevo, n);
+
+        variable = 1;
+        for (int i = 0; i < n; ++i)
+        {
+            if (array[i] != nuevo[i]) {
+                variable = 0;
+            }
+        }
+
+        if (variable) {
+            std::cout << "iguales\n";
+        } else {
+            std::cout << "NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
+        }
+
+        delete[] nuevo;
     }
     delete[] array;
 
@@ -70,6 +89,11 @@ void print_array(int *array, int n) {
 
 ////////////////////////////////////////
 
+int orien_to_axis(int orien) {
+    return 32 * pow(2,orien);
+}
+
+
 void aux_unrank(int n, int r, int *array) {
     if (n > 0) {
         array_swap(array[n-1], array[r % n]);
@@ -77,15 +101,24 @@ void aux_unrank(int n, int r, int *array) {
     }
 }
 
-int *unrank(int n, int r) {
-    int *array = new int[n];
+int *unrank(int size, int value) {
+    int *array = new int[size];
+    int d, r, power = pow(3, 8);
 
-    //  identity array
-    for (int i = 0; i < n; ++i) {
+    r = value / power;
+    d = value % power;
+
+    // Identity array
+    for (int i = 0; i < size; ++i) {
         array[i] = i;
     }
 
-    aux_unrank(n, r, array);
+    aux_unrank(size, r, array);
+
+    for (int i = size - 1; i >= 0; --i) {
+        array[i] += orien_to_axis(d % 3);
+        d = d / 3;
+    }
 
     return array;
 }

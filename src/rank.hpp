@@ -1,4 +1,4 @@
 #include "extra.hpp"
 
-int rank(int n, int *array);
-int* unrank(int n, int r);
+int rank(int size, int *array);
+int* unrank(int size, int value);

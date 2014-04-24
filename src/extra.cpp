@@ -17,6 +17,7 @@ int factorial(int n) {
     return aux_factorial(1,n);
 }
 
+////////////////////////////////////////
 
 int cubie_to_pos(int cubie) {
     if (32 <= cubie && cubie < 64) {
@@ -45,6 +46,10 @@ int cubie_to_orien(int cubie) {
 
     error("cubie_to_orien | cubie = " + int_to_string(cubie), __LINE__, __FILE__);
     throw -1;
+}
+
+int orien_to_axis(int orien) {
+    return 32 * pow(2,orien);
 }
 
 // Node* make_root_node(Cube* cube) {
