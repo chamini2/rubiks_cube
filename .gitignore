@@ -14,5 +14,7 @@
 
 *.o
 main
-test
 pdb
+tout0
+tout1
+a.out
