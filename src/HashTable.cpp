@@ -10,6 +10,10 @@ HashTable::HashTable(int type) {
     this->table = new bool[264539520];
     this->type = type;
     this->table_size = 0;
+
+    for (int i = 0; i < 264539520; ++i) {
+        this->table[i] = false;
+    }
 }
 
 HashTable::~HashTable() {
