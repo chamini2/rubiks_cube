@@ -28,7 +28,7 @@ void BFS_corners(std::ofstream *file, int end) {
     std::queue<std::tuple<int,char,int>> queue;
     std::queue<Cube*> *succ;
     HashTable closed(1);
-    bool enqueued[264539520];
+    bool *in_queue = new bool[264539520];
 
     Cube* cube = new Cube;
     int info, size, level = 0, last_level = -1;
@@ -39,14 +39,16 @@ void BFS_corners(std::ofstream *file, int end) {
     delete cube;
 
     for (int i = 0; i < 264539520; ++i) {
-        enqueued[i] = false;
+        in_queue[i] = false;
     }
+
+    std::cout << "starting\n" << std::flush;
 
     info = rank(8,corners);
     node = std::make_tuple(info, last, level);
 
     queue.push(node);
-    enqueued[info] = true;
+    in_queue[info] = true;
 
     while (!queue.empty()) {
         std::tie (info, last, level) = queue.front();
@@ -84,9 +86,9 @@ void BFS_corners(std::ofstream *file, int end) {
                     last = cube->get_last();
                     node = std::make_tuple(info, last, level+1);
 
-                    if (!enqueued[info]) {
+                    if (!in_queue[info]) {
                         queue.push(node);
-                        enqueued[info] = true;
+                        in_queue[info] = true;
                     }
                 }
 
@@ -104,4 +106,6 @@ void BFS_corners(std::ofstream *file, int end) {
 
         queue.pop();
     }
+
+    delete[] in_queue;
 }
