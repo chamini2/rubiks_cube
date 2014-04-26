@@ -52,6 +52,13 @@ int orien_to_axis(int orien) {
     return 32 * pow(2,orien);
 }
 
+void print_array(int *array, int n) {
+    for (int i = 0; i < n; ++i) {
+        std::cout << array[i] << " ";
+    }
+}
+
+
 // Node* make_root_node(Cube* cube) {
 //     Node* node = new Node(cube, NULL, 0, 0);  // action y level 0 porque es root
 

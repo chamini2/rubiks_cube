@@ -28,7 +28,6 @@ void BFS_corners(std::ofstream *file, int end) {
     std::queue<std::tuple<int,char,int>> queue;
     std::queue<Cube*> *succ;
     HashTable closed(1);
-    bool *in_queue = new bool[264539520];
 
     Cube* cube = new Cube;
     int info, size, level = 0, last_level = -1;
@@ -36,11 +35,6 @@ void BFS_corners(std::ofstream *file, int end) {
     char last = cube->get_last();
     std::tuple<int,char,int> node;
 
-    delete cube;
-
-    for (int i = 0; i < 264539520; ++i) {
-        in_queue[i] = false;
-    }
 
     std::cout << "starting\n" << std::flush;
 
@@ -48,7 +42,8 @@ void BFS_corners(std::ofstream *file, int end) {
     node = std::make_tuple(info, last, level);
 
     queue.push(node);
-    in_queue[info] = true;
+    closed.insert(cube);
+    delete cube;
 
     while (!queue.empty()) {
         std::tie (info, last, level) = queue.front();
@@ -56,49 +51,41 @@ void BFS_corners(std::ofstream *file, int end) {
 
         cube = new Cube(info, 0, last);
 
-        if (!closed.contains(cube)) {
-            closed.insert(cube);
-
-            if (level == end) {
-                delete cube;
-                break;
-            }
-
-            if (level != last_level) {
-                last_level = level;
-                std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << std::endl << std::flush;
-            }
-
-            (*file) << cube->corners_to_string() << " [" << level << "]\n";
-
-            succ = cube->succ();
-            size = succ->size();
-
+        if (level == end) {
             delete cube;
+            break;
+        }
 
-            for (int i = 0; i < size; ++i) {
-                cube = succ->front();
-                succ->pop();
+        if (level != last_level) {
+            last_level = level;
+            std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << std::endl << std::flush;
+        }
 
-                if (!closed.contains(cube)) {
-                    corners = cube->get_corners();
-                    info = rank(8, corners);
-                    last = cube->get_last();
-                    node = std::make_tuple(info, last, level+1);
+        (*file) << cube->corners_to_string() << " [" << level << "]\n";
 
-                    if (!in_queue[info]) {
-                        queue.push(node);
-                        in_queue[info] = true;
-                    }
-                }
+        succ = cube->succ();
+        size = succ->size();
 
-                delete cube;
+        delete cube;
+
+        for (int i = 0; i < size; ++i) {
+            cube = succ->front();
+            succ->pop();
+
+            if (!closed.contains(cube)) {
+                corners = cube->get_corners();
+                info = rank(8, corners);
+                last = cube->get_last();
+                node = std::make_tuple(info, last, level+1);
+
+                queue.push(node);
+                closed.insert(cube);
             }
 
-            delete succ;
-        } else {
             delete cube;
         }
+
+        delete succ;
     }
 
     while (!queue.empty()) {
@@ -107,5 +94,5 @@ void BFS_corners(std::ofstream *file, int end) {
         queue.pop();
     }
 
-    delete[] in_queue;
+    std::cout << "ending\n";
 }

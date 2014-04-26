@@ -5,27 +5,27 @@ Cube::Cube() {
     corners = new int[8];
     edges   = new int[12];
 
-    corners[0] = 32; // white  - blue  - orange
-    corners[1] = 33; // white  - blue  - red
-    corners[2] = 34; // yellow - blue  - red
-    corners[3] = 35; // yellow - blue  - orange
-    corners[4] = 36; // white  - green - orange
-    corners[5] = 37; // white  - green - red
-    corners[6] = 38; // yellow - green - red
-    corners[7] = 39; // yellow - green - orange
+    corners[0] = 32;  // white  - blue  - orange
+    corners[1] = 33;  // white  - blue  - red
+    corners[2] = 34;  // yellow - blue  - red
+    corners[3] = 35;  // yellow - blue  - orange
+    corners[4] = 36;  // white  - green - orange
+    corners[5] = 37;  // white  - green - red
+    corners[6] = 38;  // yellow - green - red
+    corners[7] = 39;  // yellow - green - orange
 
-    edges[0]   = 32; // blue   - white
-    edges[1]   = 65; // blue   - red
-    edges[2]   = 34; // blue   - yellow
-    edges[3]   = 67; // blue   - orange
-    edges[4]   = 36; // white  - orange
-    edges[5]   = 37; // white  - red
-    edges[6]   = 38; // yellow - red
-    edges[7]   = 39; // yellow - orange
-    edges[8]   = 40; // white  - green
-    edges[9]   = 73; // green  - red
-    edges[10]  = 42; // yellow - green
-    edges[11]  = 75; // green  - orange
+    edges[0]   = 32;  // blue   - white
+    edges[1]   = 65;  // blue   - red
+    edges[2]   = 34;  // blue   - yellow
+    edges[3]   = 67;  // blue   - orange
+    edges[4]   = 36;  // white  - orange
+    edges[5]   = 37;  // white  - red
+    edges[6]   = 38;  // yellow - red
+    edges[7]   = 39;  // yellow - orange
+    edges[8]   = 40;  // white  - green
+    edges[9]   = 73;  // green  - red
+    edges[10]  = 42;  // yellow - green
+    edges[11]  = 75;  // green  - orange
 
     last = ' ';
 }
