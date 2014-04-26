@@ -33,9 +33,32 @@ void HashTable::insert(Cube* cube) {
     // table[key] = key;
 }
 
+void HashTable::insert(int key) {
+
+    // if ¬(contains(key))
+    if (!table[key]) {
+        table[key] = true;
+        table_size++;
+    }
+
+    // table[key] = key;
+}
+
 bool HashTable::contains(Cube* cube) {
 
     int key = rank_it(cube);
+
+    return table[key];
+
+    // it can only be 1 or 0
+    // if (table.count(key) > 0) {
+    //     return true;
+    // } else {
+    //     return false;
+    // }
+}
+
+bool HashTable::contains(int key) {
 
     return table[key];
 

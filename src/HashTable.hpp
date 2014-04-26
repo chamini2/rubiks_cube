@@ -9,7 +9,9 @@ class HashTable {
         ~HashTable();
 
         void insert(Cube*);
+        void insert(int);
         bool contains(Cube*);
+        bool contains(int);
         bool empty();
         int size();
 
