@@ -15,6 +15,5 @@
 *.o
 main
 pdb
-tout0
-tout1
 a.out
+outest*

@@ -20,12 +20,12 @@ int factorial(int n) {
 ////////////////////////////////////////
 
 int cubie_to_pos(int cubie) {
-    if (32 <= cubie && cubie < 64) {
-        return cubie - 32;
-    } else if (64 <= cubie && cubie < 128) {
-        return cubie - 64;
-    } else if (128 <= cubie) {
-        return cubie - 128;
+    if (000 <= cubie && cubie < 100) {
+        return cubie - 000;
+    } else if (100 <= cubie && cubie < 200) {
+        return cubie - 100;
+    } else if (200 <= cubie) {
+        return cubie - 200;
     }
 
     error("cubie_to_pos | cubie = " + int_to_string(cubie), __LINE__, __FILE__);
@@ -33,13 +33,13 @@ int cubie_to_pos(int cubie) {
 }
 
 int cubie_to_orien(int cubie) {
-    if (32 <= cubie && cubie < 64) {
+    if (000 <= cubie && cubie < 100) {
         // axis C
         return 0;
-    } else if (64 <= cubie && cubie < 128) {
+    } else if (100 <= cubie && cubie < 200) {
         // axis B
         return 1;
-    } else if (128 <= cubie) {
+    } else if (200 <= cubie) {
         // axis A
         return 2;
     }
@@ -49,7 +49,7 @@ int cubie_to_orien(int cubie) {
 }
 
 int orien_to_axis(int orien) {
-    return 32 * pow(2,orien);
+    return 100*orien;
 }
 
 void print_array(int *array, int n) {

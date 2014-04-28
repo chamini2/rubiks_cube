@@ -37,17 +37,11 @@ class Cube {
         FT = Y
         LF = Z
 
-        T = XY = A
+        T = XY = C
         L = YZ = B
-        F = XZ = C
+        F = XZ = A
 
 ////////////////////////////////////////
-
-    cubie    X  orientation
-    |_|_|_| |_| |_|_|_|_|
-     A B C        0 - 7
-
-    C -> goal orientation for all corners and eight edges
 
  */
 
@@ -76,6 +70,9 @@ class Cube {
         char get_last();
         int* get_corners();
         bool equals_corners(int *other);
+        bool permutation_parity();
+        bool corner_parity();
+        bool valid();
 
     private:
         int *corners;
@@ -98,6 +95,8 @@ class Cube {
         void set_top(int* face);
         int* get_down();
         void set_down(int* face);
+        int sum_of_face(char face);
+
 
         std::string color_face(int* face, char chr);
 };

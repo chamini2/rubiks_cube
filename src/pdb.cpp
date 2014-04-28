@@ -18,14 +18,14 @@ int main(int argc, char const *argv[]) {
     file.close();
 
     file.open("../pdbs/ePDB.txt");
-    //BFS_edges(&file);
+    //  BFS_edges(&file);
     file.close();
 
     return 0;
 }
 
 void BFS_corners(std::ofstream *file, int end) {
-    std::queue<std::tuple<int,char,int>> queue;
+    std::queue<std::tuple<int, char, int>> queue;
     std::queue<Cube*> *succ;
     HashTable closed(1);
 
@@ -33,7 +33,7 @@ void BFS_corners(std::ofstream *file, int end) {
     int info, size, level = 0, last_level = -1;
     int *corners;
     char last;
-    std::tuple<int,char,int> node;
+    std::tuple<int, char, int> node;
 
 
     std::cout << "starting\n" << std::flush;
@@ -75,9 +75,8 @@ void BFS_corners(std::ofstream *file, int end) {
             cube = succ->front();
             succ->pop();
 
-
             corners = cube->get_corners();
-            info = rank(8,corners);
+            info = rank(8, corners);
             last = cube->get_last();
 
             if (!closed.contains(info)) {
@@ -94,7 +93,7 @@ void BFS_corners(std::ofstream *file, int end) {
     }
 
     while (!queue.empty()) {
-        std::tie (info, last, level) = queue.front();
+        std::tie(info, last, level) = queue.front();
 
         queue.pop();
     }
