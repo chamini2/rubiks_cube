@@ -27,10 +27,10 @@ Cube::Cube() {
     edges[10]  =  10;  // yellow - green
     edges[11]  = 111;  // green  - orange
 
-    last = ' ';
+    last = -1;
 }
 
-Cube::Cube(int corners, int edges, char last) {
+Cube::Cube(int corners, int edges, int last) {
     this->corners = unrank(8, corners);
     this->edges = unrank(12, edges);
     this->last = last;
@@ -257,62 +257,35 @@ void Cube::set_down(int *face) {
 int rotate_cubie(int cubie, char face) {
     int axis = cubie_to_orien(cubie);
     cubie = cubie_to_pos(cubie);
+    int swapping[] = { 0, 0 , 0};
 
     switch (face) {
-        // Axis A
         case 'f':
         case 'b':
-        switch (axis) {
-            case 0:
-            return cubie + 000;
-            case 1:
-            return cubie + 200;
-            case 2:
-            return cubie + 100;
-            default:
-            std::string err_msg = "rotate_cubie | axis = ";
-            err_msg +=  axis;
-            error(err_msg, __LINE__, __FILE__);
-            throw -1;
-        }
-        // Axis B
+            swapping[0] = 000;
+            swapping[1] = 200;
+            swapping[2] = 100;
+            break;
         case 'r':
         case 'l':
-        switch (axis) {
-            case 0:
-            return cubie + 200;
-            case 1:
-            return cubie + 100;
-            case 2:
-            return cubie + 000;
-            default:
-            std::string err_msg = "rotate_cubie | axis = ";
-            err_msg += axis;
-            error(err_msg, __LINE__, __FILE__);
-            throw -1;
-        }
-        // Axis C
+            swapping[0] = 200;
+            swapping[1] = 100;
+            swapping[2] = 000;
+            break;
         case 't':
         case 'd':
-        switch (axis) {
-            case 0:
-            return cubie + 100;
-            case 1:
-            return cubie + 000;
-            case 2:
-            return cubie + 200;
-            default:
-            std::string err_msg = "rotate_cubie | axis = ";
-            err_msg += axis;
+            swapping[0] = 100;
+            swapping[1] = 000;
+            swapping[2] = 200;
+            break;
+        default:
+            std::string err_msg = "rotate_cubie | face = ";
+            err_msg += face;
             error(err_msg, __LINE__, __FILE__);
             throw -1;
-        }
-        default:
-        std::string err_msg = "rotate_cubie | face = ";
-        err_msg += face;
-        error(err_msg, __LINE__, __FILE__);
-        throw -1;
     }
+
+    return cubie + swapping[axis];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -320,6 +293,7 @@ int rotate_cubie(int cubie, char face) {
 void Cube::clock(char face) {
     int* before;
     int after[8];
+    std::string str = "-";
 
     before = switch_get(face);
 
@@ -337,13 +311,14 @@ void Cube::clock(char face) {
 
     switch_set(face, after);
 
-    last = face;
+    last = str_to_last(face + str);
     delete[] before;
 }
 
 void Cube::counter(char face) {
     int* before;
     int after[8];
+    std::string str = "+";
 
     before = switch_get(face);
 
@@ -361,13 +336,14 @@ void Cube::counter(char face) {
 
     switch_set(face, after);
 
-    last = face;
+    last = str_to_last(face + str);
     delete[] before;
 }
 
 void Cube::hundred(char face) {
     int* before;
     int after[8];
+    std::string str = "|";
 
     before = switch_get(face);
 
@@ -385,7 +361,7 @@ void Cube::hundred(char face) {
 
     switch_set(face, after);
 
-    last = face;
+    last = str_to_last(face + str);
     delete[] before;
 }
 
@@ -394,10 +370,11 @@ void Cube::hundred(char face) {
 std::queue<Cube*>* Cube::succ() {
     std::queue<Cube*> *queue = new std::queue<Cube*>;
     Cube* cube;
+    std::string last_str = last_to_str(last);
     char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
 
     for (int i = 0; i < 6; i += 2) {
-        if (faces[i+1] != last) {
+        if (faces[i+1] != last_str.front()) {
             cube = this->clone();
             cube->clock(faces[i+1]);
             queue->push(cube);
@@ -410,7 +387,7 @@ std::queue<Cube*>* Cube::succ() {
             cube->hundred(faces[i+1]);
             queue->push(cube);
 
-            if (faces[i] != last) {
+            if (faces[i] != last_str.front()) {
                 cube = this->clone();
                 cube->clock(faces[i]);
                 queue->push(cube);
@@ -445,10 +422,10 @@ int* Cube::switch_get(char chr) {
         case 'd':
         return this->get_down();
         default:
-        std::string err_msg = "switch_get | chr = ";
-        err_msg += chr;
-        error(err_msg, __LINE__, __FILE__);
-        throw -1;
+            std::string err_msg = "switch_get | chr = ";
+            err_msg += chr;
+            error(err_msg, __LINE__, __FILE__);
+            throw -1;
     }
 }
 
@@ -467,10 +444,10 @@ void Cube::switch_set(char chr, int* face) {
         case 'd':
         return this->set_down(face);
         default:
-        std::string err_msg = "switch_get | chr = ";
-        err_msg += chr;
-        error(err_msg, __LINE__, __FILE__);
-        throw -1;
+            std::string err_msg = "switch_get | chr = ";
+            err_msg += chr;
+            error(err_msg, __LINE__, __FILE__);
+            throw -1;
     }
 }
 
@@ -518,7 +495,7 @@ std::string Cube::printable() {
 
 ////////////////////////////////////////
 
-char Cube::get_last() {
+int Cube::get_last() {
     return last;
 }
 
@@ -640,4 +617,69 @@ bool Cube::permutation_parity() {
 
 bool Cube::valid() {
     return corner_parity();
+}
+
+
+std::string last_to_str(int last) {
+    std::string str;
+    char faces[] = { 'f', 'b', 'r', 'l', 't', 'd' };
+
+    switch (last % 3) {
+        case 0:
+            str = "+";
+            break;
+        case 1:
+            str = "-";
+            break;
+        case 2:
+            str = "|";
+            break;
+        case -1:
+            return "  ";
+        default:
+            error("last_to_str | last % 3 = " + int_to_string(last % 3), __LINE__, __FILE__);
+            throw -1;
+    }
+
+    return faces[last / 3] + str;
+}
+
+int str_to_last(std::string last) {
+    int val;
+
+    switch (last.front()) {
+        case 'f':
+            val = 0;
+            break;
+        case 'b':
+            val = 3;
+            break;
+        case 'r':
+            val = 6;
+            break;
+        case 'l':
+            val = 9;
+            break;
+        case 't':
+            val = 12;
+            break;
+        case 'd':
+            val = 15;
+            break;
+        default:
+            error("str_to_last | last.front() = " + last, __LINE__, __FILE__);
+            throw -1;
+    }
+
+    switch (last.back()) {
+        case '+':
+            return val + 0;
+        case '-':
+            return val + 1;
+        case '|':
+            return val + 2;
+        default:
+            error("str_to_last | last.back() = " + last, __LINE__, __FILE__);
+            throw -1;
+    }
 }

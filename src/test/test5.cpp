@@ -6,8 +6,9 @@
 
 int main(int argc, char const *argv[]) {
     std::ifstream file("../pdbs/cPDB.txt");
-    int rank, yeses = 0, noes = 0;
+    int rank, yeses = 0, noes = 0, first = -1, level;
     Cube *cube;
+    char path[12];
 
     if (!file.is_open()) {
         std::cout << "NO ABRIÓ EL ARCHIVO\n";
@@ -21,13 +22,19 @@ int main(int argc, char const *argv[]) {
             break;
         }
 
+        file >> level;
         file >> rank;
-        file >> rank;
+        file.getline(path,10);
+
         cube = new Cube(rank, 0 , ' ');
         if (cube->valid()) {
             yeses++;
         } else {
             noes++;
+            if (first == -1) {
+                first = rank;
+                std::cout << "FIRST: " << first << " at " << level << " -> " << cube->corners_to_string() << " path:" << path << "\n";
+            }
         }
 
         delete cube;

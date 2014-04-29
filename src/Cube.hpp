@@ -6,14 +6,17 @@
 #ifndef CUBE_H
 #define CUBE_H
 
+std::string last_to_str(int last);
+int str_to_last(std::string last);
+
+
 class Cube {
 /*
-    Vamos a definir que un cubo tiene las siguientes caras,
-    que comienzan de los colores:
+    We will begin by defining that a cube has the following faces and colors:
         front = white
         back  = yellow
-        left  = orange
         right = red
+        left  = orange
         top   = blue
         down  = green
 
@@ -32,16 +35,40 @@ class Cube {
          \___\___\___\/
 
 
-    LTF:
+    Orientations:
         LT = X
         FT = Y
-        LF = Z
+        FL = Z
 
-        T = XY = C
-        L = YZ = B
-        F = XZ = A
+        F = XZ = A = 0
+        L = YZ = B = 1
+        T = XY = C = 2
 
-////////////////////////////////////////
+    ////////////////////////////////////////
+
+    Last:
+        -  -> clockwise
+        +  -> counter-clockwise
+        +  -> hundred-eighty degrees
+
+        0  -> f+
+        1  -> f-
+        2  -> f|
+        3  -> b+
+        4  -> b-
+        5  -> b|
+        6  -> r+
+        7  -> r-
+        8  -> r|
+        9  -> l+
+        10 -> l-
+        11 -> l|
+        12 -> t+
+        13 -> t-
+        14 -> t|
+        15 -> d+
+        16 -> d-
+        17 -> d|
 
  */
 
@@ -49,7 +76,7 @@ class Cube {
     public:
         // Constructor
         Cube();
-        Cube(int corners, int edges, char last);
+        Cube(int corners, int edges, int last);
         ~Cube();
         Cube* clone();
 
@@ -67,7 +94,7 @@ class Cube {
 
         std::queue<Cube*>* succ();
 
-        char get_last();
+        int get_last();
         int* get_corners();
         bool equals_corners(int *other);
         bool permutation_parity();
@@ -77,7 +104,7 @@ class Cube {
     private:
         int *corners;
         int *edges;
-        char last;
+        int last;
 
         int* switch_get(char chr);
         void switch_set(char chr, int* face);

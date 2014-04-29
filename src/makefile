@@ -6,12 +6,13 @@ main: clean extra Cube HashTable main.o
 pdb: clean extra rank Cube HashTable pdb.o
 	g++ $(CXXFLAGS) extra.o rank.o Cube.o HashTable.o pdb.o  -o $@
 
-tests: clean extra rank Cube test0.o test1.o test2.o test3.o test5.o
+tests: clean extra rank Cube HashTable test0.o test1.o test2.o test3.o test5.o test6.o
 	g++ $(CXXFLAGS) extra.o rank.o test0.o -o outest0 || true
 	g++ $(CXXFLAGS) extra.o rank.o test1.o -o outest1 || true
 	g++ $(CXXFLAGS) extra.o rank.o test2.o -o outest2 || true
 	g++ $(CXXFLAGS) extra.o Cube.o rank.o test3.o -o outest3 || true
 	g++ $(CXXFLAGS) extra.o Cube.o rank.o test5.o -o outest5 || true
+	g++ $(CXXFLAGS) extra.o Cube.o HashTable.o rank.o test6.o -o outest6 || true
 
 ########################################
 
@@ -37,6 +38,9 @@ test3.o: test/test3.cpp
 
 test5.o: test/test5.cpp
 	g++ $(CXXFLAGS) -c -std=c++11 test/test5.cpp || true
+
+test6.o: test/test6.cpp
+	g++ $(CXXFLAGS) -c -std=c++11 test/test6.cpp || true
 
 ####################
 
