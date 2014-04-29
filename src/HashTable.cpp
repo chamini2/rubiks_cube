@@ -1,55 +1,98 @@
 #include "HashTable.hpp"
 
-HashTable::HashTable(){}
+/*
+ * type:
+ *     0 (default) -> IDA*
+ *     1           -> Corners PDB
+ *     2           -> Edges PDB
+ */
+HashTable::HashTable(int type) {
+    this->table = new bool[264539520];
+    this->type = type;
+    this->table_size = 0;
 
-HashTable::~HashTable(){
-    for ( auto it = this->table.begin(); it != this->table.end(); ++it ) {
-        delete[] it->second;
+    for (int i = 0; i < 264539520; ++i) {
+        this->table[i] = false;
     }
 }
 
-void HashTable::insert(Cube* cube){
-    // IDA*
-    // std::string key = cube->to_string();
-
-    // corner PDB
-    std::string key = cube->corners_to_string();
-
-    // edge PDB
-    // std::string key = cube->edges_to_string();
-    this->table.emplace(key, cube->get_corners());
+HashTable::~HashTable() {
+    delete[] table;
 }
 
-bool HashTable::contains(Cube* cube){
-    // IDA*
-    // std::string key = cube->to_string();
+void HashTable::insert(Cube* cube) {
 
-    // corner PDB
-    std::string key = cube->corners_to_string();
+    int key = rank_it(cube);
 
-    // edge PDB
-    // std::string key = cube->edges_to_string();
-    auto range = this->table.equal_range(key);
-
-    if (range.first == this->table.end()){
-        return false;
-    } else {
-        while (range.first != range.second) {
-            if (cube->equals_corners(range.first->second)){
-                return true;
-            }
-
-            range.first++;
-        }
+    // if ¬(contains(cube))
+    if (!table[key]) {
+        table[key] = true;
+        table_size++;
     }
 
-    return false;
+    // table[key] = key;
+}
+
+void HashTable::insert(int key) {
+
+    // if ¬(contains(key))
+    if (!table[key]) {
+        table[key] = true;
+        table_size++;
+    }
+
+    // table[key] = key;
+}
+
+bool HashTable::contains(Cube* cube) {
+
+    int key = rank_it(cube);
+
+    return table[key];
+
+    // it can only be 1 or 0
+    // if (table.count(key) > 0) {
+    //     return true;
+    // } else {
+    //     return false;
+    // }
+}
+
+bool HashTable::contains(int key) {
+
+    return table[key];
+
+    // it can only be 1 or 0
+    // if (table.count(key) > 0) {
+    //     return true;
+    // } else {
+    //     return false;
+    // }
 }
 
 bool HashTable::empty() {
-    return this->size() == 0;
+    return table_size == 0;
 }
 
 int HashTable::size() {
-    return this->table.size();
+    return table_size;
+}
+
+////////////////////////////////////////
+
+int HashTable::rank_it(Cube* cube) {
+    switch (type) {
+        // IDA*
+        case 0:
+            // int key = rank(?, cube->???());
+        // Corners PDB
+        case 1:
+            return rank(8, cube->get_corners());
+        // Edges PDB
+        case 2:
+            // return rank(12, cube->get_edges());
+        default:
+            error("rank_it | type = " + int_to_string(type), __LINE__, __FILE__);
+            throw -1;
+    }
 }

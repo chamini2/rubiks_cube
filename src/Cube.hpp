@@ -1,19 +1,22 @@
-#include <iostream>     // std::cout, std::cin, std::endl
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
 #include "extra.hpp"    // int_to_string
+#include "rank.hpp"
 
 #ifndef CUBE_H
 #define CUBE_H
 
+std::string last_to_str(int last);
+int str_to_last(std::string last);
+
+
 class Cube {
 /*
-    Vamos a definir que un cubo tiene las siguientes caras,
-    que comienzan de los colores:
+    We will begin by defining that a cube has the following faces and colors:
         front = white
         back  = yellow
-        left  = orange
         right = red
+        left  = orange
         top   = blue
         down  = green
 
@@ -32,20 +35,40 @@ class Cube {
          \___\___\___\/
 
 
-    LTF:
+    Orientations:
         LT = X
         FT = Y
         LF = Z
 
-        T = XY = A
-        L = YZ = B
-        F = XZ = C
+        F = XZ = A = 0
+        L = YZ = B = 1
+        T = XY = C = 2
 
-////////////////////////////////////////
+    ////////////////////////////////////////
 
-    cubie    X  orientation
-    |_|_|_| |_| |_|_|_|_|
-     A B C        0 - 7
+    Last:
+        -  -> clockwise
+        +  -> counter-clockwise
+        +  -> hundred-eighty degrees
+
+        0  -> f+
+        1  -> f-
+        2  -> f|
+        3  -> b+
+        4  -> b-
+        5  -> b|
+        6  -> r+
+        7  -> r-
+        8  -> r|
+        9  -> l+
+        10 -> l-
+        11 -> l|
+        12 -> t+
+        13 -> t-
+        14 -> t|
+        15 -> d+
+        16 -> d-
+        17 -> d|
 
     C -> goal orientation for all corners and eight edges
     B -> goal orientation for other 4 edges
@@ -55,6 +78,7 @@ class Cube {
     public:
         // Constructor
         Cube();
+        Cube(int corners, int edges, int last);
         ~Cube();
         Cube* clone();
 
@@ -72,13 +96,17 @@ class Cube {
 
         std::queue<Cube*>* succ();
 
-        uint8_t* get_corners();
-        bool equals_corners(uint8_t *other);
+        int get_last();
+        int* get_corners();
+        bool equals_corners(int *other);
+        bool permutation_parity();
+        bool corner_parity();
+        bool valid();
 
     private:
-        uint8_t *corners;
-        uint8_t *edges;
-        char last;
+        int *corners;
+        int *edges;
+        int last;
 
         int* switch_get(char chr);
         void switch_set(char chr, int* face);
@@ -96,6 +124,8 @@ class Cube {
         void set_top(int* face);
         int* get_down();
         void set_down(int* face);
+        int sum_of_face(char face);
+
 
         std::string color_face(int* face, char chr);
 };
