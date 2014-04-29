@@ -5,9 +5,8 @@
 #include "../HashTable.hpp"
 
 int main(int argc, char const *argv[]) {
-    std::ifstream file("cPDB.txt");
+    std::ifstream file("../pdbs/cPDB.txt");
     int rank, yeses = 0, noes = 0;
-    int *array;
     Cube *cube;
 
     if (!file.is_open()) {
@@ -19,7 +18,7 @@ int main(int argc, char const *argv[]) {
 
         if (file.eof()) {
             file.close();
-            return 0;
+            break;
         }
 
         file >> rank;
@@ -32,7 +31,7 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-    std::cout << yeses << " " << noes << " " << noes/(yeses+noes) << "\n";
+    std::cout << yeses << " " << noes << " " << ((float) noes/(yeses+noes)) << "\n";
 }
 
 
