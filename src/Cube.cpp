@@ -257,12 +257,12 @@ void Cube::set_down(int *face) {
 int rotate_cubie(int cubie, char face) {
     int axis = cubie_to_orien(cubie);
     cubie = cubie_to_pos(cubie);
-    int swapping[] = { 0, 0 , 0};
+    int swapping[] = { 0, 0, 0};
 
     switch (face) {
         case 'f':
         case 'b':
-            swapping[0] = 000;
+            swapping[0] =   0;
             swapping[1] = 200;
             swapping[2] = 100;
             break;
@@ -270,12 +270,12 @@ int rotate_cubie(int cubie, char face) {
         case 'l':
             swapping[0] = 200;
             swapping[1] = 100;
-            swapping[2] = 000;
+            swapping[2] =   0;
             break;
         case 't':
         case 'd':
             swapping[0] = 100;
-            swapping[1] = 000;
+            swapping[1] =   0;
             swapping[2] = 200;
             break;
         default:
@@ -348,16 +348,16 @@ void Cube::hundred(char face) {
     before = switch_get(face);
 
     // corners
-    after[0] = rotate_cubie(before[2], face);
-    after[1] = rotate_cubie(before[3], face);
-    after[2] = rotate_cubie(before[0], face);
-    after[3] = rotate_cubie(before[1], face);
+    after[0] = before[2];
+    after[1] = before[3];
+    after[2] = before[0];
+    after[3] = before[1];
 
     // edges
-    after[4] = rotate_cubie(before[6], face);
-    after[5] = rotate_cubie(before[7], face);
-    after[6] = rotate_cubie(before[4], face);
-    after[7] = rotate_cubie(before[5], face);
+    after[4] = before[6];
+    after[5] = before[7];
+    after[6] = before[4];
+    after[7] = before[5];
 
     switch_set(face, after);
 
@@ -410,17 +410,17 @@ std::queue<Cube*>* Cube::succ() {
 int* Cube::switch_get(char chr) {
     switch (chr) {
         case 'f':
-        return this->get_front();
+            return this->get_front();
         case 'b':
-        return this->get_back();
+            return this->get_back();
         case 'r':
-        return this->get_right();
+            return this->get_right();
         case 'l':
-        return this->get_left();
+            return this->get_left();
         case 't':
-        return this->get_top();
+            return this->get_top();
         case 'd':
-        return this->get_down();
+            return this->get_down();
         default:
             std::string err_msg = "switch_get | chr = ";
             err_msg += chr;
@@ -432,17 +432,17 @@ int* Cube::switch_get(char chr) {
 void Cube::switch_set(char chr, int* face) {
     switch (chr) {
         case 'f':
-        return this->set_front(face);
+            return this->set_front(face);
         case 'b':
-        return this->set_back(face);
+            return this->set_back(face);
         case 'r':
-        return this->set_right(face);
+            return this->set_right(face);
         case 'l':
-        return this->set_left(face);
+            return this->set_left(face);
         case 't':
-        return this->set_top(face);
+            return this->set_top(face);
         case 'd':
-        return this->set_down(face);
+            return this->set_down(face);
         default:
             std::string err_msg = "switch_get | chr = ";
             err_msg += chr;

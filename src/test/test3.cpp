@@ -7,6 +7,18 @@
 int main(int argc, char const *argv[]) {
     // int size;
     Cube *cube = new Cube;
+
+    std::cout << cube->corners_to_string() <<"\n";
+    cube->clock('l');
+    std::cout << cube->corners_to_string() <<"\n";
+    cube->clock('b');
+    std::cout << cube->corners_to_string() <<"\n";
+    // cube->clock('l');
+    // cube->clock('l');
+    cube->hundred('l');
+    std::cout << cube->corners_to_string() <<"\n";
+
+
     if (cube->valid()) {
         std::cout << "Yes\n";
     } else {
