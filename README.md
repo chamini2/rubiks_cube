@@ -17,8 +17,8 @@ The cube in ASCII art
 
     front  = white
     back   = yellow
-    left   = orange
     right  = red
+    left   = orange
     top    = blue
     down   = green
            ____________
