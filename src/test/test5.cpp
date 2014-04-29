@@ -29,6 +29,8 @@ int main(int argc, char const *argv[]) {
         } else {
             noes++;
         }
+
+        delete cube;
     }
 
     std::cout << yeses << " " << noes << " " << ((float) noes/(yeses+noes)) << "\n";

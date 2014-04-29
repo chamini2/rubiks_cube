@@ -564,8 +564,7 @@ int tp(int n, int *P) {
 
 int Cube::sum_of_face(char face) {
     int n, h, v, sum = 0;
-    int *handle;
-    handle = switch_get(face);
+    int *handle = switch_get(face);
 
     switch(face) {
         case 'f':
