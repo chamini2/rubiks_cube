@@ -1,5 +1,5 @@
 #include <fstream>
-#include "../HashTable.hpp"
+#include "../Set.hpp"
 
 void BFS_corners(std::ofstream *file, int end);
 
@@ -28,7 +28,7 @@ void BFS_corners(std::ofstream *file, int end) {
     std::queue<std::tuple<int, int, int, std::string>> queue;
     std::queue<Cube*> *succ;
     std::string path, newpath;
-    HashTable closed(1);
+    Set closed(1);
 
     Cube* cube = new Cube;
     int info, size, level = 0, last_level = -1;

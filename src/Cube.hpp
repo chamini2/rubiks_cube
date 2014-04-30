@@ -78,6 +78,7 @@ class Cube {
     public:
         // Constructor
         Cube();
+        Cube(int pdb);
         Cube(int corners, int edges, int last);
         ~Cube();
         Cube* clone();
@@ -98,6 +99,7 @@ class Cube {
 
         int get_last();
         int* get_corners();
+        int* get_edges();
         bool equals_corners(int *other);
         bool permutation_parity();
         bool corner_parity();

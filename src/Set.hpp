@@ -2,11 +2,10 @@
 #include "Cube.hpp"
 #include "rank.hpp"
 
-class HashTable {
-
+class Set {
     public:
-        HashTable(int type = 0); // defaults to IDA*
-        ~HashTable();
+        Set(int type = 0); // defaults to IDA*
+        ~Set();
 
         void insert(Cube*);
         void insert(int);
@@ -22,3 +21,5 @@ class HashTable {
 
         int rank_it(Cube *cube);
 };
+
+

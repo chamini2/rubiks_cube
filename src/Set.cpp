@@ -1,26 +1,24 @@
-#include "HashTable.hpp"
+#include "Set.hpp"
+#include <map>
 
 /*
  * type:
  *     0 (default) -> IDA*
  *     1           -> Corners PDB
- *     2           -> Edges PDB
+ *     2           -> Edges 1 PDB
+ *     3           -> Edges 2 PDB
  */
-HashTable::HashTable(int type) {
-    this->table = new bool[264539520];
+Set::Set(int type) {
     this->type = type;
     this->table_size = 0;
-
-    for (int i = 0; i < 264539520; ++i) {
-        this->table[i] = false;
-    }
+    this->table = new bool[264539520];
 }
 
-HashTable::~HashTable() {
+Set::~Set() {
     delete[] table;
 }
 
-void HashTable::insert(Cube* cube) {
+void Set::insert(Cube* cube) {
 
     int key = rank_it(cube);
 
@@ -33,7 +31,7 @@ void HashTable::insert(Cube* cube) {
     // table[key] = key;
 }
 
-void HashTable::insert(int key) {
+void Set::insert(int key) {
 
     // if ¬(contains(key))
     if (!table[key]) {
@@ -44,7 +42,7 @@ void HashTable::insert(int key) {
     // table[key] = key;
 }
 
-bool HashTable::contains(Cube* cube) {
+bool Set::contains(Cube* cube) {
 
     int key = rank_it(cube);
 
@@ -58,7 +56,7 @@ bool HashTable::contains(Cube* cube) {
     // }
 }
 
-bool HashTable::contains(int key) {
+bool Set::contains(int key) {
 
     return table[key];
 
@@ -70,17 +68,17 @@ bool HashTable::contains(int key) {
     // }
 }
 
-bool HashTable::empty() {
+bool Set::empty() {
     return table_size == 0;
 }
 
-int HashTable::size() {
+int Set::size() {
     return table_size;
 }
 
 ////////////////////////////////////////
 
-int HashTable::rank_it(Cube* cube) {
+int Set::rank_it(Cube* cube) {
     switch (type) {
         // IDA*
         case 0:

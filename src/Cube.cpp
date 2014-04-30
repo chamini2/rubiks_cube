@@ -14,6 +14,9 @@ Cube::Cube() {
     corners[6] =   6;  // yellow - green - red
     corners[7] =   7;  // yellow - green - orange
 
+    // The set of edges is divided in two sets:
+
+    // A set of 7 edges with 12!/5! * 2^7 possible elements
     edges[0]   =   0;  // blue   - white
     edges[1]   = 101;  // blue   - red
     edges[2]   =   2;  // blue   - yellow
@@ -21,6 +24,8 @@ Cube::Cube() {
     edges[4]   =   4;  // white  - orange
     edges[5]   =   5;  // white  - red
     edges[6]   =   6;  // yellow - red
+
+    // A set of 5 edges with 12!/7! * 2^7 possible elements
     edges[7]   =   7;  // yellow - orange
     edges[8]   =   8;  // white  - green
     edges[9]   = 109;  // green  - red
@@ -30,12 +35,81 @@ Cube::Cube() {
     last = -1;
 }
 
+Cube::Cube(int pdb) {
+
+    corners = new int[8];
+    edges   = new int[12];
+
+    corners[0] =   0;  // white  - blue  - orange
+    corners[1] =   1;  // white  - blue  - red
+    corners[2] =   2;  // yellow - blue  - red
+    corners[3] =   3;  // yellow - blue  - orange
+    corners[4] =   4;  // white  - green - orange
+    corners[5] =   5;  // white  - green - red
+    corners[6] =   6;  // yellow - green - red
+    corners[7] =   7;  // yellow - green - orange
+
+
+    // The set of edges is divided in two sets:
+
+    switch (pdb) {
+        case 1:
+            // A set of 7 edges with 12!/5! * 2^7 possible elements
+            edges[0]   =   0;  // blue   - white
+            edges[1]   = 101;  // blue   - red
+            edges[2]   =   2;  // blue   - yellow
+            edges[3]   = 103;  // blue   - orange
+            edges[4]   =   4;  // white  - orange
+            edges[5]   =   5;  // white  - red
+            edges[6]   =   6;  // yellow - red
+
+            // A set of 5 edges with 12!/7! * 2^7 possible elements
+            // These elements are filled with -1 given that their values are
+            // irrelevant
+            edges[7]   = -1;  // yellow - orange
+            edges[8]   = -1;  // white  - green
+            edges[9]   = -1;  // green  - red
+            edges[10]  = -1;  // yellow - green
+            edges[11]  = -1;  // green  - orange
+
+            break;
+        case 2:
+            // These elements are filled with -1 given that their values are
+            // irrelevant
+            edges[0]   = -1;  // blue   - white
+            edges[1]   = -1;  // blue   - red
+            edges[2]   = -1;  // blue   - yellow
+            edges[3]   = -1;  // blue   - orange
+            edges[4]   = -1;  // white  - orange
+            edges[5]   = -1;  // white  - red
+            edges[6]   = -1;  // yellow - red
+
+            // A set of 5 edges with 12!/7! * 2^7 possible elements
+            edges[7]   =   7;  // yellow - orange
+            edges[8]   =   8;  // white  - green
+            edges[9]   = 109;  // green  - red
+            edges[10]  =  10;  // yellow - green
+            edges[11]  = 111;  // green  - orange
+
+            break;
+        default:
+            std::string err_msg = "Cube not initialized ";
+            error(err_msg, __LINE__, __FILE__);
+            throw -1;
+    }
+
+
+
+
+
+    last = -1;
+}
+
 Cube::Cube(int corners, int edges, int last) {
     this->corners = unrank(8, corners);
     this->edges = unrank(12, edges);
     this->last = last;
 }
-
 
 Cube::~Cube() {
   delete[] corners;
@@ -255,37 +329,41 @@ void Cube::set_down(int *face) {
 ////////////////////////////////////////////////////////////////////////////////
 
 int rotate_cubie(int cubie, char face) {
-    int axis = cubie_to_orien(cubie);
-    cubie = cubie_to_pos(cubie);
-    int swapping[] = { 0, 0, 0};
+    if (cubie >= 0) {
+        int axis = cubie_to_orien(cubie);
+        cubie = cubie_to_pos(cubie);
+        int swapping[] = { 0, 0, 0};
 
-    switch (face) {
-        case 'f':
-        case 'b':
-            swapping[0] =   0;
-            swapping[1] = 200;
-            swapping[2] = 100;
-            break;
-        case 'r':
-        case 'l':
-            swapping[0] = 200;
-            swapping[1] = 100;
-            swapping[2] =   0;
-            break;
-        case 't':
-        case 'd':
-            swapping[0] = 100;
-            swapping[1] =   0;
-            swapping[2] = 200;
-            break;
-        default:
-            std::string err_msg = "rotate_cubie | face = ";
-            err_msg += face;
-            error(err_msg, __LINE__, __FILE__);
-            throw -1;
+        switch (face) {
+            case 'f':
+            case 'b':
+                swapping[0] =   0;
+                swapping[1] = 200;
+                swapping[2] = 100;
+                break;
+            case 'r':
+            case 'l':
+                swapping[0] = 200;
+                swapping[1] = 100;
+                swapping[2] =   0;
+                break;
+            case 't':
+            case 'd':
+                swapping[0] = 100;
+                swapping[1] =   0;
+                swapping[2] = 200;
+                break;
+            default:
+                std::string err_msg = "rotate_cubie | face = ";
+                err_msg += face;
+                error(err_msg, __LINE__, __FILE__);
+                throw -1;
+        }
+
+        return cubie + swapping[axis];
+    } else {
+        return cubie;
     }
-
-    return cubie + swapping[axis];
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -506,6 +584,13 @@ int* Cube::get_corners() {
     return array;
 }
 
+int* Cube::get_edges() {
+    int *array = new int[12];
+    std::copy(this->edges, this->edges+12, array);
+
+    return array;
+}
+
 bool Cube::equals_corners(int *other) {
     for (int i = 0; i < 8; ++i) {
         if (corners[i] != other[i]) {
@@ -540,7 +625,7 @@ int tp(int n, int *P) {
 }
 
 int Cube::sum_of_face(char face) {
-    int n, h, v, sum = 0;
+    int n, v, sum = 0;
     int *handle = switch_get(face);
 
     switch(face) {
@@ -548,19 +633,16 @@ int Cube::sum_of_face(char face) {
         case 'b':
             n = 0;
             v = 2;
-            h = 1;
             break;
         case 'r':
         case 'l':
             n = 1;
             v = 2;
-            h = 0;
             break;
         case 't':
         case 'd':
             n = 2;
             v = 1;
-            h = 0;
             break;
     }
 

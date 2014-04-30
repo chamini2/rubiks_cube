@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-#include "../HashTable.hpp"
+#include "../Set.hpp"
 
 int main(int argc, char const *argv[]) {
     // int size;
