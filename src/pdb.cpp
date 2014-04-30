@@ -1,4 +1,5 @@
 #include <fstream>
+#include <bitset>
 #include "HashTable.hpp"
 
 void BFS_corners(std::ofstream *file, int end);
@@ -13,7 +14,7 @@ int main(int argc, char const *argv[]) {
         end = 1 + atoi(argv[1]);
     }
 
-    file.open("../pdbs/cPDB.txt");
+    file.open("../pdbs/cPDB.bin");
     BFS_corners(&file, end);
     file.close();
 
@@ -64,7 +65,7 @@ void BFS_corners(std::ofstream *file, int end) {
             std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << std::endl << std::flush;
         }
 
-        (*file) << level << " " << info << "\n";
+        (*file) << std::bitset<8>(level) << std::bitset<32>(info);
 
         succ = cube->succ();
         size = succ->size();
