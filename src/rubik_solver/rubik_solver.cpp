@@ -125,9 +125,7 @@ Par* bounded_dfs(Cube* n, int g, int t){
     <t> a partir del nodo <n> con costo <g>.
    */
 
-  Par* par_retorno;
-
-  par_retorno = chequear_cond_parada(n,g,t);
+  Par* par_retorno = chequear_cond_parada(n,g,t);
   if (par_retorno != NULL){
     //Hubo exito en las condiciones de parada
     return par_retorno;
@@ -136,12 +134,11 @@ Par* bounded_dfs(Cube* n, int g, int t){
   std::queue<int> *plan;
   int new_t = std::numeric_limits<int>::max(); // Infinito
 
-  std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir 
-  
+  std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir   
   int tmp;
   int succ_size = succ->size(); 
-  for (tmp = 0; tmp < succ_size; tmp++){
-    
+
+  for (tmp = 0; tmp < succ_size; tmp++){    
     par_retorno = bounded_dfs(succ->front(), g + 1 , t);
     delete(succ->front());
     succ->pop();
