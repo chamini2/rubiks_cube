@@ -4,7 +4,15 @@
 #include <time.h>  
 #include "../Cube.hpp"     
 
-int PROBLEM_LEVELS = 0;
+/*
+  Cantidad de movimientos por defecto a realizar para desordenar el cubo.
+  Si se pasa por parametros a main un numero entre 0 y 18 al procedimiento se
+  utilizara ese valor, de lo contrario se utilizara este.
+
+  El valor por defecto corresponde al ultimo valor en el que IDA* corre en 
+  menos de un minuto sin utilizar heuristica.
+ */
+int PROBLEM_LEVELS = 6; 
 
 /*
   Definicion para el valor de retorno de la funcion recursiva utilizado en IDA*:
@@ -58,6 +66,8 @@ Cube* make_root_node(int levels){
     c = succ->front();
     delete(succ);
   }
+  std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << std::endl;
+  c->reset_last();
   return c;
 }
 
@@ -98,7 +108,7 @@ Par* chequear_cond_parada(Cube* n, int g, int t){
     sobrepasado o que el goal ha sido encontrado.
    */
   Par* par_retorno = new Par;
-  
+
   if ((g + h_value(n)) > t){
     par_retorno->first = NULL;
     par_retorno->second = g + h_value(n);
@@ -109,6 +119,7 @@ Par* chequear_cond_parada(Cube* n, int g, int t){
 
   if (is_goal(n)){
     plan = extract_solution(n);
+    std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
     par_retorno->first = plan;
     par_retorno->second = g;
     return par_retorno;
@@ -139,6 +150,7 @@ Par* bounded_dfs(Cube* n, int g, int t){
   int succ_size = succ->size(); 
 
   for (tmp = 0; tmp < succ_size; tmp++){    
+    delete(par_retorno);
     par_retorno = bounded_dfs(succ->front(), g + 1 , t);
     delete(succ->front());
     succ->pop();
@@ -148,7 +160,6 @@ Par* bounded_dfs(Cube* n, int g, int t){
     }
     new_t = std::min(new_t, par_retorno->second);
   }
-  par_retorno = new Par;
   par_retorno->first = NULL;
   par_retorno->second = new_t;
   delete(succ);
@@ -181,7 +192,21 @@ std::queue<int>* IDA(){
   return NULL;  
 }
 
+void validar_entrada(int argc, char const *argv[]){
+  if (argc > 1){
+    int argv_int = atoi(argv[1]);
+    if (0 <= argv_int && argv_int < 18)
+      PROBLEM_LEVELS = argv_int;
+    else{
+      std::cout << "Advertencia: "<< argv_int;
+      std::cout << ": valor invalido para cantidad de movimientos para desordenar. ";
+      std::cout << "Utilizando valor por defecto." << std::endl;
+    }
+  }    
+}
+
 int main(int argc, char const *argv[]) {
+  validar_entrada(argc, argv);
   load_pdb();
 
   std::queue<int> *plan = IDA(); 

@@ -36,6 +36,10 @@ Cube::Cube(int corners, int edges, int last) {
     this->last = last;
 }
 
+void Cube::reset_last() {
+    this->last = -1;
+}
+
 
 Cube::~Cube() {
   delete[] corners;
