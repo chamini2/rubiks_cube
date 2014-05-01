@@ -1,65 +1,42 @@
-#include "rubik_solver.hpp"
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <iostream>
+#include <limits>
+#include <stdlib.h>     
+#include <time.h>  
+#include "../Cube.hpp"     
+
+int PROBLEM_LEVELS = 0;
+
+/*
+  Definicion para el valor de retorno de la funcion recursiva utilizado en IDA*:
+  Un par que contiene una cola de enteros para el plan de ejecucion, donde cada
+  entero representa un movimiento, y un entero para representar el valor t del
+  nivel que esta cubriendo el algoritmo en un momento dado. 
+ */
+typedef std::pair <std::queue<int>*,int> Par;
 
 void load_pdb(){
+  /*
+    Funcion que carga la PDB en memoria y la almacena en una variable global,
+    para luego ser untilizada en la funcion h_value.
+    No implementada.
+   */
   return;
 }
 
 int h_value(Cube* c){
-  return 4;
-}
-
-bool is_goal(Cube *c){
-  //Esta funcion podria tener una mejor implementacion
-  if (c == NULL)
-    return false;
-  Cube *goal = new Cube; 
-  if (goal->equals(c))
-    return true;
-  return false;
-}
-
-std::queue<int>* bounded_dfs(Cube* n, int g, int* t){  
-  std::cout << "Current level for g = " << g << std::endl;
- 
-  if ((g + h_value(n)) > *t){
-    *t = g + h_value(n);
-    return NULL;    
-  }
-  
-  std::queue<int> *plan = new std::queue<int>;
-
-  if (is_goal(n)){
-    //extract solution
-    *t = g;
-    int i;
-    for (i = 0; i < 10 ; i++)   
-      plan->push(i);
-    return plan;
-  }
-
-  int new_t = std::numeric_limits<int>::max();
-
-  std::queue<Cube*> *succ;
-  succ = n->succ();
-  
-  int tmp;
-  int succ_size = succ->size();
-  for (tmp = 0; tmp < succ_size; tmp++){
-    plan = bounded_dfs(succ->front(), g + 1 ,t);
-    succ->pop();
-    if (plan != NULL){
-      new_t = std::min(new_t,*t);
-      return plan;
-    }
-  }
-  *t = new_t;
-  return NULL;
+  /*
+    Funcion heuristica.
+    No implementada.
+   */
+  return 0;
 }
 
 
-Cube* generador_cubos_random(int levels){
+Cube* make_root_node(int levels){
+  /*
+   Funcion que retorna un Cube desordenado mediante <levels> movimientos random
+   sobre un cubo en su estado goal.
+   */
   Cube *c = new Cube;
   int i;
   std::queue<Cube*> *succ;
@@ -69,44 +46,165 @@ Cube* generador_cubos_random(int levels){
     srand(time(NULL));
     int random_succesor = rand() % (succ->size() - 1);
     for (j = 0; j < random_succesor; j++){
+      /*
+	Se eliminan <random_sucessor> sucesores de la cola y se realiza
+	el movimiento correspondiente al sucesor que quede al principio
+	de la cola.
+      */
+      delete(succ->front());
       succ->pop();
     }
+    delete(c);
     c = succ->front();
+    delete(succ);
   }
-  std::cout << c->to_string() << std::endl;
   return c;
 }
 
-void IDA(std::queue<int>** plan){
-  Cube* n = generador_cubos_random(10);
-  int t = h_value(n); 
-  int max_int = std::numeric_limits<int>::max();
-  while (t != max_int) {
-    *plan = bounded_dfs(n,0,&t);
-    if (plan != NULL){
-      return;
-    }    
+bool is_goal(Cube *c){
+  /*
+    Funcion que dado un Cube determina si este esta en su estado goal.
+   */
+
+  //Esta implementacion podria ser mas eficiente
+  if (c == NULL)
+    return false;
+  Cube *goal = new Cube; 
+  if (goal->equals(c)){
+    delete(goal);
+    return true;
   }
+  delete(goal);
+  return false;
+}
+
+std::queue<int>* extract_solution(Cube *n){
+  /*
+    Funcion que retorna el plan de ejecucion una vez hallado el goal.
+    No implementada.
+   */
+  std::cout << "Encontre el goal." << std::endl;
+  std::queue<int> *plan = new std::queue<int>;
+  int i;
+  for (i = 0; i < 10 ; i++)   
+    plan->push(i);
+  return plan;
+}
+
+Par* chequear_cond_parada(Cube* n, int g, int t){
+  /*
+    Funcion que chequea si las condiciones de parada de la funcion bounded_dfs 
+    se cumplen. Las condiciones son que el nivel actual del IDA* dado por t fue
+    sobrepasado o que el goal ha sido encontrado.
+   */
+  Par* par_retorno = new Par;
+  
+  if ((g + h_value(n)) > t){
+    par_retorno->first = NULL;
+    par_retorno->second = g + h_value(n);
+    return par_retorno;    
+  }
+
+  std::queue<int> *plan;
+
+  if (is_goal(n)){
+    plan = extract_solution(n);
+    par_retorno->first = plan;
+    par_retorno->second = g;
+    return par_retorno;
+  }
+
+  delete(par_retorno);
+  return NULL;
+
+}
+
+Par* bounded_dfs(Cube* n, int g, int t){
+  /*
+    Funcion recursiva que realiza la busqueda del goal para el nivel dado por 
+    <t> a partir del nodo <n> con costo <g>.
+   */
+
+  Par* par_retorno;
+
+  par_retorno = chequear_cond_parada(n,g,t);
+  if (par_retorno != NULL){
+    //Hubo exito en las condiciones de parada
+    return par_retorno;
+  }
+
+  std::queue<int> *plan;
+  int new_t = std::numeric_limits<int>::max(); // Infinito
+
+  std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir 
+  
+  int tmp;
+  int succ_size = succ->size(); 
+  for (tmp = 0; tmp < succ_size; tmp++){
+    
+    par_retorno = bounded_dfs(succ->front(), g + 1 , t);
+    delete(succ->front());
+    succ->pop();
+    if (par_retorno->first != NULL){
+      delete(succ);
+      return par_retorno;
+    }
+    new_t = std::min(new_t, par_retorno->second);
+  }
+  par_retorno = new Par;
+  par_retorno->first = NULL;
+  par_retorno->second = new_t;
+  delete(succ);
+  return par_retorno;
+}
+
+std::queue<int>* IDA(){
+  /*
+    Funcion principal del algoritmo IDA*.
+  */
+  Cube* n = make_root_node(PROBLEM_LEVELS);
+  int t = h_value(n);
+  int max_int = std::numeric_limits<int>::max(); // Infinito.
+  Par* pair;
+  std::queue<int>* plan;
+  while (t != max_int) {
+    pair = bounded_dfs(n,0,t);
+    plan = pair->first;
+    t = pair->second;    
+    if (pair->first != NULL){
+      //Se consugio una solucion
+      delete(n);
+      delete(pair);
+      return plan;
+    }
+    delete(pair);
+  }
+  delete(n);
+  delete(pair);
+  return NULL;  
 }
 
 int main(int argc, char const *argv[]) {
   load_pdb();
 
-  std::queue<int> *plan;
-  IDA(&plan);
+  std::queue<int> *plan = IDA(); 
 
   if (plan != NULL){
+    //Se consigio una solucion
     std::cout << "Plan encontrado: " << std::endl;
     int i;    
     int plan_size = plan->size();
-    for (i =  0; i < plan_size; i++){
+    for (i =  0; i < plan_size; i++){ 
+      //Mostrar plan encontrado.
       std::cout << plan->front() << " ";
       plan->pop();
     }
     std::cout << std::endl;
   }
   else {
+    //No se consigio solucion
     std::cout << "Plan no encontrado" << std::endl;
   }
-  return 0;
+  delete(plan);
+  return 0;  
 }
