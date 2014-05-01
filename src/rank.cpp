@@ -7,16 +7,6 @@ void array_swap(int &a, int &b) {
     a = temp;
 }
 
-int* inv_array(int* array, int size) {
-    int *inverse = new int[size];
-
-    for (int i = 0; i < size; ++i) {
-        inverse[array[i]] = i;
-    }
-
-    return inverse;
-}
-
 ////////////////////////////////////////
 
 void aux_unrank(int n, int r, int *array) {

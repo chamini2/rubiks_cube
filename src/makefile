@@ -6,7 +6,7 @@ main: clean extra Cube Set EdgeSet main.o
 pdb: clean extra rank Cube EdgeSet Set pdb.o
 	g++ $(CXXFLAGS) extra.o rank.o Cube.o EdgeSet.o Set.o pdb.o  -o $@
 
-tests: clean extra rank Cube EdgeSet.o Set test0.o test1.o test2.o test3.o test4.o test5.o test6.o
+tests: clean extra rank Cube EdgeSet.o Set test0.o test1.o test2.o test3.o test4.o test5.o test6.o test7.o
 	g++ $(CXXFLAGS) extra.o rank.o test0.o -o outest0 || true
 	g++ $(CXXFLAGS) extra.o rank.o test1.o -o outest1 || true
 	g++ $(CXXFLAGS) extra.o rank.o test2.o -o outest2 || true
@@ -14,6 +14,7 @@ tests: clean extra rank Cube EdgeSet.o Set test0.o test1.o test2.o test3.o test4
 	g++ $(CXXFLAGS) extra.o Cube.o rank.o test4.o -o outest4 || true
 	g++ $(CXXFLAGS) extra.o Cube.o rank.o test5.o -o outest5 || true
 	g++ $(CXXFLAGS) extra.o Cube.o Set.o rank.o test6.o -o outest6 || true
+	g++ $(CXXFLAGS) extra.o Cube.o Set.o rank.o test7.o -o outest7 || true
 
 ########################################
 
@@ -26,25 +27,28 @@ pdb.o: pdb.cpp
 ####################
 
 test0.o: test/test0.cpp
-	g++ $(CXXFLAGS) -c test/test0.cpp || true
+	# g++ $(CXXFLAGS) -c test/test0.cpp || true
 
 test1.o: test/test1.cpp
-	g++ $(CXXFLAGS) -c test/test1.cpp || true
+	# g++ $(CXXFLAGS) -c test/test1.cpp || true
 
 test2.o: test/test2.cpp
-	g++ $(CXXFLAGS) -c test/test2.cpp || true
+	# g++ $(CXXFLAGS) -c test/test2.cpp || true
 
 test3.o: test/test3.cpp
-	g++ $(CXXFLAGS) -c test/test3.cpp || true
+	# g++ $(CXXFLAGS) -c test/test3.cpp || true
 
 test4.o: test/test4.cpp
-	g++ $(CXXFLAGS) -c test/test4.cpp || true
+	# g++ $(CXXFLAGS) -c test/test4.cpp || true
 
 test5.o: test/test5.cpp
-	g++ $(CXXFLAGS) -c test/test5.cpp || true
+	# g++ $(CXXFLAGS) -c test/test5.cpp || true
 
 test6.o: test/test6.cpp
-	g++ $(CXXFLAGS) -c test/test6.cpp || true
+	# g++ $(CXXFLAGS) -c test/test6.cpp || true
+
+test7.o: test/test7.cpp
+	g++ $(CXXFLAGS) -c test/test7.cpp || true
 
 ####################
 
