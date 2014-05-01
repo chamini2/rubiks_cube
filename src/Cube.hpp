@@ -1,6 +1,5 @@
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
-#include "extra.hpp"    // int_to_string
 #include "rank.hpp"
 
 #ifndef CUBE_H

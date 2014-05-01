@@ -1,6 +1,5 @@
 #include <vector>
 #include "Cube.hpp"
-#include "rank.hpp"
 
 class HashTable {
 

@@ -1,22 +1,24 @@
-#include <fstream>
 #include <bitset>
 #include "HashTable.hpp"
 
-void BFS_corners(std::ofstream *file, int end);
+void BFS_corners(FILE *file, int end);
 
-void BFS_edges(std::ofstream *file);
+void BFS_edges(FILE *file);
 
 int main(int argc, char const *argv[]) {
-    std::ofstream file;
+    FILE *file;
     int end = -1;
 
     if (argc > 1) {
         end = 1 + atoi(argv[1]);
     }
 
-    file.open("../pdbs/cPDB.bin");
-    BFS_corners(&file, end);
-    file.close();
+    file = fopen("../pdbs/cPDB.bin", "wb");
+    if (file == NULL) {
+        error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+    }
+    BFS_corners(file, end);
+    fclose(file);
 
     // file.open("../pdbs/ePDB.txt");
     // BFS_edges(&file);
@@ -25,19 +27,19 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 
-void BFS_corners(std::ofstream *file, int end) {
+void BFS_corners(FILE *file, int end) {
     std::queue<std::tuple<int, int, int>> queue;
     std::queue<Cube*> *succ;
     HashTable closed(1);
 
     Cube* cube = new Cube;
-    int info, size, level = 0, last_level = -1;
+    int info, size, last_level = -1;
+    uint8_t level = 0;
     int *corners;
     int last;
     std::tuple<int, int, int> node;
 
-
-    std::cout << "starting\n" << std::flush;
+    std::cout << "starting cPDB\n" << std::flush;
 
     corners = cube->get_corners();
     info = rank(8,corners);
@@ -62,10 +64,12 @@ void BFS_corners(std::ofstream *file, int end) {
 
         if (level != last_level) {
             last_level = level;
-            std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << std::endl << std::flush;
+            std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << "\n" << std::flush;
         }
 
-        (*file) << std::bitset<8>(level) << std::bitset<32>(info);
+        // binary write
+        fwrite(&level, 1, 1, file);
+        fwrite(&info , 4, 1, file);
 
         succ = cube->succ();
         size = succ->size();
@@ -99,5 +103,5 @@ void BFS_corners(std::ofstream *file, int end) {
         queue.pop();
     }
 
-    std::cout << "ending\n";
+    std::cout << "ending cPDB\n";
 }

@@ -1,7 +1,7 @@
-CXXFLAGS = -g -Wall
+CXXFLAGS = -g -Wall -std=c++11
 
-main: clean extra Cube HashTable main.o
-	g++ $(CXXFLAGS) extra.o Cube.o HashTable.o  main.o -o $@
+main: clean extra rank Cube HashTable main.o
+	g++ $(CXXFLAGS) extra.o rank.o Cube.o HashTable.o main.o -o $@
 
 pdb: clean extra rank Cube HashTable pdb.o
 	g++ $(CXXFLAGS) extra.o rank.o Cube.o HashTable.o pdb.o  -o $@
@@ -17,49 +17,49 @@ tests: clean extra rank Cube HashTable test0.o test1.o test2.o test3.o test5.o t
 ########################################
 
 main.o: main.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 main.cpp
+	g++ $(CXXFLAGS) -c main.cpp
 
 pdb.o: pdb.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 pdb.cpp
+	g++ $(CXXFLAGS) -c pdb.cpp
 
 ####################
 
 test0.o: test/test0.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 test/test0.cpp || true
+	g++ $(CXXFLAGS) -c test/test0.cpp || true
 
 test1.o: test/test1.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 test/test1.cpp || true
+	g++ $(CXXFLAGS) -c test/test1.cpp || true
 
 test2.o: test/test2.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 test/test2.cpp || true
+	g++ $(CXXFLAGS) -c test/test2.cpp || true
 
 test3.o: test/test3.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 test/test3.cpp || true
+	g++ $(CXXFLAGS) -c test/test3.cpp || true
 
 test5.o: test/test5.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 test/test5.cpp || true
+	g++ $(CXXFLAGS) -c test/test5.cpp || true
 
 test6.o: test/test6.cpp
-	g++ $(CXXFLAGS) -c -std=c++11 test/test6.cpp || true
+	g++ $(CXXFLAGS) -c test/test6.cpp || true
 
 ####################
 
 ########################################
 
 Cube: Cube.cpp Cube.hpp
-	g++ $(CXXFLAGS) -c -std=c++11 Cube.cpp
+	g++ $(CXXFLAGS) -c Cube.cpp
 
 HashTable: HashTable.cpp HashTable.hpp
-	g++ $(CXXFLAGS) -c -std=c++11 HashTable.cpp
+	g++ $(CXXFLAGS) -c HashTable.cpp
 
 Node: Node.cpp Node.hpp
-	g++ $(CXXFLAGS) -c -std=c++11 Node.cpp
+	g++ $(CXXFLAGS) -c Node.cpp
 
 rank: rank.cpp rank.hpp
-	g++ $(CXXFLAGS) -c -std=c++11 rank.cpp
+	g++ $(CXXFLAGS) -c rank.cpp
 
 extra: extra.cpp extra.hpp
-	g++ $(CXXFLAGS) -c -std=c++11 extra.cpp
+	g++ $(CXXFLAGS) -c extra.cpp
 
 ########################################
 
