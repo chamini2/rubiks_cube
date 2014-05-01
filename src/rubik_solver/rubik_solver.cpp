@@ -54,16 +54,22 @@ Cube* make_root_node(int levels){
     srand(time(NULL));
     int random_succesor = rand() % (succ->size() - 1);
     for (j = 0; j < random_succesor; j++){
-      /*
-	Se eliminan <random_sucessor> sucesores de la cola y se realiza
+      /* Se eliminan <random_sucessor> sucesores de la cola y se realiza
 	el movimiento correspondiente al sucesor que quede al principio
-	de la cola.
-      */
+	de la cola.*/
       delete(succ->front());
       succ->pop();
     }
     delete(c);
     c = succ->front();
+    succ->pop();
+
+    //Loop para liberar memoria de los que queda en succ
+    int tmp = succ->size();
+    for (j = 0; j < tmp ; j++){
+      delete(succ->front());
+      succ->pop();
+    }
     delete(succ);
   }
   std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << std::endl;
@@ -116,7 +122,6 @@ Par* chequear_cond_parada(Cube* n, int g, int t){
   }
 
   std::queue<int> *plan;
-
   if (is_goal(n)){
     plan = extract_solution(n);
     std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
@@ -130,6 +135,48 @@ Par* chequear_cond_parada(Cube* n, int g, int t){
 
 }
 
+Par* bounded_dfs(Cube*, int, int);
+
+
+Par* avanzar_dfs(Cube* n, int g, int t){
+  /*
+    Funcion que realiza la expansion del bounded en los sucesores del nodo n
+   */
+  Par* par_retorno = NULL;
+
+  std::queue<int> *plan;
+  int new_t = std::numeric_limits<int>::max(); // Infinito
+
+  std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir   
+  int tmp;
+  int succ_size = succ->size(); 
+
+  for (tmp = 0; tmp < succ_size; tmp++){
+    delete(par_retorno);
+    par_retorno = bounded_dfs(succ->front(), g + 1 , t);
+    delete(succ->front());
+    succ->pop();
+    if (par_retorno->first != NULL){
+      //Free memory and return
+      int unused_size = succ->size(); 
+      int j;
+      for (j = 0; j < unused_size; j++){
+	delete(succ->front());
+	succ->pop();
+      }
+      delete(succ);
+      return par_retorno;
+    }
+    new_t = std::min(new_t, par_retorno->second);   
+  }
+  par_retorno->first = NULL;
+  par_retorno->second = new_t;
+  delete(succ);
+  return par_retorno;
+  
+}
+
+
 Par* bounded_dfs(Cube* n, int g, int t){
   /*
     Funcion recursiva que realiza la busqueda del goal para el nivel dado por 
@@ -141,29 +188,8 @@ Par* bounded_dfs(Cube* n, int g, int t){
     //Hubo exito en las condiciones de parada
     return par_retorno;
   }
-
-  std::queue<int> *plan;
-  int new_t = std::numeric_limits<int>::max(); // Infinito
-
-  std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir   
-  int tmp;
-  int succ_size = succ->size(); 
-
-  for (tmp = 0; tmp < succ_size; tmp++){    
-    delete(par_retorno);
-    par_retorno = bounded_dfs(succ->front(), g + 1 , t);
-    delete(succ->front());
-    succ->pop();
-    if (par_retorno->first != NULL){
-      delete(succ);
-      return par_retorno;
-    }
-    new_t = std::min(new_t, par_retorno->second);
-  }
-  par_retorno->first = NULL;
-  par_retorno->second = new_t;
-  delete(succ);
-  return par_retorno;
+  delete(par_retorno);
+  return avanzar_dfs(n,g,t);
 }
 
 std::queue<int>* IDA(){
@@ -193,6 +219,9 @@ std::queue<int>* IDA(){
 }
 
 void validar_entrada(int argc, char const *argv[]){
+  /*
+    Validar parametro de entrada para cantidad de movimientos para desordenar.
+   */
   if (argc > 1){
     int argv_int = atoi(argv[1]);
     if (0 <= argv_int && argv_int < 18)
