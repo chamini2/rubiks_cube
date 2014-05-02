@@ -48,7 +48,7 @@ int main(int argc, char const *argv[]) {
         }
 
         print_array(array, n);
-        variable = rank(n, array);
+        variable = rank(n, array, n, 3);
         std::cout << " " << variable << "  ";
 
         nuevo = unrank(n, variable);

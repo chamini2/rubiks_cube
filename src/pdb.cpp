@@ -38,7 +38,7 @@ void BFS_corners(std::ofstream *file, int end) {
     std::tuple<int, int, int> node;
 
     corners = cube->get_corners();
-    info = rank(8,corners);
+    info = rank(8,corners, 8, 3);
     last = cube->get_last();
 
     node = std::make_tuple(info, last, level);
@@ -77,7 +77,7 @@ void BFS_corners(std::ofstream *file, int end) {
             succ->pop();
 
             corners = cube->get_corners();
-            info = rank(8, corners);
+            info = rank(8, corners, 8, 3);
             last = cube->get_last();
 
             if (!closed.contains(info)) {

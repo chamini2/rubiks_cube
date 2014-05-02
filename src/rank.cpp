@@ -1,24 +1,5 @@
 #include "rank.hpp"
 
-void array_swap(int &a, int &b) {
-    int temp;
-    temp = b;
-    b = a;
-    a = temp;
-}
-
-int* inv_array(int* array, int size) {
-    int *inverse = new int[size];
-
-    for (int i = 0; i < size; ++i) {
-        inverse[array[i]] = i;
-    }
-
-    return inverse;
-}
-
-////////////////////////////////////////
-
 void aux_unrank(int n, int r, int *array) {
     if (n > 0) {
         array_swap(array[n-1], array[r % n]);
@@ -49,9 +30,8 @@ int *unrank(int size, int value) {
 }
 
 ////////////////////////////////////////
-
-int aux_rank(int n, int *array, int *inverse) {
-    if (n == 1) {
+int aux_rank(int n, int *array, int *inverse, int edge) {
+    if (n == edge) {
         return 0;
     }
 
@@ -59,27 +39,39 @@ int aux_rank(int n, int *array, int *inverse) {
     array_swap(array[n-1], array[inverse[n-1]]);
     array_swap(inverse[s], inverse[n-1]);
 
-    return s + n * aux_rank(n-1, array, inverse);
+    return s + n * aux_rank(n-1, array, inverse, edge);
 }
 
-int rank(int size, int *array) {
-    int *inverse;
-    int *aux = new int[size];
-    int value, orientation = 0;
+/*
+ * Given a array with a k-permutation of n elements, returns an unique integer
+ * for such permutation.
+ *
+ * For complete permutations, k must be equal to n.
+ *
+ * For k-permutations, it is assumed that the array contains the k elements in
+ * rightmost k positions of the array. The contents of the rest are
+ * irrelevant.
+ */
 
-    for (int i = 0; i < size; ++i) {
+int rank(int n, int *array, int k, int factor) {
+    int *inverse;
+    int *aux = new int[n];
+    int value, orientation = 0;
+    int edge = n-k-1;
+
+    for (int i = 0; i < n; ++i) {
         aux[i] = cubie_to_pos(array[i]);
     }
 
-    inverse = inv_array(aux, size);
-    value = aux_rank(size, aux, inverse);
+    inverse = inv_array(aux, n);
+    value = aux_rank(n, aux, inverse, edge);
 
     delete[] inverse;
     delete[] aux;
 
-    value *= pow(3,8);
-    for (int i = 0; i < size; ++i) {
-        orientation = orientation * 3 + cubie_to_orien(array[i]);
+    value *= pow(factor,n);
+    for (int i = n-k; i < n; ++i) {
+        orientation = orientation * factor + cubie_to_orien(array[i]);
     }
     value += orientation;
 

@@ -32,7 +32,7 @@ int main(int argc, char const *argv[]) {
         temp = cost + 2;
         temp[strlen(temp) - 1] = '\0';
 
-        value = rank(n, array);
+        value = rank(n, array, n, 3);
         std::cout << value << " " << temp << "\n";
     }
 

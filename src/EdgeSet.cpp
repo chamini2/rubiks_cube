@@ -36,7 +36,7 @@ int EdgeSet::rank_it(Cube* cube) {
             // int key = rank(?, cube->???());
         // Corners PDB
         case 1:
-            return rank(8, cube->get_corners());
+            return rank(8, cube->get_corners(), 8, 3);
         // Edges PDB
         case 2:
             // return rank(12, cube->get_edges());
