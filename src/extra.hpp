@@ -11,9 +11,11 @@ int* inv_array(int* array, int size);
 void array_reverse(int* array, int size);
 void subarray_reverse(int *array, int i, int j);
 int factorial(int n);
+int* inv_array(int* array, int size);
 int cubie_to_pos(int cubie);
 int cubie_to_orien(int cubie);
 int orien_to_axis(int orien);
+int cubie_to_axis(int cubie);
 void print_array(int *array, int n);
 // Node* make_root_node(Cube* cube);
 

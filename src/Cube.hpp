@@ -3,12 +3,8 @@
 #include "extra.hpp"    // int_to_string
 #include "rank.hpp"
 
-#ifndef CUBE_H
-#define CUBE_H
-
 std::string last_to_str(int last);
 int str_to_last(std::string last);
-
 
 class Cube {
 /*
@@ -114,6 +110,9 @@ class Cube {
         void switch_set(char chr, int* face);
 
         // getters and setters for the faces of the cube
+        int* get_face(int *face);
+        void set_face(int *face, int* poss);
+
         int* get_front();
         void set_front(int* face);
         int* get_back();
@@ -128,7 +127,5 @@ class Cube {
         void set_down(int* face);
         int sum_of_face(char face);
 
-
         std::string color_face(int* face, char chr);
 };
-#endif

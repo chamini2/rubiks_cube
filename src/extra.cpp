@@ -66,39 +66,24 @@ int factorial(int n) {
     return aux_factorial(1,n);
 }
 
+
+
 ////////////////////////////////////////
 
 int cubie_to_pos(int cubie) {
-    if (000 <= cubie && cubie < 100) {
-        return cubie - 000;
-    } else if (100 <= cubie && cubie < 200) {
-        return cubie - 100;
-    } else if (200 <= cubie) {
-        return cubie - 200;
-    }
-
-    error("cubie_to_pos | cubie = " + int_to_string(cubie), __LINE__, __FILE__);
-    throw -1;
+    return cubie % 100;
 }
 
 int cubie_to_orien(int cubie) {
-    if (000 <= cubie && cubie < 100) {
-        // axis C
-        return 0;
-    } else if (100 <= cubie && cubie < 200) {
-        // axis B
-        return 1;
-    } else if (200 <= cubie) {
-        // axis A
-        return 2;
-    }
-
-    error("cubie_to_orien | cubie = " + int_to_string(cubie), __LINE__, __FILE__);
-    throw -1;
+    return cubie / 100;
 }
 
 int orien_to_axis(int orien) {
-    return 100*orien;
+    return orien * 100;
+}
+
+int cubie_to_axis(int cubie) {
+    return orien_to_axis(cubie_to_orien(cubie));
 }
 
 void print_array(int *array, int n) {
@@ -127,38 +112,4 @@ void next_perm(int* array, int size) {
 void error(std::string message, int line, std::string file) {
     std::cout << message << " at line " << line << " in file '" << file << "'\n";
     exit(-1);
-}
-
-int lex_perm(int* array, int n, int k) {
-    int edge = k-1, j = k, i;
-
-    while (j < n && array[edge] >= array[j]) {
-        ++j;
-    }
-
-    if (j < n) {
-        array_swap(array[edge], array[j]);
-    }
-    else {
-        subarray_reverse(array, k, n-1);
-        i = edge - 1;
-
-        while (i > 0 && array[i] >= array[i + 1]) {
-            --i;
-        }
-
-        if (i < 0) {
-            return 0;
-        }
-
-        j = n - 1;
-
-        while (j > i && array[i] >= array[j]) {
-            --j;
-        }
-
-        array_swap(array[i], array[j]);
-        subarray_reverse(array, i+1, n-1);
-    }
-    return 1;
 }

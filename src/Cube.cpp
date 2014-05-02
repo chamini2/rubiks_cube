@@ -63,7 +63,6 @@ Cube::Cube(int pdb) {
             edges[5]   =   5;  // white  - red
             edges[6]   =   6;  // yellow - red
 
-            // A set of 5 edges with 12!/7! * 2^7 possible elements
             // These elements are filled with -1 given that their values are
             // irrelevant
             edges[7]   = -1;  // yellow - orange
@@ -97,10 +96,6 @@ Cube::Cube(int pdb) {
             error(err_msg, __LINE__, __FILE__);
             throw -1;
     }
-
-
-
-
 
     last = -1;
 }
@@ -148,191 +143,160 @@ bool Cube::equals(Cube* other) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+int* Cube::get_face(int *face) {
+    int *face_res = new int[8];
+    int orien_aux[8];
+    int corners_aux[8];
+    int edges_aux[12];
+    int *corners_inv;
+    int *edges_inv;
+
+    for (int i = 0; i < 8; ++i) {
+        corners_aux[i] = cubie_to_pos(corners[i]);
+    }
+
+    for (int i = 0; i < 12; ++i) {
+        edges_aux[i] = cubie_to_pos(edges[i]);
+    }
+
+    corners_inv = inv_array(corners_aux, 8);
+    edges_inv   = inv_array(edges_aux, 12);
+
+    for (int i = 0; i < 4; ++i) {
+        orien_aux[i] = cubie_to_axis(corners[corners_inv[face[i]]]);
+    }
+
+    for (int i = 4; i < 8; ++i) {
+        orien_aux[i] = cubie_to_axis(edges[edges_inv[face[i]]]);
+    }
+
+    face_res[0] = corners_inv[face[0]] + orien_aux[0];
+    face_res[1] = corners_inv[face[1]] + orien_aux[1];
+    face_res[2] = corners_inv[face[2]] + orien_aux[2];
+    face_res[3] = corners_inv[face[3]] + orien_aux[3];
+
+    face_res[4] = edges_inv[face[4]] + orien_aux[4];
+    face_res[5] = edges_inv[face[5]] + orien_aux[5];
+    face_res[6] = edges_inv[face[6]] + orien_aux[6];
+    face_res[7] = edges_inv[face[7]] + orien_aux[7];
+
+    delete[] corners_inv;
+    delete[] edges_inv;
+
+    return face_res;
+}
+
+void Cube::set_face(int* face, int* poss) {
+    int pos_aux[8], orien_aux[8];
+
+    for (int i = 0; i < 8; ++i) {
+        pos_aux[i]   = cubie_to_pos(face[i]);
+        orien_aux[i] = cubie_to_axis(face[i]);
+    }
+
+    corners[pos_aux[0]] = poss[0] + orien_aux[0];
+    corners[pos_aux[1]] = poss[1] + orien_aux[1];
+    corners[pos_aux[2]] = poss[2] + orien_aux[2];
+    corners[pos_aux[3]] = poss[3] + orien_aux[3];
+
+    edges[pos_aux[4]]   = poss[4] + orien_aux[4];
+    edges[pos_aux[5]]   = poss[5] + orien_aux[5];
+    edges[pos_aux[6]]   = poss[6] + orien_aux[6];
+    edges[pos_aux[7]]   = poss[7] + orien_aux[7];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 int* Cube::get_front() {
-    int* face = new int[8];
-
-    face[0] = corners[0];
-    face[1] = corners[1];
-    face[2] = corners[5];
-    face[3] = corners[4];
-
-    face[4] = edges[0];
-    face[5] = edges[5];
-    face[6] = edges[8];
-    face[7] = edges[4];
-
-    return face;
+    int face[8] = { 0, 1, 5, 4,     // corners
+                    0, 5, 8, 4 };   // edges
+    return get_face(face);
 }
 
 void Cube::set_front(int *face) {
-    corners[0] = face[0];
-    corners[1] = face[1];
-    corners[5] = face[2];
-    corners[4] = face[3];
-
-    edges[0]   = face[4];
-    edges[5]   = face[5];
-    edges[8]   = face[6];
-    edges[4]   = face[7];
+    int positions[8] = { 0, 1, 5, 4,    // corners
+                         0, 5, 8, 4 };  // edges
+    set_face(face, positions);
 }
 
 ////////////////////////////////////////
 
 int* Cube::get_back() {
-    int* face = new int[8];
-
-    face[0] = corners[2];
-    face[1] = corners[3];
-    face[2] = corners[7];
-    face[3] = corners[6];
-
-    face[4] = edges[2];
-    face[5] = edges[7];
-    face[6] = edges[10];
-    face[7] = edges[6];
-
-    return face;
+    int face[8] = {2, 3, 7, 6,      // corners
+                   2, 7, 10, 6 };   // edges
+    return get_face(face);
 }
 
 void Cube::set_back(int *face) {
-    corners[2] = face[0];
-    corners[3] = face[1];
-    corners[7] = face[2];
-    corners[6] = face[3];
-
-    edges[2]   = face[4];
-    edges[7]   = face[5];
-    edges[10]  = face[6];
-    edges[6]   = face[7];
+    int positions[8] = { 2, 3, 7, 6,    // corners
+                         2, 7, 10, 6 }; // edges
+    set_face(face, positions);
 }
 
 ////////////////////////////////////////
 
 int* Cube::get_right() {
-    int* face = new int[8];
-
-    face[0] = corners[1];
-    face[1] = corners[2];
-    face[2] = corners[6];
-    face[3] = corners[5];
-
-    face[4] = edges[1];
-    face[5] = edges[6];
-    face[6] = edges[9];
-    face[7] = edges[5];
-
-    return face;
+    int face[8] = { 1, 2, 6, 5,     // corners
+                    1, 6, 9, 5 };   // edges
+    return get_face(face);
 }
 
 void Cube::set_right(int *face) {
-    corners[1] = face[0];
-    corners[2] = face[1];
-    corners[6] = face[2];
-    corners[5] = face[3];
-
-    edges[1]   = face[4];
-    edges[6]   = face[5];
-    edges[9]   = face[6];
-    edges[5]   = face[7];
+    int positions[8] = { 1, 2, 6, 5,    // corners
+                         1, 6, 9, 5 };  // edges
+    set_face(face, positions);
 }
 
 ////////////////////////////////////////
 
 int* Cube::get_left() {
-    int* face = new int[8];
-
-    face[0] = corners[3];
-    face[1] = corners[0];
-    face[2] = corners[4];
-    face[3] = corners[7];
-
-    face[4] = edges[3];
-    face[5] = edges[4];
-    face[6] = edges[11];
-    face[7] = edges[7];
-
-    return face;
+    int face[8] = { 3, 0, 4, 7,     // corners
+                    3, 4, 11, 7 };  // edges
+    return get_face(face);
 }
 
 void Cube::set_left(int *face) {
-    corners[3] = face[0];
-    corners[0] = face[1];
-    corners[4] = face[2];
-    corners[7] = face[3];
-
-    edges[3]   = face[4];
-    edges[4]   = face[5];
-    edges[11]  = face[6];
-    edges[7]   = face[7];
+    int positions[8] = { 3, 0, 4, 7,    // corners
+                         3, 4, 11, 7 }; // edges
+    set_face(face, positions);
 }
 
 ////////////////////////////////////////
 
 int* Cube::get_top() {
-    int* face = new int[8];
-
-    face[0] = corners[0];
-    face[1] = corners[3];
-    face[2] = corners[2];
-    face[3] = corners[1];
-
-    face[4] = edges[2];
-    face[5] = edges[1];
-    face[6] = edges[0];
-    face[7] = edges[3];
-
-    return face;
+    int face[8] = { 0, 3, 2, 1,     // corners
+                    2, 1, 0, 3 };   // edges
+    return get_face(face);
 }
 
 void Cube::set_top(int *face) {
-    corners[0] = face[0];
-    corners[3] = face[1];
-    corners[2] = face[2];
-    corners[1] = face[3];
-
-    edges[2]   = face[4];
-    edges[1]   = face[5];
-    edges[0]   = face[6];
-    edges[3]   = face[7];
+    int positions[8] = { 0, 3, 2, 1,    // corners
+                         2, 1, 0, 3 };  // edges
+    set_face(face, positions);
 }
 
 ////////////////////////////////////////
 
 int* Cube::get_down() {
-    int* face = new int[8];
-
-    face[0] = corners[7];
-    face[1] = corners[4];
-    face[2] = corners[5];
-    face[3] = corners[6];
-
-    face[4] = edges[8];
-    face[5] = edges[9];
-    face[6] = edges[10];
-    face[7] = edges[11];
-
-    return face;
+    int face[8] = { 7, 4, 5, 6,     // corners
+                    8, 9, 10, 11 }; // edges
+    return get_face(face);
 }
 
 void Cube::set_down(int *face) {
-    corners[7] = face[0];
-    corners[4] = face[1];
-    corners[5] = face[2];
-    corners[6] = face[3];
-
-    edges[8]   = face[4];
-    edges[9]   = face[5];
-    edges[10]  = face[6];
-    edges[11]  = face[7];
+    int positions[8] = { 7, 4, 5, 6,    // corners
+                         8, 9, 10, 11 };// edges
+    set_face(face, positions);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 int rotate_cubie(int cubie, char face) {
     if (cubie >= 0) {
-        int axis = cubie_to_orien(cubie);
+        int orien = cubie_to_orien(cubie);
+        int swapping[] = { 0, 0, 0 };
+
         cubie = cubie_to_pos(cubie);
-        int swapping[] = { 0, 0, 0};
 
         switch (face) {
             case 'f':
@@ -360,7 +324,7 @@ int rotate_cubie(int cubie, char face) {
                 throw -1;
         }
 
-        return cubie + swapping[axis];
+        return cubie + swapping[orien];
     } else {
         return cubie;
     }
@@ -539,7 +503,11 @@ std::string Cube::corners_to_string() {
     std::string str = "";
 
     for (int i = 0; i < 8; ++i) {
-        str += " " + int_to_string(this->corners[i]);
+        if (this->corners[i] < 100) {
+            str += "   " + int_to_string(this->corners[i]);
+        } else {
+            str += " " + int_to_string(this->corners[i]);
+        }
     }
 
     return str;
@@ -549,7 +517,13 @@ std::string Cube::edges_to_string() {
     std::string str = "";
 
     for (int i = 0; i < 12; ++i) {
-        str += " " + int_to_string(this->edges[i]);
+        if (this->edges[i] < 10) {
+            str += "   " + int_to_string(this->edges[i]);
+        } else if (this->edges[i] < 100) {
+            str += "  " + int_to_string(this->edges[i]);
+        } else {
+            str += " " + int_to_string(this->edges[i]);
+        }
     }
 
     return str;
