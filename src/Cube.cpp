@@ -106,8 +106,8 @@ Cube::Cube(int pdb) {
 }
 
 Cube::Cube(int corners, int edges, int last) {
-    this->corners = unrank(8, corners);
-    this->edges = unrank(12, edges);
+    this->corners = unrank(8, corners, 8, 3);
+    this->edges = unrank(12, edges, 7, 2);
     this->last = last;
 }
 

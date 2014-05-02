@@ -1,29 +1,30 @@
 #include "rank.hpp"
 
-void aux_unrank(int n, int r, int *array) {
-    if (n > 0) {
+void aux_unrank(int n, int r, int *array, int edge) {
+    if (n > edge) {
         array_swap(array[n-1], array[r % n]);
-        aux_unrank(n-1, floor(r/n), array);
+        aux_unrank(n-1, floor(r/n), array, edge);
     }
 }
 
-int *unrank(int size, int value) {
-    int *array = new int[size];
-    int d, r, power = pow(3, 8);
+int *unrank(int n, int value, int k, int factor) {
+    int *array = new int[n];
+    int d, r, power = pow(factor, k);
+    int edge = n-k;
 
     r = value / power;
     d = value % power;
 
     // Identity array
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < n; ++i) {
         array[i] = i;
     }
 
-    aux_unrank(size, r, array);
+    aux_unrank(n, r, array, edge);
 
-    for (int i = size - 1; i >= 0; --i) {
-        array[i] += orien_to_axis(d % 3);
-        d = d / 3;
+    for (int i = n - 1; i >= edge; --i) {
+        array[i] += orien_to_axis(d % factor);
+        d = d / factor;
     }
 
     return array;
@@ -31,6 +32,7 @@ int *unrank(int size, int value) {
 
 ////////////////////////////////////////
 int aux_rank(int n, int *array, int *inverse, int edge) {
+
     if (n == edge) {
         return 0;
     }
@@ -57,7 +59,7 @@ int rank(int n, int *array, int k, int factor) {
     int *inverse;
     int *aux = new int[n];
     int value, orientation = 0;
-    int edge = n-k-1;
+    int edge = n-k;
 
     for (int i = 0; i < n; ++i) {
         aux[i] = cubie_to_pos(array[i]);
@@ -69,7 +71,7 @@ int rank(int n, int *array, int k, int factor) {
     delete[] inverse;
     delete[] aux;
 
-    value *= pow(factor,n);
+    value *= pow(factor,k);
     for (int i = n-k; i < n; ++i) {
         orientation = orientation * factor + cubie_to_orien(array[i]);
     }
