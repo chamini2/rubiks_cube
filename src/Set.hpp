@@ -7,15 +7,15 @@ class Set {
         Set(int type = 0); // defaults to IDA*
         ~Set();
 
-        void insert(Cube*);
-        void insert(int);
-        bool contains(Cube*);
-        bool contains(int);
+        void insert(Cube* cube, int8_t level);
+        void insert(int key, int8_t level);
+        bool contains(Cube* cube);
+        bool contains(int key);
         bool empty();
         int size();
 
     private:
-        bool *table;
+        int8_t *table;
         int type;
         int table_size;
 

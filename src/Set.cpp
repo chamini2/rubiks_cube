@@ -11,61 +11,57 @@
 Set::Set(int type) {
     this->type = type;
     this->table_size = 0;
-    this->table = new bool[264539520];
+
+    if (type == 1) {
+        // Corners
+        this->table = new int8_t[264539520];
+        std::fill_n(table, 264539520, 127);
+    } else if (type == 2) {
+        // Edges
+        this->table = new int8_t[510935040];
+        std::fill_n(table, 264539520, 127);
+    }
+
+
 }
 
 Set::~Set() {
     delete[] table;
 }
 
-void Set::insert(Cube* cube) {
-
+void Set::insert(Cube* cube, int8_t level) {
     int key = rank_it(cube);
 
-    // if ¬(contains(cube))
-    if (!table[key]) {
-        table[key] = true;
+    if (table[key] == 127) {
+        table[key] = level;
         table_size++;
     }
-
-    // table[key] = key;
 }
 
-void Set::insert(int key) {
-
-    // if ¬(contains(key))
-    if (!table[key]) {
-        table[key] = true;
+void Set::insert(int key, int8_t level) {
+    if (table[key] == 127) {
+        // std::cout << "instertando" << std::endl;
+        table[key] = level;
         table_size++;
     }
-
-    // table[key] = key;
 }
 
 bool Set::contains(Cube* cube) {
-
     int key = rank_it(cube);
 
-    return table[key];
+    if (table[key] == 127) {
+        return false;
+    }
 
-    // it can only be 1 or 0
-    // if (table.count(key) > 0) {
-    //     return true;
-    // } else {
-    //     return false;
-    // }
+    return true;
 }
 
 bool Set::contains(int key) {
+    if (table[key] == 127) {
+        return false;
+    }
 
-    return table[key];
-
-    // it can only be 1 or 0
-    // if (table.count(key) > 0) {
-    //     return true;
-    // } else {
-    //     return false;
-    // }
+    return true;
 }
 
 bool Set::empty() {
@@ -88,7 +84,7 @@ int Set::rank_it(Cube* cube) {
             return rank(8, cube->get_corners(), 8, 3);
         // Edges PDB
         case 2:
-            // return rank(12, cube->get_edges());
+            return rank(12, cube->get_edges(), 7, 3);
         default:
             error("rank_it | type = " + int_to_string(type), __LINE__, __FILE__);
             throw -1;
