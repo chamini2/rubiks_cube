@@ -9,7 +9,7 @@ pdb: clean extra rank Cube Set pdb.o
 
 tests: clean extra rank Cube EdgeSet.o Set test1.o
 	# $(CC)++ $(CXXFLAGS) extra.o rank.o test0.o -o outest0 || true
-	$(CC)++ $(CXXFLAGS) extra.o rank.o test1.o -o outest1 || true
+	$(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test1.o -o outest1 || true
 	# $(CC)++ $(CXXFLAGS) extra.o rank.o test2.o -o outest2 || true
 	# $(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test3.o -o outest3 || true
 	# $(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test4.o -o outest4 || true

@@ -2,98 +2,78 @@
 #include <iostream>
 #include "../extra.hpp"
 #include "../rank.hpp"
-
-////////////////////////////////////////////////////////////////////////////////
-
-int aux_rank2(int n, int edge, int *array, int *inverse) {
-    if (n == edge) {
-        return 0;
-    }
-
-    int s = array[n-1];
-    array_swap(array[n-1], array[inverse[n-1]]);
-    array_swap(inverse[s], inverse[n-1]);
-
-    return s + n * aux_rank2(n-1, edge, array, inverse);
-}
-
-
-/*
- * Given a array with a k-permutation of n elements, returns an unique integer
- * for such permutation.
- *
- * For complete permutations, k must be equal to n.
- *
- * For k-permutations, it is assumed that the array contains the k elements in
- * last k positions of the array and the contents of the rest are irrelevant.
- */
-
-int rank2(int *array, int size, int k) {
-    int *inverse;
-    int *aux = new int[size];
-    int value;
-    int edge = size-k-1;
-    // int orientation = 0;
-
-    for (int i = 0; i < size; ++i) {
-        aux[i] = cubie_to_pos(array[i]);
-    }
-
-    inverse = inv_array(aux, size);
-    value = aux_rank2(size, edge, aux, inverse);
-
-    delete[] inverse;
-    delete[] aux;
-
-    // value *= pow(3,8);
-    // for (int i = 0; i < size; ++i) {
-    //     orientation = orientation * 3 + cubie_to_orien(array[i]);
-    // }
-    // value += orientation;
-
-    // delete[] array;
-
-    return value;
-}
-
-////////////////////////////////////////////////////////////////////////////////
+#include "../Set.hpp"
 
 int main(int argc, char const *argv[]) {
-    int size = 4;
-    int k = 4;
-    int *array = new int[size];
-    int *rankeable = new int[size];
+//     int size = 4;
+//     int k = 4;
+//     int *array = new int[size];
+//     int *rankeable = new int[size];
 
-    // for (int i = 2; i < size; ++i) {
-    //     array[i] = i;
-    // }
+//     // for (int i = 2; i < size; ++i) {
+//     //     array[i] = i;
+//     // }
 
-    // for (int i = 0; i < 2; ++i) {
-    //     array[i] = 0;
-    // }
+//     // for (int i = 0; i < 2; ++i) {
+//     //     array[i] = 0;
+//     // }
 
-    for (int i = 0; i < size; ++i) {
-        array[i] = i;
-        rankeable[i] = 0;
+//     for (int i = 0; i < size; ++i) {
+//         array[i] = i;
+//         rankeable[i] = 0;
+//     }
+
+//     for (int i = 0; i < k; ++i) {
+//         rankeable[size- k + i] = array[i];
+//     }
+
+//     std::cout << array_to_string(rankeable, size) << " ";
+//     std::cout << rank2(rankeable, size, k) << "\n";
+
+//     int output;
+//     for (int i = 0; i < 24 - 1; ++i) {
+//         output = lex_perm(array, size, k);
+//         for (int i = 0; i < k; ++i) {
+//             rankeable[size- k + i] = array[i];
+//         }
+//         std::cout << array_to_string(rankeable, size) << " ";
+//         std::cout << rank2(rankeable, size, k) << "\n";
+
+//     }
+
+//     return 0;
+    Cube* cube = new Cube;
+    int *corners;
+    int *edges;
+    int *unrank_e;
+    int *unrank_c;
+    int info_edge;
+    int info_corner;
+
+    cube->hundred('b');
+
+    edges = cube->get_edges();
+    corners = cube->get_corners();
+
+    std::cout << array_to_string(edges, 12) << "\n";
+
+    for (int i = 0; i < 5; ++i) {
+        edges[i] = 0;
     }
 
-    for (int i = 0; i < k; ++i) {
-        rankeable[size- k + i] = array[i];
-    }
 
-    std::cout << array_to_string(rankeable, size) << " ";
-    std::cout << rank2(rankeable, size, k) << "\n";
+    std::cout << "Edges: " << array_to_string(edges, 12) << "\n";
+    std::cout << "Corners" << array_to_string(corners, 8) << "\n";
 
-    int output;
-    for (int i = 0; i < 24 - 1; ++i) {
-        output = lex_perm(array, size, k);
-        for (int i = 0; i < k; ++i) {
-            rankeable[size- k + i] = array[i];
-        }
-        std::cout << array_to_string(rankeable, size) << " ";
-        std::cout << rank2(rankeable, size, k) << "\n";
+    info_edge = rank(12, edges, 7, 2);
+    info_corner = rank(8, corners, 8, 3);
 
-    }
+    std::cout << "Rank edges: " << info_edge << "\n";
+    std::cout << "Rank corners: " << info_corner << "\n";
 
-    return 0;
+    unrank_e = unrank(12, info_edge, 7, 2);
+    unrank_c = unrank(8, info_corner, 8, 3);
+
+    std::cout << "Unranked edges: " <<  array_to_string(unrank_e, 12) << "\n";
+    std::cout << "Unranked corners: " <<  array_to_string(unrank_c, 8) << "\n";
 }
