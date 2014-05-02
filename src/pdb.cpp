@@ -70,7 +70,7 @@ void BFS_corners(std::ofstream *file, int end) {
             std::cout << std::flush;
         }
 
-        (*file) << level << " " << info << "\n";
+        (*file) << int_to_string(level) << "\n";
 
         succ = cube->succ();
         size = succ->size();
