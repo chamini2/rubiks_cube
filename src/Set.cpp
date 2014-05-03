@@ -15,11 +15,11 @@ Set::Set(int type) {
     if (type == 1) {
         // Corners
         this->table = new int8_t[264539520];
-        std::fill_n(table, 264539520, 127);
+        std::fill_n(table, 264539520, -1);
     } else if (type == 2) {
         // Edges
         this->table = new int8_t[510935040];
-        std::fill_n(table, 264539520, 127);
+        std::fill_n(table, 264539520, -1);
     }
 
 
@@ -32,14 +32,14 @@ Set::~Set() {
 void Set::insert(Cube* cube, int8_t level) {
     int key = rank_it(cube);
 
-    if (table[key] == 127) {
+    if (table[key] == -1) {
         table[key] = level;
         table_size++;
     }
 }
 
 void Set::insert(int key, int8_t level) {
-    if (table[key] == 127) {
+    if (table[key] == -1) {
         // std::cout << "instertando" << std::endl;
         table[key] = level;
         table_size++;
@@ -49,7 +49,7 @@ void Set::insert(int key, int8_t level) {
 bool Set::contains(Cube* cube) {
     int key = rank_it(cube);
 
-    if (table[key] == 127) {
+    if (table[key] == -1) {
         return false;
     }
 
@@ -57,11 +57,15 @@ bool Set::contains(Cube* cube) {
 }
 
 bool Set::contains(int key) {
-    if (table[key] == 127) {
+    if (table[key] == -1) {
         return false;
     }
 
     return true;
+}
+
+int Set::value(int key) {
+    return table[key];
 }
 
 bool Set::empty() {
@@ -70,6 +74,19 @@ bool Set::empty() {
 
 int Set::size() {
     return table_size;
+}
+
+int Set::width() {
+    if (type == 1) {
+        // Corners
+        return 264539520;
+    } else if (type == 2) {
+        // Edges
+        return 510935040;
+    }
+
+    error("width | type = " + int_to_string(type), __LINE__, __FILE__);
+    throw -1;
 }
 
 ////////////////////////////////////////

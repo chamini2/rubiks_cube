@@ -20,5 +20,3 @@ class EdgeSet {
 
         int rank_it(Cube *cube);
 };
-
-
