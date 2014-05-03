@@ -1,8 +1,8 @@
 CC = clang
 CXXFLAGS = -g -Wall -std=c++11
 
-main: clean extra Cube Set EdgeSet main.o
-	$(CC)++ $(CXXFLAGS) extra.o Cube.o EdgeSet.o Set.o  main.o -o $@
+main: clean extra rank Cube Set EdgeSet main.o
+	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o EdgeSet.o Set.o  main.o -o $@
 
 pdb: clean extra rank Cube Set pdb.o
 	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o  -o $@

@@ -21,8 +21,6 @@ Set::Set(int type) {
         this->table = new int8_t[510935040];
         std::fill_n(table, 264539520, -1);
     }
-
-
 }
 
 Set::~Set() {
@@ -40,7 +38,6 @@ void Set::insert(Cube* cube, int8_t level) {
 
 void Set::insert(int key, int8_t level) {
     if (table[key] == -1) {
-        // std::cout << "instertando" << std::endl;
         table[key] = level;
         table_size++;
     }
@@ -64,7 +61,7 @@ bool Set::contains(int key) {
     return true;
 }
 
-int Set::value(int key) {
+int8_t Set::value(int key) {
     return table[key];
 }
 
@@ -106,4 +103,8 @@ int Set::rank_it(Cube* cube) {
             error("rank_it | type = " + int_to_string(type), __LINE__, __FILE__);
             throw -1;
     }
+}
+
+void Set::print(FILE *file, size_t elem_size) {
+    fwrite(table, width(), elem_size, file);
 }

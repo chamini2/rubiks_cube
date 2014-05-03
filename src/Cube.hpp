@@ -1,6 +1,5 @@
 #include <queue>        // std::queue, std::push, std::pop, std::front
 #include <tuple>
-#include "extra.hpp"    // int_to_string
 #include "rank.hpp"
 
 std::string last_to_str(int last);

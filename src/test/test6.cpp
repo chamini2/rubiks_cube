@@ -62,7 +62,7 @@ void BFS_corners(std::ofstream *file, int end) {
 
         if (level != last_level) {
             last_level = level;
-            std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << std::endl << std::flush;
+            std::cout << "LEVEL " << last_level << " | queue " << queue.size() << " | closed " << closed.size() << "\n" << std::flush;
         }
 
         (*file) << level << " " << info << " " << path << "\n";
