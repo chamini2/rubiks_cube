@@ -1,7 +1,7 @@
 #include <map>
 #include "EdgeSet.hpp"
 
-EdgeSet::EdgeSet() {
+EdgeSet::EdgeSet(int type) {
     this->type = type;
     this->table_size = 0;
 }

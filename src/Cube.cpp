@@ -40,14 +40,14 @@ Cube::Cube(int pdb) {
     corners = new int[8];
     edges   = new int[12];
 
-    corners[0] =   0;  // white  - blue  - orange
-    corners[1] =   1;  // white  - blue  - red
-    corners[2] =   2;  // yellow - blue  - red
-    corners[3] =   3;  // yellow - blue  - orange
-    corners[4] =   4;  // white  - green - orange
-    corners[5] =   5;  // white  - green - red
-    corners[6] =   6;  // yellow - green - red
-    corners[7] =   7;  // yellow - green - orange
+    corners[0] = 0;  // white  - blue  - orange
+    corners[1] = 1;  // white  - blue  - red
+    corners[2] = 2;  // yellow - blue  - red
+    corners[3] = 3;  // yellow - blue  - orange
+    corners[4] = 4;  // white  - green - orange
+    corners[5] = 5;  // white  - green - red
+    corners[6] = 6;  // yellow - green - red
+    corners[7] = 7;  // yellow - green - orange
 
 
     // The set of edges is divided in two sets:
@@ -55,40 +55,40 @@ Cube::Cube(int pdb) {
     switch (pdb) {
         case 1:
             // A set of 7 edges with 12!/5! * 2^7 possible elements
-            edges[0]   =   0;  // blue   - white
-            edges[1]   = 101;  // blue   - red
-            edges[2]   =   2;  // blue   - yellow
-            edges[3]   = 103;  // blue   - orange
-            edges[4]   =   4;  // white  - orange
-            edges[5]   =   5;  // white  - red
-            edges[6]   =   6;  // yellow - red
+            edges[0]  =   0;  // blue   - white
+            edges[1]  = 101;  // blue   - red
+            edges[2]  =   2;  // blue   - yellow
+            edges[3]  = 103;  // blue   - orange
+            edges[4]  =   4;  // white  - orange
+            edges[5]  =   5;  // white  - red
+            edges[6]  =   6;  // yellow - red
 
             // These elements are filled with -1 given that their values are
             // irrelevant
-            edges[7]   = -1;  // yellow - orange
-            edges[8]   = -1;  // white  - green
-            edges[9]   = -1;  // green  - red
-            edges[10]  = -1;  // yellow - green
-            edges[11]  = -1;  // green  - orange
+            edges[7]  = -1;  // yellow - orange
+            edges[8]  = -1;  // white  - green
+            edges[9]  = -1;  // green  - red
+            edges[10] = -1;  // yellow - green
+            edges[11] = -1;  // green  - orange
 
             break;
         case 2:
             // These elements are filled with -1 given that their values are
             // irrelevant
-            edges[0]   = -1;  // blue   - white
-            edges[1]   = -1;  // blue   - red
-            edges[2]   = -1;  // blue   - yellow
-            edges[3]   = -1;  // blue   - orange
-            edges[4]   = -1;  // white  - orange
-            edges[5]   = -1;  // white  - red
-            edges[6]   = -1;  // yellow - red
+            edges[0]  = -1;  // blue   - white
+            edges[1]  = -1;  // blue   - red
+            edges[2]  = -1;  // blue   - yellow
+            edges[3]  = -1;  // blue   - orange
+            edges[4]  = -1;  // white  - orange
+            edges[5]  = -1;  // white  - red
+            edges[6]  = -1;  // yellow - red
 
             // A set of 5 edges with 12!/7! * 2^7 possible elements
-            edges[7]   =   7;  // yellow - orange
-            edges[8]   =   8;  // white  - green
-            edges[9]   = 109;  // green  - red
-            edges[10]  =  10;  // yellow - green
-            edges[11]  = 111;  // green  - orange
+            edges[7]  =   7;  // yellow - orange
+            edges[8]  =   8;  // white  - green
+            edges[9]  = 109;  // green  - red
+            edges[10] =  10;  // yellow - green
+            edges[11] = 111;  // green  - orange
 
             break;
         default:
@@ -146,30 +146,30 @@ bool Cube::equals(Cube* other) {
 int* Cube::get_face(int *face) {
     int *face_res = new int[8];
     int orien_aux[8];
-    int corners_aux[8];
-    int edges_aux[12];
+    int corners_pos[8];
+    int edges_pos[12];
     int *corners_inv;
     int *edges_inv;
 
+    // gets all positions
     for (int i = 0; i < 8; ++i) {
-        corners_aux[i] = cubie_to_pos(corners[i]);
+        corners_pos[i] = cubie_to_pos(corners[i]);
     }
-
     for (int i = 0; i < 12; ++i) {
-        edges_aux[i] = cubie_to_pos(edges[i]);
+        edges_pos[i] = cubie_to_pos(edges[i]);
     }
+    corners_inv = inv_array(corners_pos, 8);
+    edges_inv   = inv_array(edges_pos, 12);
 
-    corners_inv = inv_array(corners_aux, 8);
-    edges_inv   = inv_array(edges_aux, 12);
-
+    // gets all orientations
     for (int i = 0; i < 4; ++i) {
         orien_aux[i] = cubie_to_axis(corners[corners_inv[face[i]]]);
     }
-
     for (int i = 4; i < 8; ++i) {
         orien_aux[i] = cubie_to_axis(edges[edges_inv[face[i]]]);
     }
 
+    // returns positions and orientations together
     face_res[0] = corners_inv[face[0]] + orien_aux[0];
     face_res[1] = corners_inv[face[1]] + orien_aux[1];
     face_res[2] = corners_inv[face[2]] + orien_aux[2];

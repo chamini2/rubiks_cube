@@ -1,20 +1,34 @@
 CC = clang
 CXXFLAGS = -g -Wall -std=c++11
 
+# If the first argument is "test"...
+ifeq (test,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "test"
+  TEST_NUM := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(TEST_NUM):;@:)
+endif
+
 main: clean extra rank Cube Set EdgeSet main.o
 	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o EdgeSet.o Set.o  main.o -o $@
 
 pdb: clean extra rank Cube Set pdb.o
 	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o  -o $@
 
-tests: clean extra rank Cube EdgeSet.o Set test1.o
-	# $(CC)++ $(CXXFLAGS) extra.o rank.o test0.o -o outest0 || true
-	$(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test1.o -o outest1 || true
-	# $(CC)++ $(CXXFLAGS) extra.o rank.o test2.o -o outest2 || true
-	# $(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test3.o -o outest3 || true
-	# $(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test4.o -o outest4 || true
-	# $(CC)++ $(CXXFLAGS) extra.o Cube.o rank.o test5.o -o outest5 || true
-	# $(CC)++ $(CXXFLAGS) extra.o Cube.o Set.o rank.o test6.o -o outest6 || true
+# use in the way: make test <number>
+# where <number> is the number appended at the end of the file
+# 'make test 2' would run
+#     clang++ -g -Wall -std=c++11 -c extra.cpp
+#     clang++ -g -Wall -std=c++11 -c rank.cpp
+#     clang++ -g -Wall -std=c++11 -c Cube.cpp
+#     clang++ -g -Wall -std=c++11 -c EdgeSet.cpp
+#     clang++ -g -Wall -std=c++11 -c Set.cpp
+#     clang++ -g -Wall -std=c++11 -c test/test2.cpp || true
+#     clang++ -g -Wall -std=c++11 extra.o Cube.o Set.o rank.o test2.o -o outest2 || true
+#######
+# generatin the executabe 'outest2' in the 'src' folder
+test: clean extra rank Cube EdgeSet.o Set test$(TEST_NUM).o
+	$(CC)++ $(CXXFLAGS) extra.o Cube.o Set.o rank.o test$(TEST_NUM).o -o outest$(TEST_NUM) || true
 
 ########################################
 
@@ -26,28 +40,8 @@ pdb.o: pdb.cpp
 
 ####################
 
-test0.o: test/test0.cpp
-	# $(CC)++ $(CXXFLAGS) -c test/test0.cpp || true
-
-test1.o: test/test1.cpp
-	$(CC)++ $(CXXFLAGS) -c test/test1.cpp
-
-test2.o: test/test2.cpp
-	# $(CC)++ $(CXXFLAGS) -c test/test2.cpp || true
-
-test3.o: test/test3.cpp
-	# $(CC)++ $(CXXFLAGS) -c test/test3.cpp || true
-
-test4.o: test/test4.cpp
-	# $(CC)++ $(CXXFLAGS) -c test/test4.cpp || true
-
-test5.o: test/test5.cpp
-	# $(CC)++ $(CXXFLAGS) -c test/test5.cpp || true
-
-test6.o: test/test6.cpp
-	# $(CC)++ $(CXXFLAGS) -c test/test6.cpp || true
-
-####################
+test$(TEST_NUM).o: test/test$(TEST_NUM).cpp
+	$(CC)++ $(CXXFLAGS) -c test/test$(TEST_NUM).cpp || true
 
 ########################################
 
@@ -72,7 +66,7 @@ extra: extra.cpp extra.hpp
 ########################################
 
 clean:
-	@rm main  2> /dev/null || true
-	@rm pdb   2> /dev/null || true
+	@rm main    2> /dev/null || true
+	@rm pdb     2> /dev/null || true
 	@rm outest* 2> /dev/null || true
-	@rm *.o   2> /dev/null || true
+	@rm *.o     2> /dev/null || true

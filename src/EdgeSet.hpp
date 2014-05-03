@@ -5,7 +5,7 @@
 
 class EdgeSet {
     public:
-        EdgeSet();  // defaults to IDA*
+        EdgeSet(int type);  // defaults to IDA*
         ~EdgeSet();
 
         void insert(int64_t info);
