@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>     // std::cout, std::cin, std::endl
 #include <sstream>
 #include <string>
