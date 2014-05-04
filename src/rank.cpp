@@ -10,9 +10,9 @@ void aux_unrank(int n, int r, int *array, int edge) {
 
 int *unrank(int n, int value, int k, int factor) {
     int *array = new int[n];
-    int *aux = new bool[n];
+    bool *aux = new bool[n];
     int d, r, power = pow(factor, k);
-    int edge = n-k;
+    int edge = n-k, aux_i = 0;
 
 
     r = value / power;
