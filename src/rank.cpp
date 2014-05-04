@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "rank.hpp"
 
 void aux_unrank(int n, int r, int *array, int edge) {
@@ -9,6 +10,7 @@ void aux_unrank(int n, int r, int *array, int edge) {
 
 int *unrank(int n, int value, int k, int factor) {
     int *array = new int[n];
+    int *aux = new bool[n];
     int d, r, power = pow(factor, k);
     int edge = n-k;
 
@@ -19,6 +21,7 @@ int *unrank(int n, int value, int k, int factor) {
     // Identity array
     for (int i = 0; i < n; ++i) {
         array[i] = i;
+        aux[i] = true;
     }
 
     aux_unrank(n, r, array, edge);
@@ -28,7 +31,21 @@ int *unrank(int n, int value, int k, int factor) {
         d = d / factor;
     }
 
-    std::sort(array,array+edge);
+    // fill incrementally the unchecked part
+    for (int i = 0; i < n; ++i) {
+        aux[cubie_to_pos(array[i])] = false;
+    }
+
+    aux_i = 0;
+    for (int i = 0; i < n; ++i) {
+        if (aux[i]) {
+            array[aux_i] = i;
+            aux_i++;
+        }
+    }
+    std::sort(array, array+edge);
+
+    delete[] aux;
 
     return array;
 }
