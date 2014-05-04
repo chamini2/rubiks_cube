@@ -27,7 +27,11 @@ int *unrank(int n, int value, int k, int factor) {
     aux_unrank(n, r, array, edge);
 
     for (int i = n - 1; i >= edge; --i) {
-        array[i] += orien_to_axis(d % factor);
+        if (factor == 3) {
+            array[i] += orien_to_axis(d % factor);
+        } else {
+            array[i] += edge_orien_to_axis(d % factor, i, array[i]);
+        }
         d = d / factor;
     }
 
@@ -79,7 +83,7 @@ int rank(int n, int *array, int k, int factor) {
     int *inverse;
     int *aux = new int[n];
     int value, orientation = 0;
-    int edge = n-k;
+    int edge = n - k;
 
     for (int i = 0; i < n; ++i) {
         aux[i] = cubie_to_pos(array[i]);
@@ -92,8 +96,12 @@ int rank(int n, int *array, int k, int factor) {
     delete[] aux;
 
     value *= pow(factor,k);
-    for (int i = n-k; i < n; ++i) {
-        orientation = orientation * factor + cubie_to_orien(array[i]);
+    for (int i = edge; i < n; ++i) {
+        if (factor == 3) {
+            orientation = orientation * factor + cubie_to_orien(array[i]);
+        } else {
+            orientation = orientation * factor + cubie_to_edge_orien(array[i], i);
+        }
     }
     value += orientation;
 
