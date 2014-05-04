@@ -130,7 +130,7 @@ void BFS_edges1(FILE *file, int end) {
     std::cout << "starting e1PDB\n" << std::flush;
 
     edges = cube->get_edges();
-    info = rank(12, edges, 7, 2);
+    info = rank(12, edges, 6, 2);
     last = cube->get_last();
 
     node = std::make_tuple(info, last, level);
@@ -171,7 +171,7 @@ void BFS_edges1(FILE *file, int end) {
             succ->pop();
 
             edges = cube->get_edges();
-            info = rank(12, edges, 7, 2);
+            info = rank(12, edges, 6, 2);
             last = cube->get_last();
 
             if (!closed.contains(info)) {

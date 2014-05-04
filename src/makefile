@@ -27,7 +27,7 @@ pdb: clean extra rank Cube Set pdb.o
 #     clang++ -g -Wall -std=c++11 extra.o Cube.o Set.o rank.o test2.o -o outest2 || true
 #######
 # generatin the executabe 'outest2' in the 'src' folder
-test: clean extra rank Cube EdgeSet.o Set test$(TEST_NUM).o
+test: clean extra rank Cube Set test$(TEST_NUM).o
 	$(CC)++ $(CXXFLAGS) extra.o Cube.o Set.o rank.o test$(TEST_NUM).o -o outest$(TEST_NUM) || true
 
 ########################################
@@ -50,9 +50,6 @@ Cube: Cube.cpp Cube.hpp
 
 Set: Set.cpp Set.hpp
 	$(CC)++ $(CXXFLAGS) -c Set.cpp
-
-EdgeSet: EdgeSet.cpp EdgeSet.hpp
-	$(CC)++ $(CXXFLAGS) -c EdgeSet.cpp
 
 Node: Node.cpp Node.hpp
 	$(CC)++ $(CXXFLAGS) -c Node.cpp
