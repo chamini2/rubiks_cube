@@ -642,6 +642,20 @@ int Cube::sum_of_face(char face) {
     return sum;
 }
 
+bool Cube::permutation_parity() {
+    int array[20];
+
+    for (int i = 0; i < 8; ++i) {
+        array[i] = cubie_to_pos(corners[i]);
+    }
+
+    for (int i = 0; i < 12; ++i) {
+        array[i+8] = cubie_to_pos(edges[i])+8;
+    }
+
+    return tp(20, array) == 0;
+}
+
 bool Cube::corner_parity() {
     char faces[] = { 'f', 'b', 'r', 'l', 't', 'd' };
     int sum;
@@ -657,22 +671,12 @@ bool Cube::corner_parity() {
     return isEven;
 }
 
-bool Cube::permutation_parity() {
-    int array[20];
-
-    for (int i = 0; i < 8; ++i) {
-        array[i] = cubie_to_pos(corners[i]);
-    }
-
-    for (int i = 0; i < 12; ++i) {
-        array[i+8] = cubie_to_pos(edges[i])+8;
-    }
-
-    return tp(20, array) == 0;
+bool Cube::edge_parity() {
+    return false;
 }
 
 bool Cube::valid() {
-    return corner_parity();
+    return corner_parity() && permutation_parity() && edge_parity();
 }
 
 

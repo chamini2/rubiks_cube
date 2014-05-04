@@ -93,7 +93,6 @@ void print_array(int *array, int n) {
 }
 
 /* Generates next permutation in lexicographical order */
-
 void next_perm(int* array, int size) {
     for (int i = size-2; i >= 0; --i) {
         /* code */

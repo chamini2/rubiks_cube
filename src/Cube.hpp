@@ -98,6 +98,7 @@ class Cube {
         bool equals_corners(int *other);
         bool permutation_parity();
         bool corner_parity();
+        bool edge_parity();
         bool valid();
 
     private:

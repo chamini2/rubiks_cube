@@ -9,8 +9,10 @@ void aux_unrank(int n, int r, int *array, int edge) {
 
 int *unrank(int n, int value, int k, int factor) {
     int *array = new int[n];
+    bool *aux = new bool[n]; // for incremental fill
     int d, r, power = pow(factor, k);
-    int edge = n-k;
+    int edge = n-k, aux_i;
+
 
     r = value / power;
     d = value % power;
@@ -27,10 +29,28 @@ int *unrank(int n, int value, int k, int factor) {
         d = d / factor;
     }
 
+    // fill incrementally de unchecked part
+    for (int i = 0; i < n; ++i) {
+        aux[i] = true;
+    }
+    for (int i = 0; i < n; ++i) {
+        aux[cubie_to_pos(array[i])] = false;
+    }
+
+    aux_i = 0;
+    for (int i = 0; i < n; ++i) {
+        if (aux[i]) {
+            array[aux_i] = i;
+        }
+    }
+
+    delete[] aux;
+
     return array;
 }
 
-////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 int aux_rank(int n, int *array, int *inverse, int edge) {
 
     if (n == edge) {
@@ -54,7 +74,6 @@ int aux_rank(int n, int *array, int *inverse, int edge) {
  * rightmost k positions of the array. The contents of the rest are
  * irrelevant.
  */
-
 int rank(int n, int *array, int k, int factor) {
     int *inverse;
     int *aux = new int[n];
