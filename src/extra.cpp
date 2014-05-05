@@ -87,50 +87,116 @@ int cubie_to_axis(int cubie) {
 }
 
 int cubie_to_edge_orien(int cubie, int index) {
-    int orien = cubie_to_orien(cubie);  // 0 || 1 || 2
+    int orien = cubie_to_orien(cubie);  // 0 | 1 | 2
+    int pos = cubie_to_pos(cubie);
 
     switch (index) {
         case 0:
         case 2:
         case 8:
         case 10:
-            if (orien == 0) {
-                return 0;
-            } else if (orien == 1) {
-                return 0;
-            } else {
-                return 1;
+            switch (pos) {
+                case 0:
+                case 2:
+                case 8:
+                case 10:
+                    if (orien == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                case 1:
+                case 3:
+                case 9:
+                case 11:
+                    if (orien == 1) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    if (orien == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
             }
         case 1:
         case 3:
         case 9:
         case 11:
-            if (orien == 1) {
-                return 0;
-            } else if (orien == 0) {
-                return 0;
-            } else {
-                return 1;
+            switch (pos) {
+                case 0:
+                case 2:
+                case 8:
+                case 10:
+                    if (orien == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                case 1:
+                case 3:
+                case 9:
+                case 11:
+                    if (orien == 1) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    if (orien == 1) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
             }
         case 4:
         case 5:
         case 6:
         case 7:
-            if (orien == 0) {
-                return 0;
-            } else if (orien == 2) {
-                return 0;
-            } else {
-                return 1;
+            switch (pos) {
+                case 0:
+                case 2:
+                case 8:
+                case 10:
+                    if (orien == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                case 1:
+                case 3:
+                case 9:
+                case 11:
+                    if (orien == 2) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    if (orien == 0) {
+                        return 0;
+                    } else {
+                        return 1;
+                    }
             }
         default:
-            error("ahora lo ponemos", __LINE__, __FILE__);
+            error("ahora lo ponemos: cubie_to_edge_orien", __LINE__, __FILE__);
             throw -1;
     }
 }
 
 int edge_orien_to_axis(int orien, int index, int pos) {
-
     switch (index) {
         case 0:
         case 2:
@@ -244,7 +310,7 @@ int edge_orien_to_axis(int orien, int index, int pos) {
             }
 
         default:
-            error("ahora lo ponemos", __LINE__, __FILE__);
+            error("ahora lo ponemos: edge_orien_to_axis", __LINE__, __FILE__);
             throw -1;
     }
 }

@@ -19,7 +19,7 @@ Set::Set(int type) {
     } else if (type == 2) {
         // Edges
         this->table = new int8_t[510935040];
-        std::fill_n(table, 264539520, -1);
+        std::fill_n(table, 510935040, -1);
     }
 }
 

@@ -22,7 +22,7 @@ int main(int argc, char const *argv[]) {
     // BFS_corners(file, end);
     // fclose(file);
 
-    file = fopen("../pdbs/e1PDB.bin", "wb");
+    file = fopen("../pdbs/e1PDB.bin", "w");
     if (file == NULL) {
         error("main | file cPDB did not open correctly", __LINE__, __FILE__);
     }
@@ -153,10 +153,14 @@ void BFS_edges1(FILE *file, int end) {
             std::cout << std::flush;
         }
 
-        fprintf(file, "%s %d\n", cube->edges_to_string().c_str(), level);
+        edges = cube->get_edges();
+        fprintf(file, "%s %d\n", array_to_string(edges, 12).c_str(), info);
+        delete edges;
 
         succ = cube->succ();
         size = succ->size();
+
+        delete cube;
 
         for (int i = 0; i < size; ++i) {
             cube = succ->front();
@@ -167,9 +171,10 @@ void BFS_edges1(FILE *file, int end) {
 
             if (!closed.contains(info)) {
                 node = std::make_tuple(cube, level + 1);
-
                 queue.push(node);
                 closed.insert(info, level);
+            } else {
+                delete cube;
             }
         }
 

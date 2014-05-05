@@ -13,12 +13,8 @@ int main(int argc, char const *argv[]) {
     int info_edge;
     int info_corner;
 
-    cube->counter('r');
-    cube->clock('l');
-    cube->counter('f');
-    cube->clock('b');
-    cube->counter('t');
-    cube->clock('d');
+    cube->clock('f');
+    cube->counter('d');
     edges = cube->get_edges();
     corners = cube->get_corners();
 
