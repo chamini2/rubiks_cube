@@ -162,10 +162,6 @@ void BFS_edges1(FILE *file, int end) {
         succ = cube->succ();
         size = succ->size();
 
-        edges = cube->get_edges();
-        fprintf(file, "%s %d\n", array_to_string(edges, 12).c_str(), info);
-        delete edges;
-
         delete cube;
 
         for (int i = 0; i < size; ++i) {
@@ -196,8 +192,8 @@ void BFS_edges1(FILE *file, int end) {
         queue.pop();
     }
 
-    //binary write, all at once
-    // closed.print(file,1);
+    // binary write, all at once
+    closed.print(file,1);
 
     std::cout << "ending cPDB\n";
 }

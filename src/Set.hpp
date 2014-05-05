@@ -22,6 +22,7 @@ class Set {
         int8_t *table;
         int type;
         int table_size;
+        int max_size;
 
         int rank_it(Cube *cube);
 };

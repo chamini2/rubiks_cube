@@ -14,13 +14,15 @@ Set::Set(int type) {
 
     if (type == 1) {
         // Corners
-        this->table = new int8_t[264539520];
-        std::fill_n(table, 264539520, -1);
+        this->max_size = 264539520;
     } else if (type == 2) {
         // Edges
-        this->table = new int8_t[510935040];
-        std::fill_n(table, 510935040, -1);
+        this->max_size = 42577920;
+    } else if (type == 3) {
+        this->max_size = 510935040;
     }
+    this->table = new int8_t[max_size];
+    std::fill_n(table, max_size, -1);
 }
 
 Set::~Set() {
@@ -74,16 +76,7 @@ int Set::size() {
 }
 
 int Set::width() {
-    if (type == 1) {
-        // Corners
-        return 264539520;
-    } else if (type == 2) {
-        // Edges
-        return 510935040;
-    }
-
-    error("width | type = " + int_to_string(type), __LINE__, __FILE__);
-    throw -1;
+    return max_size;
 }
 
 ////////////////////////////////////////
