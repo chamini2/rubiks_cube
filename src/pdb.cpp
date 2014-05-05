@@ -116,7 +116,7 @@ void BFS_corners(FILE *file, int end) {
 }
 
 void BFS_edges1(FILE *file, int end) {
-    std::queue<std::tuple<Cube*, int8_t>> queue;     // <rank, last, level>
+    std::queue<std::tuple<int, int, int8_t>> queue;     // <rank, last, level>
     std::queue<Cube*> *succ;
     Set closed(2);
 
@@ -124,22 +124,28 @@ void BFS_edges1(FILE *file, int end) {
     int info, size;
     int8_t level = 0, last_level = -1;
     int *edges;
-    std::tuple<Cube*, int8_t> node;
+    int last;
+    std::tuple<int, int, int8_t> node;
 
     std::cout << "starting e1PDB\n" << std::flush;
 
     edges = cube->get_edges();
     info = rank(12, edges, 6, 2);
+    last = cube->get_last();
 
-    node = std::make_tuple(cube, level);
+    node = std::make_tuple(info, last, level);
 
     queue.push(node);
 
     closed.insert(info, level);
 
+    delete cube;
+
     while (!queue.empty()) {
-        std::tie(cube, level) = queue.front();
+        std::tie(info, last, level) = queue.front();
         queue.pop();
+
+        cube = new Cube(0, info, last);
 
         if (level == end) {
             delete cube;
@@ -153,12 +159,12 @@ void BFS_edges1(FILE *file, int end) {
             std::cout << std::flush;
         }
 
+        succ = cube->succ();
+        size = succ->size();
+
         edges = cube->get_edges();
         fprintf(file, "%s %d\n", array_to_string(edges, 12).c_str(), info);
         delete edges;
-
-        succ = cube->succ();
-        size = succ->size();
 
         delete cube;
 
@@ -168,14 +174,16 @@ void BFS_edges1(FILE *file, int end) {
 
             edges = cube->get_edges();
             info = rank(12, edges, 6, 2);
+            last = cube->get_last();
 
             if (!closed.contains(info)) {
-                node = std::make_tuple(cube, level + 1);
+                node = std::make_tuple(info, last, level + 1);
+
                 queue.push(node);
                 closed.insert(info, level);
-            } else {
-                delete cube;
             }
+
+            delete cube;
         }
 
         delete succ;
@@ -183,14 +191,13 @@ void BFS_edges1(FILE *file, int end) {
 
     // if the 'end' argument was modified
     while (!queue.empty()) {
-        std::tie(cube, level) = queue.front();
-        queue.pop();
+        std::tie(info, last, level) = queue.front();
 
-        delete cube;
+        queue.pop();
     }
 
     //binary write, all at once
-    // closed.print(file,1); ///////////////////////////////
+    // closed.print(file,1);
 
-    std::cout << "ending e1PDB\n";
+    std::cout << "ending cPDB\n";
 }
