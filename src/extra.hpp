@@ -8,6 +8,7 @@
 std::string int_to_string(int number);
 std::string array_to_string(int *array, int size);
 void array_swap(int &a, int &b);
+void swap_entire_array(int n, int *array, int low, int quan);
 int* inv_array(int* array, int size);
 void array_reverse(int* array, int size);
 void subarray_reverse(int *array, int i, int j);

@@ -10,10 +10,8 @@ void aux_unrank(int n, int r, int *array, int low) {
 
 int *unrank(int n, int value, int low, int quan, int factor) {
     int *array = new int[n];
-    // bool *aux = new bool[n];
     int d, r, power = pow(factor, quan);
     int upp = low + quan;
-
 
     r = value / power;
     d = value % power;
@@ -21,7 +19,6 @@ int *unrank(int n, int value, int low, int quan, int factor) {
     // Identity array
     for (int i = 0; i < n; ++i) {
         array[i] = i;
-        // aux[i] = true;
     }
 
     aux_unrank(upp, r, array, low);
@@ -41,7 +38,6 @@ int *unrank(int n, int value, int low, int quan, int factor) {
 ////////////////////////////////////////////////////////////////////////////////
 
 int aux_rank(int n, int *array, int *inverse, int low) {
-
     if (n == low) {
         return 0;
     }
@@ -68,7 +64,6 @@ int rank(int n, int *array, int low, int quan, int factor) {
     int *aux = new int[n];
     int value, orientation = 0;
     int upp = quan + low;
-    // int edge = n - k;
 
     for (int i = 0; i < n; ++i) {
         aux[i] = cubie_to_pos(array[i]);

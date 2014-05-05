@@ -23,6 +23,24 @@ void array_swap(int &a, int &b) {
     a = temp;
 }
 
+void swap_entire_array(int n, int *array, int low, int quan) {
+    int *temp = new int[n];
+
+    for (int i = 0; i < n; ++i) {
+        temp[i] = array[i];
+    }
+
+    for (int i = 0; i < low; ++i) {
+        array[i+quan] = temp[i];
+    }
+
+    for (int i = low; i < n; ++i) {
+        array[i-low] = temp[i];
+    }
+
+    delete[] temp;
+}
+
 int* inv_array(int* array, int size) {
     int *inverse = new int[size];
 
