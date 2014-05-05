@@ -1,11 +1,7 @@
 #include <fstream>
 #include "Set.hpp"
 
-void BFS_corners(FILE *file, int end);
-
-void BFS_edges1(FILE *file, int end);
-
-void BFS_edges2(FILE *file, int end);
+void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor);
 
 int main(int argc, char const *argv[]) {
     FILE *file;
@@ -17,37 +13,48 @@ int main(int argc, char const *argv[]) {
 
     // file = fopen("../pdbs/cPDB.bin", "wb");
     // if (file == NULL) {
-        // error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+    //     error("main | file cPDB did not open correctly", __LINE__, __FILE__);
     // }
-    // BFS_corners(file, end);
+    // BFS(file, end, 1, 8, 0, 8, 3);
     // fclose(file);
 
-    file = fopen("../pdbs/e1PDB.bin", "w");
+    // file = fopen("../pdbs/e1PDB.bin", "wb");
+    // if (file == NULL) {
+    //     error("main | file e1PDB did not open correctly", __LINE__, __FILE__);
+    // }
+    // BFS(file, end, 2, 12, 6, 6, 2);
+    // fclose(file);
+
+    file = fopen("../pdbs/e2PDB.bin", "wb");
     if (file == NULL) {
-        error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+        error("main | file e2PDB did not open correctly", __LINE__, __FILE__);
     }
-    BFS_edges1(file, end);
+    BFS(file, end, 2, 12, 0, 6, 2);
     fclose(file);
 
     return 0;
 }
 
-void BFS_corners(FILE *file, int end) {
+void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor) {
     std::queue<std::tuple<int, int, int8_t>> queue;     // <rank, last, level>
     std::queue<Cube*> *succ;
-    Set closed(1);
+    Set closed(type);
 
     Cube* cube = new Cube;
     int info, size;
     int8_t level = 0, last_level = -1;
-    int *corners;
+    int *array;
     int last;
     std::tuple<int, int, int8_t> node;
 
-    std::cout << "starting cPDB\n" << std::flush;
+    std::cout << "starting PDB\n" << std::flush;
 
-    corners = cube->get_corners();
-    info = rank(8, corners, 0, 8, 3);
+    if (type == 1) {
+        array = cube->get_corners();
+    } else {
+        array = cube->get_edges();
+    }
+    info = rank(n, array, low, quan, factor);
     last = cube->get_last();
 
     node = std::make_tuple(info, last, level);
@@ -62,7 +69,13 @@ void BFS_corners(FILE *file, int end) {
         std::tie(info, last, level) = queue.front();
         queue.pop();
 
-        cube = new Cube(info, 0, last);
+        if (type == 1) {
+            // Corners
+            cube = new Cube(info, 0, last);
+        } else {
+            // Edges
+            cube = new Cube(0, info, last);
+        }
 
         if (level == end) {
             delete cube;
@@ -85,8 +98,12 @@ void BFS_corners(FILE *file, int end) {
             cube = succ->front();
             succ->pop();
 
-            corners = cube->get_corners();
-            info = rank(8, corners, 0, 8, 3);
+            if (type == 1) {
+                array = cube->get_corners();
+            } else {
+                array = cube->get_edges();
+            }
+            info = rank(n, array, low, quan, factor);
             last = cube->get_last();
 
             if (!closed.contains(info)) {
@@ -112,88 +129,5 @@ void BFS_corners(FILE *file, int end) {
     //binary write, all at once
     closed.print(file,1);
 
-    std::cout << "ending cPDB\n";
-}
-
-void BFS_edges1(FILE *file, int end) {
-    std::queue<std::tuple<int, int, int8_t>> queue;     // <rank, last, level>
-    std::queue<Cube*> *succ;
-    Set closed(2);
-
-    Cube* cube = new Cube;
-    int info, size;
-    int8_t level = 0, last_level = -1;
-    int *edges;
-    int last;
-    std::tuple<int, int, int8_t> node;
-
-    std::cout << "starting e1PDB\n" << std::flush;
-
-    edges = cube->get_edges();
-    info = rank(12, edges, 6, 6, 2);
-    last = cube->get_last();
-
-    node = std::make_tuple(info, last, level);
-
-    queue.push(node);
-
-    closed.insert(info, level);
-
-    delete cube;
-
-    while (!queue.empty()) {
-        std::tie(info, last, level) = queue.front();
-        queue.pop();
-
-        cube = new Cube(0, info, last);
-
-        if (level == end) {
-            delete cube;
-            break;
-        }
-
-        if (level != last_level) {
-            last_level = level;
-            std::cout << "LEVEL " << int_to_string(last_level) << " | queue " << queue.size();
-            std::cout << " | closed " << closed.size() << std::endl;
-            std::cout << std::flush;
-        }
-
-        succ = cube->succ();
-        size = succ->size();
-
-        delete cube;
-
-        for (int i = 0; i < size; ++i) {
-            cube = succ->front();
-            succ->pop();
-
-            edges = cube->get_edges();
-            info = rank(12, edges, 6, 6, 2);
-            last = cube->get_last();
-
-            if (!closed.contains(info)) {
-                node = std::make_tuple(info, last, level + 1);
-
-                queue.push(node);
-                closed.insert(info, level);
-            }
-
-            delete cube;
-        }
-
-        delete succ;
-    }
-
-    // if the 'end' argument was modified
-    while (!queue.empty()) {
-        std::tie(info, last, level) = queue.front();
-
-        queue.pop();
-    }
-
-    // binary write, all at once
-    closed.print(file,1);
-
-    std::cout << "ending cPDB\n";
+    std::cout << "ending PDB\n";
 }
