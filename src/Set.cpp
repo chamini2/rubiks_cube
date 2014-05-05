@@ -88,10 +88,10 @@ int Set::rank_it(Cube* cube) {
             // int key = rank(?, cube->???());
         // Corners PDB
         case 1:
-            return rank(8, cube->get_corners(), 8, 3);
+            return rank(8, cube->get_corners(), 0, 8, 3);
         // Edges PDB
         case 2:
-            return rank(12, cube->get_edges(), 6, 2);
+            return rank(12, cube->get_edges(), 6, 6, 2);
         default:
             error("rank_it | type = " + int_to_string(type), __LINE__, __FILE__);
             throw -1;

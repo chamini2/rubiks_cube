@@ -56,9 +56,9 @@ int *unrank(int n, int value, int k, int factor) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-int aux_rank(int n, int *array, int *inverse, int edge) {
+int aux_rank(int n, int *array, int *inverse, int low) {
 
-    if (n == edge) {
+    if (n == low) {
         return 0;
     }
 
@@ -66,7 +66,7 @@ int aux_rank(int n, int *array, int *inverse, int edge) {
     array_swap(array[n-1], array[inverse[n-1]]);
     array_swap(inverse[s], inverse[n-1]);
 
-    return s + n * aux_rank(n-1, array, inverse, edge);
+    return s + n * aux_rank(n-1, array, inverse, low);
 }
 
 /*
@@ -79,24 +79,25 @@ int aux_rank(int n, int *array, int *inverse, int edge) {
  * rightmost k positions of the array. The contents of the rest are
  * irrelevant.
  */
-int rank(int n, int *array, int k, int factor) {
+int rank(int n, int *array, int low, int quan, int factor) {
     int *inverse;
     int *aux = new int[n];
     int value, orientation = 0;
-    int edge = n - k;
+    int upp = quan + low;
+    // int edge = n - k;
 
     for (int i = 0; i < n; ++i) {
         aux[i] = cubie_to_pos(array[i]);
     }
 
     inverse = inv_array(aux, n);
-    value = aux_rank(n, aux, inverse, edge);
+    value = aux_rank(upp, aux, inverse, low);
 
     delete[] inverse;
     delete[] aux;
 
-    value *= pow(factor,k);
-    for (int i = edge; i < n; ++i) {
+    value *= pow(factor, quan);
+    for (int i = low; i < upp; ++i) {
         if (factor == 3) {
             orientation = orientation * factor + cubie_to_orien(array[i]);
         } else {

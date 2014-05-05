@@ -15,19 +15,19 @@ int main(int argc, char const *argv[]) {
         end = 1 + atoi(argv[1]);
     }
 
-    // file = fopen("../pdbs/cPDB.bin", "wb");
-    // if (file == NULL) {
-    //     error("main | file cPDB did not open correctly", __LINE__, __FILE__);
-    // }
-    // BFS_corners(file, end);
-    // fclose(file);
-
-    file = fopen("../pdbs/e1PDB.bin", "w");
+    file = fopen("../pdbs/cPDB.bin", "wb");
     if (file == NULL) {
         error("main | file cPDB did not open correctly", __LINE__, __FILE__);
     }
-    BFS_edges1(file, end);
+    BFS_corners(file, end);
     fclose(file);
+
+    // file = fopen("../pdbs/e1PDB.bin", "w");
+    // if (file == NULL) {
+    //     error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+    // }
+    // BFS_edges1(file, end);
+    // fclose(file);
 
     return 0;
 }
@@ -47,7 +47,7 @@ void BFS_corners(FILE *file, int end) {
     std::cout << "starting cPDB\n" << std::flush;
 
     corners = cube->get_corners();
-    info = rank(8, corners, 8, 3);
+    info = rank(8, corners, 0, 8, 3);
     last = cube->get_last();
 
     node = std::make_tuple(info, last, level);
@@ -86,7 +86,7 @@ void BFS_corners(FILE *file, int end) {
             succ->pop();
 
             corners = cube->get_corners();
-            info = rank(8, corners, 8, 3);
+            info = rank(8, corners, 0, 8, 3);
             last = cube->get_last();
 
             if (!closed.contains(info)) {
@@ -130,7 +130,7 @@ void BFS_edges1(FILE *file, int end) {
     std::cout << "starting e1PDB\n" << std::flush;
 
     edges = cube->get_edges();
-    info = rank(12, edges, 6, 2);
+    info = rank(12, edges, 6, 6, 2);
     last = cube->get_last();
 
     node = std::make_tuple(info, last, level);
@@ -169,7 +169,7 @@ void BFS_edges1(FILE *file, int end) {
             succ->pop();
 
             edges = cube->get_edges();
-            info = rank(12, edges, 6, 2);
+            info = rank(12, edges, 6, 6, 2);
             last = cube->get_last();
 
             if (!closed.contains(info)) {
