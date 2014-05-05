@@ -1,18 +1,18 @@
 #include <algorithm>
 #include "rank.hpp"
 
-void aux_unrank(int n, int r, int *array, int edge) {
-    if (n > edge) {
+void aux_unrank(int n, int r, int *array, int low) {
+    if (n > low) {
         array_swap(array[n-1], array[r % n]);
-        aux_unrank(n-1, floor(r/n), array, edge);
+        aux_unrank(n-1, floor(r/n), array, low);
     }
 }
 
-int *unrank(int n, int value, int k, int factor) {
+int *unrank(int n, int value, int low, int quan, int factor) {
     int *array = new int[n];
-    bool *aux = new bool[n];
-    int d, r, power = pow(factor, k);
-    int edge = n-k, aux_i = 0;
+    // bool *aux = new bool[n];
+    int d, r, power = pow(factor, quan);
+    int upp = low + quan;
 
 
     r = value / power;
@@ -21,12 +21,12 @@ int *unrank(int n, int value, int k, int factor) {
     // Identity array
     for (int i = 0; i < n; ++i) {
         array[i] = i;
-        aux[i] = true;
+        // aux[i] = true;
     }
 
-    aux_unrank(n, r, array, edge);
+    aux_unrank(upp, r, array, low);
 
-    for (int i = n - 1; i >= edge; --i) {
+    for (int i = upp - 1; i >= low; --i) {
         if (factor == 3) {
             array[i] += orien_to_axis(d % factor);
         } else {
@@ -34,22 +34,6 @@ int *unrank(int n, int value, int k, int factor) {
         }
         d = d / factor;
     }
-
-    // fill incrementally the unchecked part
-    for (int i = 0; i < n; ++i) {
-        aux[cubie_to_pos(array[i])] = false;
-    }
-
-    aux_i = 0;
-    for (int i = 0; i < n; ++i) {
-        if (aux[i]) {
-            array[aux_i] = i;
-            aux_i++;
-        }
-    }
-    std::sort(array, array+edge);
-
-    delete[] aux;
 
     return array;
 }

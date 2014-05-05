@@ -15,19 +15,19 @@ int main(int argc, char const *argv[]) {
         end = 1 + atoi(argv[1]);
     }
 
-    file = fopen("../pdbs/cPDB.bin", "wb");
+    // file = fopen("../pdbs/cPDB.bin", "wb");
+    // if (file == NULL) {
+        // error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+    // }
+    // BFS_corners(file, end);
+    // fclose(file);
+
+    file = fopen("../pdbs/e1PDB.bin", "w");
     if (file == NULL) {
         error("main | file cPDB did not open correctly", __LINE__, __FILE__);
     }
-    BFS_corners(file, end);
+    BFS_edges1(file, end);
     fclose(file);
-
-    // file = fopen("../pdbs/e1PDB.bin", "w");
-    // if (file == NULL) {
-    //     error("main | file cPDB did not open correctly", __LINE__, __FILE__);
-    // }
-    // BFS_edges1(file, end);
-    // fclose(file);
 
     return 0;
 }
