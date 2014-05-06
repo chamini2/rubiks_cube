@@ -74,7 +74,7 @@ class Cube {
         // Constructor
         Cube();
         Cube(int pdb);
-        Cube(int corners, int edges, int last);
+        Cube(int corners, int edges, int last, int low, int quan);
         ~Cube();
         Cube* clone();
 

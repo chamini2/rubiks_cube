@@ -99,9 +99,9 @@ Cube::Cube(int pdb) {
     last = -1;
 }
 
-Cube::Cube(int corners, int edges, int last) {
+Cube::Cube(int corners, int edges, int last, int low, int quan) {
     this->corners = unrank(8, corners, 0, 8, 3);
-    this->edges = unrank(12, edges, 6, 6, 2);
+    this->edges = unrank(12, edges, low, quan, 2);
     this->last = last;
 }
 

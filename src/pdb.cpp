@@ -71,10 +71,10 @@ void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor) {
 
         if (type == 1) {
             // Corners
-            cube = new Cube(info, 0, last);
+            cube = new Cube(info, 0, last, low, quan);
         } else {
             // Edges
-            cube = new Cube(0, info, last);
+            cube = new Cube(0, info, last, low, quan);
         }
 
         if (level == end) {
