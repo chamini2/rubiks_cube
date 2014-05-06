@@ -53,13 +53,13 @@ int *unrank(int n, int value, int low, int quan, int factor) {
             aux_unrank(upp, r, array, low);
         }
 
-        std::cout << "(unrank) n = " << n << ", new_low = " << new_low ;
+        // std::cout << "(unrank) n = " << n << ", new_low = " << new_low ;
         int *inverse = inv_array(array, n);
         int *array_copy = new int[12];
         for (int i = 0; i < n; ++i) {
             array_copy[i] = array[i];
         }
-        std::cout << ", rank  = " << aux_rank(n, array_copy, inverse, new_low) << "\n";
+        // std::cout << ", rank  = " << aux_rank(n, array_copy, inverse, new_low) << "\n";
         delete[] inverse;
         delete[] array_copy;
 
@@ -133,6 +133,9 @@ int rank(int n, int *array, int low, int quan, int factor) {
 
         delete[] array;
         delete[] swapped;
+        delete[] aux;
+        delete[] inverse;
+
 
         return value;
     } else {
