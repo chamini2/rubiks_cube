@@ -73,8 +73,8 @@ class Cube {
     public:
         // Constructor
         Cube();
-        Cube(int pdb);
         Cube(int corners, int edges, int last, int low, int quan);
+        void reset_last();
         ~Cube();
         Cube* clone();
 
