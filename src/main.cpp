@@ -77,11 +77,12 @@ int h_value(Cube * c) {
     int values[3]; // 0 corens | 1 edges1 | 2 edges2
 
     corners = c->get_corners();
-    edges = c->get_edges();
+    edges  = c->get_edges();
+    edges2 = c->get_edges();
 
     int c_val = rank(8, corners, 0, 8, 3);
     int e1_val = rank(12, edges, 0, 6, 2);;
-    int e2_val = rank(12, edges, 6, 6, 2);;
+    int e2_val = rank(12, edges2, 6, 6, 2);;
 
     values[0] = cpdb[c_val];
     values[1] = e1pdb[e1_val];
