@@ -48,13 +48,13 @@ Cube* make_root_node(int levels){
   Cube *c = new Cube;
   int i;
   std::queue<Cube*> *succ;
+  srand(time(NULL));
   std::string desorden = "";
   for (i = 0; i < levels; i++){
     succ = c->succ();
     int j;
-    srand(time(NULL));
-    int random_succesor = rand() % (succ->size() - 1);
-    for (j = 0; j < random_succesor; j++){
+    int random_succesor = rand() % succ->size();
+    for (j = 0; j < random_succesor - 1; j++){
       /* Se eliminan <random_sucessor> sucesores de la cola y se realiza
 	el movimiento correspondiente al sucesor que quede al principio
 	de la cola.*/

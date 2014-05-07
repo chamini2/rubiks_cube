@@ -7,6 +7,7 @@
 #define CUBE_H
 
 std::string last_to_str(int last);
+std::string pretty_last_to_str(int last);
 int str_to_last(std::string last);
 
 
