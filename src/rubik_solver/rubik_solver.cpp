@@ -4,9 +4,9 @@
 #include <time.h>
 #include "../Cube.hpp"
 
-extern int8_t *cpdb;
-extern int8_t *e1pdb;
-extern int8_t *e2pdb;
+int8_t *cpdb;
+int8_t *e1pdb;
+int8_t *e2pdb;
 
 
 /*
@@ -27,16 +27,53 @@ int PROBLEM_LEVELS = 6;
  */
 typedef std::pair <std::queue<int>*,int> Par;
 
-void load_pdb() {
-  /*
-    Funcion que carga la PDB en memoria y la almacena en una variable global,
-    para luego ser untilizada en la funcion h_value.
-    No implementada.
-   */
-  return;
+/*
+  Funcion que carga la PDB en memoria y la almacena en una variable global,
+  para luego ser utilizada en la funcion h_value.
+  No implementada.
+ */
+void load_pdb(std::string folder, int edges_type){
+    int CORNERS_MAX = 264539520;
+    int EDGES_MAX = 42577920; // 510935040 (edges of 7)
+    FILE *file;
+    int tmp;
+
+    // the default behaviour is edges_type == 1 (42577920)
+    if (edges_type == 2) {
+        EDGES_MAX = 510935040;
+    }
+
+    cpdb  = new int8_t[CORNERS_MAX];
+    e1pdb = new int8_t[EDGES_MAX];
+    e2pdb = new int8_t[EDGES_MAX];
+
+    file = fopen(std::string(folder + "cPDB.bin").c_str(), "rb");
+    if (file == NULL) {
+        error("readPDBs | file 'cPDB.bin' did not open correctly", __LINE__, __FILE__);
+        throw -1;
+    }
+    fread(cpdb, sizeof(int8_t), CORNERS_MAX, file);
+    fclose(file);
+
+    file = fopen(std::string(folder + "e1PDB.bin").c_str(), "rb");
+    if (file == NULL) {
+        error("readPDBs | file 'e1PDB.bin' did not open correctly", __LINE__, __FILE__);
+        throw -1;
+    }
+    fread(e1pdb, sizeof(int8_t), EDGES_MAX, file);
+    fclose(file);
+
+    file = fopen(std::string(folder + "e2PDB.bin").c_str(), "rb");
+    if (file == NULL) {
+        error("readPDBs | file 'e2PDB.bin' did not open correctly", __LINE__, __FILE__);
+        throw -1;
+    }
+    fread(e2pdb, sizeof(int8_t), EDGES_MAX, file);
+    fclose(file);
 }
 
-int h_value(Cube * c, int8_t) {
+
+int h_value(Cube * c) {
     int *corners;
     int *edges;
     int values[3]; // 0 corens | 1 edges1 | 2 edges2
@@ -54,11 +91,11 @@ int h_value(Cube * c, int8_t) {
 }
 
 
+/*
+  Funcion que retorna un Cube desordenado mediante <levels> movimientos random
+  sobre un cubo en su estado goal.
+*/
 Cube* make_root_node(int levels) {
-  /*
-   Funcion que retorna un Cube desordenado mediante <levels> movimientos random
-   sobre un cubo en su estado goal.
-   */
   Cube *c = new Cube;
   int i;
   std::queue<Cube*> *succ;
@@ -68,9 +105,11 @@ Cube* make_root_node(int levels) {
     srand(time(NULL));
     int random_succesor = rand() % (succ->size() - 1);
     for (j = 0; j < random_succesor; j++) {
-      /* Se eliminan <random_sucessor> sucesores de la cola y se realiza
-	el movimiento correspondiente al sucesor que quede al principio
-	de la cola.*/
+    /*
+      Se eliminan <random_sucessor> sucesores de la cola y se realiza
+      el movimiento correspondiente al sucesor que quede al principio
+      de la cola.
+     */
       delete(succ->front());
       succ->pop();
     }
@@ -78,7 +117,7 @@ Cube* make_root_node(int levels) {
     c = succ->front();
     succ->pop();
 
-    //Loop para liberar memoria de los que queda en succ
+    // Loop para liberar memoria de los que queda en succ
     int tmp = succ->size();
     for (j = 0; j < tmp ; j++) {
       delete(succ->front());
@@ -96,7 +135,7 @@ bool is_goal(Cube *c) {
     Funcion que dado un Cube determina si este esta en su estado goal.
    */
 
-  //Esta implementacion podria ser mas eficiente
+  // Esta implementacion podria ser mas eficiente
   if (c == NULL)
     return false;
   Cube *goal = new Cube;
@@ -269,7 +308,7 @@ void validar_entrada(int argc, char const *argv[]) {
 
 int main(int argc, char const *argv[]) {
   validar_entrada(argc, argv);
-  load_pdb();
+  load_pdb("../pdbs/", 1);
 
   std::queue<int> *plan = IDA();
 
