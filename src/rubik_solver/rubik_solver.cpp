@@ -63,8 +63,8 @@ Cube* make_root_node(int levels){
     }
     delete(c);    
     c = succ->front();
-    desorden.append(last_to_str(c->get_last()));
-    desorden.append(" ");
+    desorden.insert(0,last_to_str(c->get_last()));
+    desorden.insert(0, " ");
     succ->pop();
 
     //Loop para liberar memoria de los que queda en succ
