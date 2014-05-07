@@ -63,7 +63,7 @@ Cube* make_root_node(int levels){
     }
     delete(c);    
     c = succ->front();
-    desorden.insert(0,last_to_str(c->get_last()));
+    desorden.insert(0,pretty_last_to_str(c->get_last()));
     desorden.insert(0, " ");
     succ->pop();
 
@@ -105,7 +105,7 @@ std::queue<std::string>* extract_solution(Cube *n){
    */
   std::cout << "Encontre el goal." << std::endl;
   std::queue<std::string> *plan = new std::queue<std::string>; 
-  plan->push(last_to_str(n->get_last()));
+  plan->push(pretty_last_to_str(n->get_last()));
   return plan;
 }
 
@@ -159,7 +159,7 @@ Par* avanzar_dfs(Cube* n, int g, int t){
     delete(succ->front());
     succ->pop();
     if (par_retorno->first != NULL){
-      par_retorno->first->push(last_to_str(n->get_last()));
+      par_retorno->first->push(pretty_last_to_str(n->get_last()));
       int unused_size = succ->size(); 
       int j;
       for (j = 0; j < unused_size; j++){
