@@ -141,6 +141,9 @@ int cubie_to_edge_orien(int cubie, int index) {
                     } else {
                         return 1;
                     }
+                default:
+                    error("cubie_to_edge_orien | pos = " + int_to_string(pos), __LINE__, __FILE__);
+                    throw -1;
             }
         case 1:
         case 3:
@@ -174,6 +177,9 @@ int cubie_to_edge_orien(int cubie, int index) {
                     } else {
                         return 1;
                     }
+                default:
+                    error("cubie_to_edge_orien | pos = " + int_to_string(pos), __LINE__, __FILE__);
+                    throw -1;
             }
         case 4:
         case 5:
@@ -207,9 +213,12 @@ int cubie_to_edge_orien(int cubie, int index) {
                     } else {
                         return 1;
                     }
+                default:
+                    error("cubie_to_edge_orien | pos = " + int_to_string(pos), __LINE__, __FILE__);
+                    throw -1;
             }
         default:
-            error("ahora lo ponemos: cubie_to_edge_orien", __LINE__, __FILE__);
+            error("cubie_to_edge_orien | index = " + int_to_string(index), __LINE__, __FILE__);
             throw -1;
     }
 }
@@ -249,7 +258,7 @@ int edge_orien_to_axis(int orien, int index, int pos) {
                         return 100;
                     }
                 default:
-                    error("MAL EN anillo 0 2 8 10", __LINE__, __FILE__);
+                    error("edge_orien_to_axis | pos = " + int_to_string(pos), __LINE__, __FILE__);
                     throw -1;
             }
 
@@ -286,7 +295,7 @@ int edge_orien_to_axis(int orien, int index, int pos) {
                         return 0;
                     }
                 default:
-                    error("MAL EN anillo 1 3 9 11", __LINE__, __FILE__);
+                    error("edge_orien_to_axis | pos = " + int_to_string(pos), __LINE__, __FILE__);
                     throw -1;
             }
 
@@ -323,12 +332,12 @@ int edge_orien_to_axis(int orien, int index, int pos) {
                         return 100;
                     }
                 default:
-                    error("MAL EN anillo 4 5 6 7", __LINE__, __FILE__);
+                    error("edge_orien_to_axis | pos = " + int_to_string(pos), __LINE__, __FILE__);
                     throw -1;
             }
 
         default:
-            error("ahora lo ponemos: edge_orien_to_axis", __LINE__, __FILE__);
+            error("edge_orien_to_axis | index = " + int_to_string(index), __LINE__, __FILE__);
             throw -1;
     }
 }
@@ -347,13 +356,6 @@ void next_perm(int* array, int size) {
         /* code */
     }
 }
-
-
-// Node* make_root_node(Cube* cube) {
-//     Node* node = new Node(cube, NULL, 0, 0);  // action y level 0 porque es root
-
-//     return node;
-// }
 
 ////////////////////////////////////////////////////////////////////////////////
 

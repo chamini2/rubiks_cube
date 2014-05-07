@@ -3,6 +3,7 @@
 #include "rank.hpp"
 
 std::string last_to_str(int last);
+std::string pretty_last_to_str(int last);
 int str_to_last(std::string last);
 
 class Cube {

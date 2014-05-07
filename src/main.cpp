@@ -24,7 +24,7 @@ int PROBLEM_LEVELS = 6;
   entero representa un movimiento, y un entero para representar el valor t del
   nivel que esta cubriendo el algoritmo en un momento dado.
  */
-typedef std::pair <std::queue<int>*,int> Par;
+typedef std::pair <std::queue<std::string>*,int> Par;
 
 /*
   Funcion que carga la PDB en memoria y la almacena en una variable global,
@@ -76,8 +76,8 @@ int h_value(Cube * c) {
     int *edges;
     int values[3]; // 0 corens | 1 edges1 | 2 edges2
 
-    corners = c->get_corners;
-    edges = c->get_edges;
+    corners = c->get_corners();
+    edges = c->get_edges();
 
     int c_val = rank(8, corners, 0, 8, 3);
     int e1_val = rank(12, edges, 0, 6, 2);;
@@ -100,12 +100,13 @@ Cube* make_root_node(int levels) {
   Cube *c = new Cube;
   int i;
   std::queue<Cube*> *succ;
+  srand(time(NULL));
+  std::string desorden = "";
   for (i = 0; i < levels; i++) {
     succ = c->succ();
     int j;
-    srand(time(NULL));
-    int random_succesor = rand() % (succ->size() - 1);
-    for (j = 0; j < random_succesor; j++) {
+    int random_succesor = rand() % succ->size();
+    for (j = 0; j < random_succesor - 1; j++){
     /*
       Se eliminan <random_sucessor> sucesores de la cola y se realiza
       el movimiento correspondiente al sucesor que quede al principio
@@ -116,6 +117,8 @@ Cube* make_root_node(int levels) {
     }
     delete(c);
     c = succ->front();
+    desorden.insert(0,pretty_last_to_str(c->get_last()));
+    desorden.insert(0, " ");
     succ->pop();
 
     // Loop para liberar memoria de los que queda en succ
@@ -127,6 +130,7 @@ Cube* make_root_node(int levels) {
     delete(succ);
   }
   std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << std::endl;
+  std::cout << "Los movimientos realizados para desordenar son: " << desorden << std::endl;
   c->reset_last();
   return c;
 }
@@ -148,46 +152,43 @@ bool is_goal(Cube *c) {
   return false;
 }
 
-std::queue<int>* extract_solution(Cube *n) {
+std::queue<std::string>* extract_solution(Cube *n){
   /*
     Funcion que retorna el plan de ejecucion una vez hallado el goal.
     No implementada.
    */
   std::cout << "Encontre el goal." << std::endl;
-  std::queue<int> *plan = new std::queue<int>;
-  int i;
-  for (i = 0; i < 10 ; i++)
-    plan->push(i);
+  std::queue<std::string> *plan = new std::queue<std::string>;
+  plan->push(pretty_last_to_str(n->get_last()));
   return plan;
 }
 
+Par* chequear_cond_parada(Cube* n, int g, int t){
   /*
     Funcion que chequea si las condiciones de parada de la funcion bounded_dfs
     se cumplen. Las condiciones son que el nivel actual del IDA* dado por t fue
     sobrepasado o que el goal ha sido encontrado.
    */
+  Par* par_retorno = new Par;
 
-Par* chequear_cond_parada(Cube* n, int g, int t) {
-    Par* par_retorno = new Par;
+  if ((g + h_value(n)) > t){
+    par_retorno->first = NULL;
+    par_retorno->second = g + h_value(n);
+    return par_retorno;
+  }
 
-    if ((g + h_value(n)) > t) {
-        par_retorno->first = NULL;
-        par_retorno->second = g + h_value(n);
-        return par_retorno;
-    }
+  std::queue<std::string> *plan;
+  if (is_goal(n)){
+    plan = extract_solution(n);
+    std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
+    par_retorno->first = plan;
+    par_retorno->second = g;
+    return par_retorno;
+  }
 
-    std::queue<int> *plan;
-    if (is_goal(n)) {
-        plan = extract_solution(n);
-        std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
-        par_retorno->first = plan;
-        par_retorno->second = g;
-        return par_retorno;
-    }
+  delete(par_retorno);
+  return NULL;
 
-    delete(par_retorno);
-
-    return NULL;
 }
 
 Par* bounded_dfs(Cube*, int, int);
@@ -198,22 +199,20 @@ Par* avanzar_dfs(Cube* n, int g, int t) {
     Funcion que realiza la expansion del bounded en los sucesores del nodo n
    */
   Par* par_retorno = NULL;
-
-  std::queue<int> *plan;
-  int new_t = std::numeric_limits<int>::max(); // Infinito
+  int new_t = std::numeric_limits<int>::max(); // Infinite
 
   std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir
   int tmp;
   int succ_size = succ->size();
 
-  for (tmp = 0; tmp < succ_size; tmp++) {
+  for (tmp = 0; tmp < succ_size; tmp++){
     delete(par_retorno);
     par_retorno = bounded_dfs(succ->front(), g + 1 , t);
     delete(succ->front());
     succ->pop();
 
-    if (par_retorno->first != NULL) {
-      //Free memory and return
+    if (par_retorno->first != NULL){
+      par_retorno->first->push(pretty_last_to_str(n->get_last()));
       int unused_size = succ->size();
       int j;
 
@@ -260,33 +259,30 @@ Par* bounded_dfs(Cube* n, int g, int t) {
     Funcion principal del algoritmo IDA*.
   */
 
-std::queue<int>* IDA() {
+std::queue<std::string>* IDA() {
     Cube* n = make_root_node(PROBLEM_LEVELS);
     int t = h_value(n);
     int max_int = std::numeric_limits<int>::max();  // Infinite.
     Par* pair;
 
-    std::queue<int>* plan;
+  std::queue<std::string>* plan;
 
-    while (t != max_int) {
-        pair = bounded_dfs(n, 0, t);
-        plan = pair->first;
-        t = pair->second;
+  while (t != max_int) {
+    pair = bounded_dfs(n,0,t);
+    plan = pair->first;
+    t = pair->second;
 
-        if (pair->first != NULL) {
-            // Se consugio una solucion
-            delete(n);
-            delete(pair);
-
-            return plan;
-        }
-
-        delete(pair);
+    if (pair->first != NULL){
+      //Se consiguió una solucion
+      delete(n);
+      return plan;
     }
-
-    delete(n);
     delete(pair);
-    return NULL;
+  }
+
+  delete(n);
+  delete(pair);
+  return NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +307,7 @@ int main(int argc, char const *argv[]) {
   validar_entrada(argc, argv);
   load_pdb("../pdbs/", 1);
 
-  std::queue<int> *plan = IDA();
+  std::queue<std::string> *plan = IDA();
 
   if (plan != NULL) {
     //Se consigio una solucion
