@@ -9,8 +9,8 @@ ifeq (test,$(firstword $(MAKECMDGOALS)))
   $(eval $(TEST_NUM):;@:)
 endif
 
-main: clean extra rank Cube Set EdgeSet main.o
-	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o EdgeSet.o Set.o  main.o -o $@
+main: clean extra rank Cube Set main.o
+	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o  main.o -o $@
 
 pdb: clean extra rank Cube Set pdb.o
 	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o  -o $@
@@ -21,7 +21,6 @@ pdb: clean extra rank Cube Set pdb.o
 #     clang++ -g -Wall -std=c++11 -c extra.cpp
 #     clang++ -g -Wall -std=c++11 -c rank.cpp
 #     clang++ -g -Wall -std=c++11 -c Cube.cpp
-#     clang++ -g -Wall -std=c++11 -c EdgeSet.cpp
 #     clang++ -g -Wall -std=c++11 -c Set.cpp
 #     clang++ -g -Wall -std=c++11 -c test/test2.cpp || true
 #     clang++ -g -Wall -std=c++11 extra.o Cube.o Set.o rank.o test2.o -o outest2 || true
