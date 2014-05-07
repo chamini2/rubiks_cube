@@ -11,19 +11,19 @@ int main(int argc, char const *argv[]) {
         end = 1 + atoi(argv[1]);
     }
 
-    // file = fopen("../pdbs/cPDB.bin", "wb");
-    // if (file == NULL) {
-    //     error("main | file cPDB did not open correctly", __LINE__, __FILE__);
-    // }
-    // BFS(file, end, 1, 8, 0, 8, 3);
-    // fclose(file);
+    file = fopen("../pdbs/cPDB.bin", "wb");
+    if (file == NULL) {
+        error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+    }
+    BFS(file, end, 1, 8, 0, 8, 3);
+    fclose(file);
 
-    // file = fopen("../pdbs/e1PDB.bin", "wb");
-    // if (file == NULL) {
-    //     error("main | file e1PDB did not open correctly", __LINE__, __FILE__);
-    // }
-    // BFS(file, end, 2, 12, 6, 6, 2);
-    // fclose(file);
+    file = fopen("../pdbs/e1PDB.bin", "wb");
+    if (file == NULL) {
+        error("main | file e1PDB did not open correctly", __LINE__, __FILE__);
+    }
+    BFS(file, end, 2, 12, 6, 6, 2);
+    fclose(file);
 
     file = fopen("../pdbs/e2PDB.bin", "wb");
     if (file == NULL) {

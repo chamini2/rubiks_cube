@@ -22,7 +22,7 @@ Set::Set(int type) {
         this->max_size = 510935040;
     }
     this->table = new int8_t[max_size];
-    std::fill_n(table, max_size, -1);
+    std::fill_n(table, max_size, 127);
 }
 
 Set::~Set() {
@@ -32,14 +32,14 @@ Set::~Set() {
 void Set::insert(Cube* cube, int8_t level) {
     int key = rank_it(cube);
 
-    if (table[key] == -1) {
+    if (table[key] == 127) {
         table[key] = level;
         table_size++;
     }
 }
 
 void Set::insert(int key, int8_t level) {
-    if (table[key] == -1) {
+    if (table[key] == 127) {
         table[key] = level;
         table_size++;
     }
@@ -48,7 +48,7 @@ void Set::insert(int key, int8_t level) {
 bool Set::contains(Cube* cube) {
     int key = rank_it(cube);
 
-    if (table[key] == -1) {
+    if (table[key] == 127) {
         return false;
     }
 
@@ -56,7 +56,7 @@ bool Set::contains(Cube* cube) {
 }
 
 bool Set::contains(int key) {
-    if (table[key] == -1) {
+    if (table[key] == 127) {
         return false;
     }
 
@@ -99,5 +99,8 @@ int Set::rank_it(Cube* cube) {
 }
 
 void Set::print(FILE *file, size_t elem_size) {
-    fwrite(table, width(), elem_size, file);
+    // for (int i = 0; i < width(); ++i) {
+        // fwrite(table + i, sizeof(int8_t), 1, file);
+    // }
+    fwrite(table, elem_size, width(), file);
 }
