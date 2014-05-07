@@ -48,6 +48,7 @@ Cube* make_root_node(int levels){
   Cube *c = new Cube;
   int i;
   std::queue<Cube*> *succ;
+  std::string desorden = "";
   for (i = 0; i < levels; i++){
     succ = c->succ();
     int j;
@@ -60,8 +61,10 @@ Cube* make_root_node(int levels){
       delete(succ->front());
       succ->pop();
     }
-    delete(c);
+    delete(c);    
     c = succ->front();
+    desorden.append(last_to_str(c->get_last()));
+    desorden.append(" ");
     succ->pop();
 
     //Loop para liberar memoria de los que queda en succ
@@ -73,6 +76,7 @@ Cube* make_root_node(int levels){
     delete(succ);
   }
   std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << std::endl;
+  std::cout << "Los movimientos realizados para desordenar son: " << desorden << std::endl;
   c->reset_last();
   return c;
 }
