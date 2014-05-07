@@ -74,6 +74,7 @@ void load_pdb(std::string folder, int edges_type){
 int h_value(Cube * c) {
     int *corners;
     int *edges;
+    int *edges2;
     int values[3]; // 0 corens | 1 edges1 | 2 edges2
 
     corners = c->get_corners();
