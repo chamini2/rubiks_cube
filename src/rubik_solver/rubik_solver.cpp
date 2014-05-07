@@ -20,7 +20,7 @@ int PROBLEM_LEVELS = 6;
   entero representa un movimiento, y un entero para representar el valor t del
   nivel que esta cubriendo el algoritmo en un momento dado. 
  */
-typedef std::pair <std::queue<int>*,int> Par;
+typedef std::pair <std::queue<std::string>*,int> Par;
 
 void load_pdb(){
   /*
@@ -94,16 +94,14 @@ bool is_goal(Cube *c){
   return false;
 }
 
-std::queue<int>* extract_solution(Cube *n){
+std::queue<std::string>* extract_solution(Cube *n){
   /*
     Funcion que retorna el plan de ejecucion una vez hallado el goal.
     No implementada.
    */
   std::cout << "Encontre el goal." << std::endl;
-  std::queue<int> *plan = new std::queue<int>;
-  int i;
-  for (i = 0; i < 10 ; i++)   
-    plan->push(i);
+  std::queue<std::string> *plan = new std::queue<std::string>; 
+  plan->push(last_to_str(n->get_last()));
   return plan;
 }
 
@@ -121,7 +119,7 @@ Par* chequear_cond_parada(Cube* n, int g, int t){
     return par_retorno;    
   }
 
-  std::queue<int> *plan;
+  std::queue<std::string> *plan;
   if (is_goal(n)){
     plan = extract_solution(n);
     std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
@@ -144,7 +142,7 @@ Par* avanzar_dfs(Cube* n, int g, int t){
    */
   Par* par_retorno = NULL;
 
-  std::queue<int> *plan;
+  std::queue<std::string> *plan;
   int new_t = std::numeric_limits<int>::max(); // Infinito
 
   std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir   
@@ -157,7 +155,7 @@ Par* avanzar_dfs(Cube* n, int g, int t){
     delete(succ->front());
     succ->pop();
     if (par_retorno->first != NULL){
-      //Free memory and return
+      par_retorno->first->push(last_to_str(n->get_last()));
       int unused_size = succ->size(); 
       int j;
       for (j = 0; j < unused_size; j++){
@@ -192,7 +190,7 @@ Par* bounded_dfs(Cube* n, int g, int t){
   return avanzar_dfs(n,g,t);
 }
 
-std::queue<int>* IDA(){
+std::queue<std::string>* IDA(){
   /*
     Funcion principal del algoritmo IDA*.
   */
@@ -200,7 +198,7 @@ std::queue<int>* IDA(){
   int t = h_value(n);
   int max_int = std::numeric_limits<int>::max(); // Infinito.
   Par* pair;
-  std::queue<int>* plan;
+  std::queue<std::string>* plan;
   while (t != max_int) {
     pair = bounded_dfs(n,0,t);
     plan = pair->first;
@@ -238,7 +236,7 @@ int main(int argc, char const *argv[]) {
   validar_entrada(argc, argv);
   load_pdb();
 
-  std::queue<int> *plan = IDA(); 
+  std::queue<std::string> *plan = IDA(); 
 
   if (plan != NULL){
     //Se consigio una solucion
