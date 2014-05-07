@@ -76,8 +76,8 @@ int h_value(Cube * c) {
     int *edges;
     int values[3]; // 0 corens | 1 edges1 | 2 edges2
 
-    corners = c->get_corners;
-    edges = c->get_edges;
+    corners = c->get_corners();
+    edges = c->get_edges();
 
     int c_val = rank(8, corners, 0, 8, 3);
     int e1_val = rank(12, edges, 0, 6, 2);;
