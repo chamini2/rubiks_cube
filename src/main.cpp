@@ -396,5 +396,7 @@ Cube* gen_random_cube(int moves) {
 
     cube->reset_last();
 
+    std::cout << "\n";
+
     return cube;
 }
