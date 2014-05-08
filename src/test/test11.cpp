@@ -2,7 +2,7 @@
 #include <limits>
 #include <cstdlib>
 #include <ctime>
-#include "Cube.hpp"
+#include "../Cube.hpp"
 
 int8_t *cpdb;
 int8_t *e1pdb;
@@ -102,36 +102,18 @@ int h_value(Cube * c) {
 */
 Cube* make_root_node(int levels) {
     Cube *c = new Cube;
-    int random_succesor, tmp;
-    std::queue<Cube*> *succ;
-
+    int ran_next, last = -1;
     srand(time(NULL));
     std::string desorden = "";
 
     for (int i = 0; i < levels; i++) {
-        succ = c->succ();
-        random_succesor = rand() % succ->size();
-        /* Se eliminan <random_sucessor> sucesores de la cola y se realiza
-         * el movimiento correspondiente al sucesor que quede al principio
-         * de la cola. */
-        for (int j = 0; j < random_succesor - 1; j++) {
-            delete(succ->front());
-            succ->pop();
-        }
-        delete(c);
-        c = succ->front();
-        succ->pop();
+        do {
+            ran_next = rand() % 18;
+        } while ((ran_next/3 == last/3) && ((ran_next/3)+1== last/3));
+        c->move(ran_next);
 
         desorden.insert(0,pretty_last_to_str(c->get_last()));
         desorden.insert(0, " ");
-
-        // Loop para liberar memoria de los que queda en succ
-        tmp = succ->size();
-        for (int j = 0; j < tmp ; j++) {
-            delete(succ->front());
-            succ->pop();
-        }
-        delete(succ);
     }
 
     std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << "\n";
@@ -194,17 +176,29 @@ Par* check_stop_condition(Cube* n, int g, int t) {
     return NULL;
 }
 
-Par* bounded_dfs(Cube*, int, int);
-
 /*
- * Funcion que realiza la expansion del bounded en los sucesores del nodo n
  */
-Par* avanzar_dfs(Cube* n, int g, int t) {
-    Par* par_retorno = NULL;
+/*
+ * Funcion recursiva que realiza la busqueda del goal para el nivel dado por
+ * <t> a partir del nodo <n> con costo <g>.
+ * Realiza la expansion del bounded en los sucesores del nodo n.
+ */
+Par* bounded_dfs(Cube* n, int g, int t) {
+    Par* par_retorno = check_stop_condition(n,g,t);
     int new_t = std::numeric_limits<int>::max();    // Infinito
-    std::queue<Cube*> *succ = n->succ();            // Lista de sucesores a expandir
-    int succ_size = succ->size();
+    std::queue<Cube*> *succ;
+    int succ_size;
     int unused_size;
+
+    //Hubo exito en las condiciones de parada
+    if (par_retorno != NULL) {
+        return par_retorno;
+    } else {
+        delete(par_retorno);
+    }
+
+    succ = n->succ();
+    succ_size = succ->size();
 
     for (int i = 0; i < succ_size; i++) {
         delete(par_retorno);
@@ -232,25 +226,6 @@ Par* avanzar_dfs(Cube* n, int g, int t) {
     par_retorno->second = new_t;
     delete(succ);
     return par_retorno;
-}
-
-
-/*
- * Funcion recursiva que realiza la busqueda del goal para el nivel dado por
- * <t> a partir del nodo <n> con costo <g>.
- */
-Par* bounded_dfs(Cube* n, int g, int t) {
-    Par* par_retorno = check_stop_condition(n,g,t);
-
-    //Hubo exito en las condiciones de parada
-    if (par_retorno != NULL) {
-        return par_retorno;
-    }
-
-    delete(par_retorno);
-
-
-    return avanzar_dfs(n,g,t);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

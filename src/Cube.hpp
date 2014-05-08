@@ -87,6 +87,7 @@ class Cube {
         bool equals(Cube* other);
 
         // operations on the cube
+        void move(int val);
         void clock(char face);
         void counter(char face);
         void hundred(char face);

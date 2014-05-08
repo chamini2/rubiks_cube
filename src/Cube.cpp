@@ -271,6 +271,25 @@ int rotate_cubie(int cubie, char face) {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+void Cube::move(int val) {
+    char faces[] = { 'f', 'b', 'r', 'l', 't', 'd' };
+
+    switch (val % 3) {
+        case 0:
+            counter(faces[val/3]);
+            break;
+        case 1:
+            clock(faces[val/3]);
+            break;
+        case 2:
+            hundred(faces[val/3]);
+            break;
+        default:
+            error("move | val % 3 = " + int_to_string(val % 3), __LINE__, __FILE__);
+            throw -1;
+    }
+}
+
 void Cube::clock(char face) {
     int* before;
     int after[8];
