@@ -17,3 +17,6 @@ main
 pdb
 a.out
 outest*
+src/gmon.out
+src/out.txt
+src/test.txt
