@@ -618,6 +618,32 @@ bool Cube::valid() {
     return corner_parity() && permutation_parity() && edge_parity();
 }
 
+std::string pretty_last_to_str(int last) {
+    std::string str;
+    char faces[] = { 'f', 'b', 'r', 'l', 'u', 'd' };
+
+    switch (last % 3) {
+        case 0:
+            str = "+";
+            break;
+        case 1:
+            str = "-";
+            break;
+        case 2:
+            str = "|";
+            break;
+        case -1:
+            return "  ";
+        default:
+            error("last_to_str | last % 3 = " + int_to_string(last % 3), __LINE__, __FILE__);
+            throw -1;
+    }
+    if (str.compare("|") == 0){
+      str = "+";
+      return faces[last / 3] + str + faces[last / 3] + str;
+    }
+    return faces[last / 3] + str;
+}
 
 std::string last_to_str(int last) {
     std::string str;

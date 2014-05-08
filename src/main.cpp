@@ -24,7 +24,7 @@ int PROBLEM_LEVELS = 6;
   entero representa un movimiento, y un entero para representar el valor t del
   nivel que esta cubriendo el algoritmo en un momento dado.
  */
-typedef std::pair <std::queue<int>*,int> Par;
+typedef std::pair <std::queue<std::string>*,int> Par;
 
 /*
   Funcion que carga la PDB en memoria y la almacena en una variable global,
@@ -100,14 +100,16 @@ int h_value(Cube * c) {
 */
 Cube* make_root_node(int levels) {
   Cube *c = new Cube;
-  int i;
+  int random_succesor, tmp;
   std::queue<Cube*> *succ;
-  for (i = 0; i < levels; i++) {
+
+  srand(time(NULL));
+  std::string desorden = "";
+
+  for (int i = 0; i < levels; i++) {
     succ = c->succ();
-    int j;
-    srand(time(NULL));
-    int random_succesor = rand() % (succ->size() - 1);
-    for (j = 0; j < random_succesor; j++) {
+    random_succesor = rand() % succ->size();
+    for (int j = 0; j < random_succesor - 1; j++) {
     /*
       Se eliminan <random_sucessor> sucesores de la cola y se realiza
       el movimiento correspondiente al sucesor que quede al principio
@@ -120,15 +122,20 @@ Cube* make_root_node(int levels) {
     c = succ->front();
     succ->pop();
 
+    desorden.insert(0,pretty_last_to_str(c->get_last()));
+    desorden.insert(0, " ");
+
     // Loop para liberar memoria de los que queda en succ
-    int tmp = succ->size();
-    for (j = 0; j < tmp ; j++) {
+    tmp = succ->size();
+    for (int j = 0; j < tmp ; j++) {
       delete(succ->front());
       succ->pop();
     }
     delete(succ);
   }
+
   std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << std::endl;
+  std::cout << "Los movimientos realizados para desordenar son: " << desorden << std::endl;
   c->reset_last();
   return c;
 }
@@ -150,16 +157,14 @@ bool is_goal(Cube *c) {
   return false;
 }
 
-std::queue<int>* extract_solution(Cube *n) {
+std::queue<std::string>* extract_solution(Cube *n) {
   /*
     Funcion que retorna el plan de ejecucion una vez hallado el goal.
     No implementada.
    */
   std::cout << "Encontre el goal." << std::endl;
-  std::queue<int> *plan = new std::queue<int>;
-  int i;
-  for (i = 0; i < 10 ; i++)
-    plan->push(i);
+  std::queue<std::string> *plan = new std::queue<std::string>;
+  plan->push(pretty_last_to_str(n->get_last()));
   return plan;
 }
 
@@ -178,7 +183,7 @@ Par* chequear_cond_parada(Cube* n, int g, int t) {
         return par_retorno;
     }
 
-    std::queue<int> *plan;
+    std::queue<std::string> *plan;
     if (is_goal(n)) {
         plan = extract_solution(n);
         std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
@@ -195,13 +200,11 @@ Par* chequear_cond_parada(Cube* n, int g, int t) {
 Par* bounded_dfs(Cube*, int, int);
 
 
+/*
+  Funcion que realiza la expansion del bounded en los sucesores del nodo n
+ */
 Par* avanzar_dfs(Cube* n, int g, int t) {
-  /*
-    Funcion que realiza la expansion del bounded en los sucesores del nodo n
-   */
   Par* par_retorno = NULL;
-
-  std::queue<int> *plan;
   int new_t = std::numeric_limits<int>::max(); // Infinito
 
   std::queue<Cube*> *succ = n->succ(); // Lista de sucesores a expandir
@@ -215,7 +218,7 @@ Par* avanzar_dfs(Cube* n, int g, int t) {
     succ->pop();
 
     if (par_retorno->first != NULL) {
-      //Free memory and return
+      par_retorno->first->push(pretty_last_to_str(n->get_last()));
       int unused_size = succ->size();
       int j;
 
@@ -262,13 +265,12 @@ Par* bounded_dfs(Cube* n, int g, int t) {
     Funcion principal del algoritmo IDA*.
   */
 
-std::queue<int>* IDA() {
+std::queue<std::string>* IDA() {
     Cube* n = make_root_node(PROBLEM_LEVELS);
     int t = h_value(n);
     int max_int = std::numeric_limits<int>::max();  // Infinite.
     Par* pair;
-
-    std::queue<int>* plan;
+    std::queue<std::string>* plan;
 
     while (t != max_int) {
         pair = bounded_dfs(n, 0, t);
@@ -313,7 +315,7 @@ int main(int argc, char const *argv[]) {
   validar_entrada(argc, argv);
   load_pdb("../pdbs/", 1);
 
-  std::queue<int> *plan = IDA();
+  std::queue<std::string> *plan = IDA();
 
   if (plan != NULL) {
     //Se consigio una solucion
