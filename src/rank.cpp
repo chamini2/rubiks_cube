@@ -24,6 +24,9 @@ int *unrank(int n, int value, int low, int quan, int factor) {
         array[i] = i;
     }
 
+    /*
+     * NEEDS TO BE GENERALIZED
+     */
     if (low == 0 && quan == 6 && factor == 2) {
         int *array_aux = new int[12];
 
@@ -46,12 +49,7 @@ int *unrank(int n, int value, int low, int quan, int factor) {
 
         return array_aux;
     } else {
-        if (low == 0 && quan < n) {
-            aux_unrank(n, r, array, new_low);
-            swap_entire_array(n, array, new_low, quan);
-        } else {
-            aux_unrank(upp, r, array, low);
-        }
+        aux_unrank(upp, r, array, low);
 
         // std::cout << "(unrank) n = " << n << ", new_low = " << new_low ;
         int *inverse = inv_array(array, n);
@@ -103,70 +101,33 @@ int aux_rank(int n, int *array, int *inverse, int low) {
  */
 int rank(int n, int *array, int low, int quan, int factor) {
     int *inverse;
-    int *aux = new int[n];
+    int *aux;
     int value, orientation = 0;
     int upp = quan + low;
     int new_low = n - quan;
 
-    if (low == 0 && quan == 6 && factor == 2) {
-        int *swapped = new int[12];
+    aux = swap_entire_array(n, array, upp);
 
-        for (int i = 0; i < 6; ++i) {
-            swapped[i+6] = array[i];
-        }
-        for (int i = 0; i < 6; ++i) {
-            swapped[i] = array[i+6];
-        }
+    for (int i = 0; i < n; ++i) {
+        aux[i] = cubie_to_pos(aux[i]);
+    }
 
-        for (int i = 0; i < n; ++i) {
-            aux[i] = cubie_to_pos(swapped[i]);
-        }
+    inverse = inv_array(aux, n);
+    value = aux_rank(n, aux, inverse, new_low);
 
-        inverse = inv_array(aux, 12);
-        value = aux_rank(12, aux, inverse, 6);
-
-        value *= pow(factor, quan);
-        for (int i = 0; i < 6; ++i) {
+    value *= pow(factor, quan);
+    for (int i = low; i < upp; ++i) {
+        if (factor == 3) {
+            orientation = orientation * factor + cubie_to_orien(array[i]);
+        } else {
             orientation = orientation * factor + cubie_to_edge_orien(array[i], i);
         }
-        value += orientation;
-
-        delete[] array;
-        delete[] swapped;
-        delete[] aux;
-        delete[] inverse;
-
-
-        return value;
-    } else {
-        for (int i = 0; i < n; ++i) {
-            aux[i] = cubie_to_pos(array[i]);
-        }
-
-        if (low == 0 && quan < n) {
-            swap_entire_array(n, aux, low, quan);
-            inverse = inv_array(aux, n);
-            value = aux_rank(n, aux, inverse, new_low);
-        } else {
-            inverse = inv_array(aux, n);
-            value = aux_rank(upp, aux, inverse, low);
-        }
-
-        delete[] inverse;
-        delete[] aux;
-
-        value *= pow(factor, quan);
-        for (int i = low; i < upp; ++i) {
-            if (factor == 3) {
-                orientation = orientation * factor + cubie_to_orien(array[i]);
-            } else {
-                orientation = orientation * factor + cubie_to_edge_orien(array[i], i);
-            }
-        }
-        value += orientation;
-
-        delete[] array;
-
-        return value;
     }
+    value += orientation;
+
+    delete[] array;
+    delete[] aux;
+    delete[] inverse;
+
+    return value;
 }

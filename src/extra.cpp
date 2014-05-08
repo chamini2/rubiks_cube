@@ -23,22 +23,22 @@ void array_swap(int &a, int &b) {
     a = temp;
 }
 
-void swap_entire_array(int n, int *array, int low, int quan) {
+/* Swaps array, form the 'cut' position
+ * swap_entire_array(8, [0,1,2,3,4,5,6,7], 5) = [5,6,7,0,1,2,3,4]
+ */
+int* swap_entire_array(int n, int *array, int cut) {
     int *temp = new int[n];
+    int right = n - cut;
 
-    for (int i = 0; i < n; ++i) {
-        temp[i] = array[i];
+    for (int i = 0; i < cut; ++i) {
+        temp[i+right] = array[i];
     }
 
-    for (int i = 0; i < low; ++i) {
-        array[i+quan] = temp[i];
+    for (int i = 0; i < right; ++i) {
+        temp[i] = array[i+cut];
     }
 
-    for (int i = low; i < n; ++i) {
-        array[i-low] = temp[i];
-    }
-
-    delete[] temp;
+    return temp;
 }
 
 int* inv_array(int* array, int size) {

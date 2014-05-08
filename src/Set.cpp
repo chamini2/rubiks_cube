@@ -46,9 +46,7 @@ void Set::insert(int key, int8_t level) {
 }
 
 bool Set::contains(Cube* cube) {
-    int key = rank_it(cube);
-
-    if (table[key] == 127) {
+    if (table[rank_it(cube)] == 127) {
         return false;
     }
 
@@ -62,6 +60,11 @@ bool Set::contains(int key) {
 
     return true;
 }
+
+int8_t Set::value(Cube* cube) {
+    return table[rank_it(cube)];
+}
+
 
 int8_t Set::value(int key) {
     return table[key];
@@ -103,4 +106,8 @@ void Set::print(FILE *file, size_t elem_size) {
         // fwrite(table + i, sizeof(int8_t), 1, file);
     // }
     fwrite(table, elem_size, width(), file);
+}
+
+void Set::read(FILE *file, size_t elem_size) {
+    fread(table, elem_size, width(), file);
 }

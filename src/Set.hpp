@@ -11,12 +11,14 @@ class Set {
         void insert(int key, int8_t level);
         bool contains(Cube* cube);
         bool contains(int key);
+        int8_t value(Cube* cube);
         int8_t value(int key);
         bool empty();
         int size();
         int width();
 
         void print(FILE *file, size_t elem_size);
+        void read(FILE *file, size_t elem_size);
 
     private:
         int8_t *table;

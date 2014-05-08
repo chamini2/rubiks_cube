@@ -2,11 +2,11 @@
 #include <limits>
 #include <cstdlib>
 #include <ctime>
-#include "Cube.hpp"
+#include "Set.hpp"
 
-int8_t *cpdb;
-int8_t *e1pdb;
-int8_t *e2pdb;
+Set cpdb(1);
+Set e1pdb(2);
+Set e2pdb(2);
 
 Cube *goal_compare;
 
@@ -34,25 +34,14 @@ typedef std::pair <std::queue<std::string>*,int> Par;
  * No implementada.
  */
 void load_pdb(std::string folder, int edges_type){
-    int CORNERS_MAX = 264539520;
-    int EDGES_MAX = 42577920; // 510935040 (edges of 7)
     FILE *file;
-
-    // the default behaviour is edges_type == 1 (42577920)
-    if (edges_type == 2) {
-        EDGES_MAX = 510935040;
-    }
-
-    cpdb  = new int8_t[CORNERS_MAX];
-    e1pdb = new int8_t[EDGES_MAX];
-    e2pdb = new int8_t[EDGES_MAX];
 
     file = fopen(std::string(folder + "cPDB.bin").c_str(), "rb");
     if (file == NULL) {
         error("readPDBs | file 'cPDB.bin' did not open correctly", __LINE__, __FILE__);
         throw -1;
     }
-    fread(cpdb, sizeof(int8_t), CORNERS_MAX, file);
+    cpdb.read(file, sizeof(int8_t));
     fclose(file);
 
     file = fopen(std::string(folder + "e1PDB.bin").c_str(), "rb");
@@ -60,7 +49,7 @@ void load_pdb(std::string folder, int edges_type){
         error("readPDBs | file 'e1PDB.bin' did not open correctly", __LINE__, __FILE__);
         throw -1;
     }
-    fread(e1pdb, sizeof(int8_t), EDGES_MAX, file);
+    e1pdb.read(file, sizeof(int8_t));
     fclose(file);
 
     file = fopen(std::string(folder + "e2PDB.bin").c_str(), "rb");
@@ -68,28 +57,17 @@ void load_pdb(std::string folder, int edges_type){
         error("readPDBs | file 'e2PDB.bin' did not open correctly", __LINE__, __FILE__);
         throw -1;
     }
-    fread(e2pdb, sizeof(int8_t), EDGES_MAX, file);
+    e2pdb.read(file, sizeof(int8_t));
     fclose(file);
 }
 
 
 int h_value(Cube * c) {
-    int *corners;
-    int *edges;
-    int *edges2;
-    int values[3]; // 0 corens | 1 edges1 | 2 edges2
+    int values[3]; // 0 corners | 1 edges1 | 2 edges2
 
-    corners = c->get_corners();
-    edges  = c->get_edges();
-    edges2 = c->get_edges();
-
-    int c_val = rank(8, corners, 0, 8, 3);
-    int e1_val = rank(12, edges, 0, 6, 2);;
-    int e2_val = rank(12, edges2, 6, 6, 2);;
-
-    values[0] = cpdb[c_val];
-    values[1] = e1pdb[e1_val];
-    values[2] = e2pdb[e2_val];
+    values[0] = cpdb.value(c);
+    values[1] = e1pdb.value(c);
+    values[2] = e2pdb.value(c);
 
     // std::max returns an iterator, thus the *.
     return *std::max_element(values, values+3);
@@ -99,7 +77,7 @@ int h_value(Cube * c) {
 /*
  * Funcion que retorna un Cube desordenado mediante <levels> movimientos random
  * sobre un cubo en su estado goal.
-*/
+ */
 Cube* make_root_node(int levels) {
     Cube *c = new Cube;
     int random_succesor, tmp;
