@@ -102,9 +102,6 @@ int Set::rank_it(Cube* cube) {
 }
 
 void Set::print(FILE *file, size_t elem_size) {
-    // for (int i = 0; i < width(); ++i) {
-        // fwrite(table + i, sizeof(int8_t), 1, file);
-    // }
     fwrite(table, elem_size, width(), file);
 }
 
