@@ -9,8 +9,8 @@ ifeq (test,$(firstword $(MAKECMDGOALS)))
   $(eval $(TEST_NUM):;@:)
 endif
 
-main: clean extra rank Cube Set main.o
-	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o  main.o -o $@
+main: clean extra rank Cube Set pdb.o main.o
+	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o main.o -o $@
 
 pdb: clean extra rank Cube Set pdb.o
 	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o  -o $@

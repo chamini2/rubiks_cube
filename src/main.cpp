@@ -2,13 +2,12 @@
 #include <limits>
 #include <cstdlib>
 #include <ctime>
-#include "Set.hpp"
+#include "pdb.hpp"
 
 Set cpdb(1);
 Set e1pdb(2);
 Set e2pdb(2);
 
-Cube *goal_compare;
 
 /*
  * Cantidad de movimientos por defecto a realizar para desordenar el cubo.
@@ -20,6 +19,8 @@ Cube *goal_compare;
  */
 int PROBLEM_LEVELS = 6;
 
+int NUMBER_OF_MOVES = 50;
+
 /*
  * Definicion para el valor de retorno de la funcion recursiva utilizado en IDA*:
  * Un par que contiene una cola de enteros para el plan de ejecucion, donde cada
@@ -27,13 +28,60 @@ int PROBLEM_LEVELS = 6;
  * nivel que esta cubriendo el algoritmo en un momento dado.
  */
 typedef std::pair <std::queue<std::string>*,int> Par;
+Cube *goal_compare;
+
+Cube* gen_random_cube(int moves);
+void load_pdb(std::string folder, int edges_type);
+int h_value(Cube * c);
+Cube* make_root_node(int moves);
+Cube* make_leveled_node(int levels);
+bool is_goal(Cube *c);
+std::queue<std::string>* extract_solution(Cube *n);
+Par* check_stop_condition(Cube* n, int g, int t);
+Par* bounded_dfs(Cube*, int, int);
+Par* avanzar_dfs(Cube* n, int g, int t);
+std::queue<std::string>* IDA();
+void validar_entrada(int argc, char const *argv[]);
+bool get_option();
+
+
+int main(int argc, char const *argv[]) {
+    bool option = get_option();
+
+    while (!option) {
+        option = get_option();
+    }
+
+    goal_compare = new Cube;
+    std::queue<std::string> *plan;
+
+    load_pdb("../pdbs/", 1);
+    plan = IDA();
+
+    //Se consigio una solucion
+    if (plan != NULL) {
+        std::cout << "Plan encontrado: \n";
+        int plan_size = plan->size();
+        //Mostrar plan encontrado.
+        for (int i =  0; i < plan_size; i++) {
+            std::cout << plan->front() << " ";
+            plan->pop();
+        }
+        std::cout << "\n";
+    } else {
+    //No se consiguio solucion
+        std::cout << "Plan no encontrado\n";
+    }
+
+    delete(plan);
+    return 0;
+}
 
 /*
  * Funcion que carga la PDB en memoria y la almacena en una variable global,
  * para luego ser utilizada en la funcion h_value.
- * No implementada.
  */
-void load_pdb(std::string folder, int edges_type){
+void load_pdb(std::string folder, int edges_type) {
     FILE *file;
 
     file = fopen(std::string(folder + "cPDB.bin").c_str(), "rb");
@@ -61,24 +109,23 @@ void load_pdb(std::string folder, int edges_type){
     fclose(file);
 }
 
-
 int h_value(Cube * c) {
-    int values[3]; // 0 corners | 1 edges1 | 2 edges2
+    int values[3];  // 0 corners | 1 edges1 | 2 edges2
 
     values[0] = cpdb.value(c);
     values[1] = e1pdb.value(c);
     values[2] = e2pdb.value(c);
 
-    // std::max returns an iterator, thus the *.
-    return *std::max_element(values, values+3);
-}
+    int value = *std::max_element(values, values+3);
 
+    return value;
+}
 
 /*
  * Funcion que retorna un Cube desordenado mediante <levels> movimientos random
  * sobre un cubo en su estado goal.
  */
-Cube* make_root_node(int levels) {
+Cube* make_leveled_node(int levels) {
     Cube *c = new Cube;
     int random_succesor, tmp;
     std::queue<Cube*> *succ;
@@ -172,7 +219,23 @@ Par* check_stop_condition(Cube* n, int g, int t) {
     return NULL;
 }
 
-Par* bounded_dfs(Cube*, int, int);
+/*
+ * Funcion recursiva que realiza la busqueda del goal para el nivel dado por
+ * <t> a partir del nodo <n> con costo <g>.
+ */
+Par* bounded_dfs(Cube* n, int g, int t) {
+    Par* par_retorno = check_stop_condition(n,g,t);
+
+    //Hubo exito en las condiciones de parada
+    if (par_retorno != NULL) {
+        return par_retorno;
+    }
+
+    delete(par_retorno);
+
+
+    return avanzar_dfs(n,g,t);
+}
 
 /*
  * Funcion que realiza la expansion del bounded en los sucesores del nodo n
@@ -212,32 +275,11 @@ Par* avanzar_dfs(Cube* n, int g, int t) {
     return par_retorno;
 }
 
-
-/*
- * Funcion recursiva que realiza la busqueda del goal para el nivel dado por
- * <t> a partir del nodo <n> con costo <g>.
- */
-Par* bounded_dfs(Cube* n, int g, int t) {
-    Par* par_retorno = check_stop_condition(n,g,t);
-
-    //Hubo exito en las condiciones de parada
-    if (par_retorno != NULL) {
-        return par_retorno;
-    }
-
-    delete(par_retorno);
-
-
-    return avanzar_dfs(n,g,t);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
 /*
  * Funcion principal del algoritmo IDA*.
  */
 std::queue<std::string>* IDA() {
-    Cube* n = make_root_node(PROBLEM_LEVELS);
+    Cube* n = make_root_node(NUMBER_OF_MOVES);
     int t = h_value(n);
     int max_int = std::numeric_limits<int>::max();  // Infinite.
     Par* pair;
@@ -264,8 +306,6 @@ std::queue<std::string>* IDA() {
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-
 /*
  * Validar parametro de entrada para cantidad de movimientos para desordenar.
  */
@@ -282,29 +322,69 @@ void validar_entrada(int argc, char const *argv[]) {
     }
 }
 
-int main(int argc, char const *argv[]) {
-    goal_compare = new Cube;
-    std::queue<std::string> *plan;
+bool get_option() {
+    std::cout << "Welcome to yet another Rubik's cube solver\n";
+    std::cout << "Select an option:\n";
+    std::cout << "  1) Generate corners PDB (about 30 minutes)\n";
+    std::cout << "  2) Generate 1st edges PDB (about 15 minutes)\n";
+    std::cout << "  3) Generate 2nd edges PDB (about 15 minutes).\n";
+    std::cout << "  4) Solve Rubik's cube for random instance.\n";
 
-    validar_entrada(argc, argv);
-    load_pdb("../pdbs/", 1);
-    plan = IDA();
+    int option;
+    std::cin >> option;
 
-    //Se consigio una solucion
-    if (plan != NULL) {
-        std::cout << "Plan encontrado: \n";
-        int plan_size = plan->size();
-        //Mostrar plan encontrado.
-        for (int i =  0; i < plan_size; i++) {
-            std::cout << plan->front() << " ";
-            plan->pop();
+    switch (option) {
+        case(1):
+            std::cout << "Generating corners PDB...\n";
+            get_pdb(1);
+            std::cout << "All done!\n";
+            exit(0);
+        case(2):
+            std::cout << "Generating 1st edges PDB...\n";
+            get_pdb(2);
+            std::cout << "All done!\n";
+            exit(0);
+        case(3):
+            std::cout << "Generating 2nd edges PDB...\n";
+            get_pdb(3);
+            std::cout << "All done!\n";
+            exit(0);
+        case(4):
+            std::cout << "Proceeding with cube solving...\n";
+            return true;
+        default:
+            return false;
+    }
+}
+
+Cube* make_root_node(int moves) {
+    Cube *c = gen_random_cube(moves);
+
+    return c;
+}
+
+Cube* gen_random_cube(int moves) {
+    char faces[] = {'f', 'b', 'r', 'l', 't', 'd'};
+    Cube *cube = new Cube;
+
+    for (int i = 0; i < moves; ++i) {
+        int faceIndex = rand() % 6;
+        int facelet = rand() % 3;
+
+        switch(facelet) {
+            case(0):
+                cube->clock(faces[faceIndex]);
+                break;
+            case(1):
+                cube->counter(faces[faceIndex]);
+                break;
+            case(2):
+                cube->hundred(faces[faceIndex]);
+                break;
         }
-        std::cout << "\n";
-    } else {
-    //No se consiguio solucion
-        std::cout << "Plan no encontrado\n";
     }
 
-    delete(plan);
-    return 0;
+    cube->reset_last();
+
+    return cube;
 }
