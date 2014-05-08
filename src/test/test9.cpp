@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "../rank.hpp"
 
 int main(int argc, char const *argv[]) {
@@ -30,14 +31,10 @@ int main(int argc, char const *argv[]) {
     array[10] = 6;
     array[11] = 211;
 
-    print_array(array, 12);
+    for (int i = 0; i < 100; ++i) {
+        std::cout << rand() % 6 << " ";
+    }
 
-    i = rank(12, array, 6, 2);
-    std::cout << "\n" << i << "\n";
-    array = unrank(12, i, 6, 2);
-
-    print_array(array, 12);
-    std::cout << "\n";
 
     delete[] array;
     return 0;

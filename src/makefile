@@ -1,5 +1,5 @@
 CC = clang
-CXXFLAGS = -g -Wall -std=c++11
+CXXFLAGS = -pg -Wall -std=c++11
 
 # If the first argument is "test"...
 ifeq (test,$(firstword $(MAKECMDGOALS)))
@@ -9,8 +9,8 @@ ifeq (test,$(firstword $(MAKECMDGOALS)))
   $(eval $(TEST_NUM):;@:)
 endif
 
-main: clean extra rank Cube Set main.o
-	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o  main.o -o $@
+main: clean extra rank Cube Set pdb.o main.o
+	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o main.o -o $@
 
 pdb: clean extra rank Cube Set pdb.o
 	$(CC)++ $(CXXFLAGS) extra.o rank.o Cube.o Set.o pdb.o  -o $@
@@ -34,7 +34,7 @@ test: clean extra rank Cube Set test$(TEST_NUM).o
 main.o: main.cpp
 	$(CC)++ $(CXXFLAGS) -c main.cpp
 
-pdb.o: pdb.cpp
+pdb.o: pdb.cpp pdb.hpp
 	$(CC)++ $(CXXFLAGS) -c pdb.cpp
 
 ####################

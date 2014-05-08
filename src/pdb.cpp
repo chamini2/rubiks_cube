@@ -1,36 +1,38 @@
-#include <fstream>
-#include "Set.hpp"
+#include "pdb.hpp"
 
-void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor);
 
-int main(int argc, char const *argv[]) {
+int get_pdb(int which) {
     FILE *file;
     int end = -1;
 
-    if (argc > 1) {
-        end = 1 + atoi(argv[1]);
-    }
+    switch(which) {
+        case(1):
+            file = fopen("../pdbs/cPDB.bin", "wb");
+            if (file == NULL) {
+                error("main | file cPDB did not open correctly", __LINE__, __FILE__);
+            }
+            BFS(file, end, 1, 8, 0, 8, 3);
+            fclose(file);
+            break;
 
-    file = fopen("../pdbs/cPDB.bin", "wb");
-    if (file == NULL) {
-        error("main | file cPDB did not open correctly", __LINE__, __FILE__);
-    }
-    BFS(file, end, 1, 8, 0, 8, 3);
-    fclose(file);
+        case(2):
+            file = fopen("../pdbs/e1PDB.bin", "wb");
+            if (file == NULL) {
+                error("main | file e1PDB did not open correctly", __LINE__, __FILE__);
+            }
+            BFS(file, end, 2, 12, 6, 6, 2);
+            fclose(file);
+            break;
 
-    file = fopen("../pdbs/e1PDB.bin", "wb");
-    if (file == NULL) {
-        error("main | file e1PDB did not open correctly", __LINE__, __FILE__);
+        case(3):
+            file = fopen("../pdbs/e2PDB.bin", "wb");
+            if (file == NULL) {
+                error("main | file e2PDB did not open correctly", __LINE__, __FILE__);
+            }
+            BFS(file, end, 2, 12, 0, 6, 2);
+            fclose(file);
+            break;
     }
-    BFS(file, end, 2, 12, 6, 6, 2);
-    fclose(file);
-
-    file = fopen("../pdbs/e2PDB.bin", "wb");
-    if (file == NULL) {
-        error("main | file e2PDB did not open correctly", __LINE__, __FILE__);
-    }
-    BFS(file, end, 2, 12, 0, 6, 2);
-    fclose(file);
 
     return 0;
 }
