@@ -134,8 +134,8 @@ Cube* make_root_node(int levels) {
         delete(succ);
     }
 
-    std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << std::endl;
-    std::cout << "Los movimientos realizados para desordenar son: " << desorden << std::endl;
+    std::cout << "Se utilizara como comienzo el cubo: " << c->to_string() << "\n";
+    std::cout << "Los movimientos realizados para desordenar son: " << desorden << "\n";
     c->reset_last();
     return c;
 }
@@ -160,7 +160,7 @@ bool is_goal(Cube *c) {
  * No implementada.
  */
 std::queue<std::string>* extract_solution(Cube *n) {
-    std::cout << "Encontre el goal." << std::endl;
+    std::cout << "Encontre el goal.\n";
     std::queue<std::string> *plan = new std::queue<std::string>;
     plan->push(pretty_last_to_str(n->get_last()));
     return plan;
@@ -183,7 +183,7 @@ Par* chequear_cond_parada(Cube* n, int g, int t) {
     std::queue<std::string> *plan;
     if (is_goal(n)) {
         plan = extract_solution(n);
-        std::cout << "Goal encontrado cuando t valia: " << t << std::endl;
+        std::cout << "Goal encontrado cuando t valia: " << t << "\n";
         par_retorno->first = plan;
         par_retorno->second = g;
         return par_retorno;
@@ -297,7 +297,7 @@ void validar_entrada(int argc, char const *argv[]) {
         } else {
             std::cout << "Advertencia: "<< argv_int;
             std::cout << ": valor invalido para cantidad de movimientos para desordenar. ";
-            std::cout << "Utilizando valor por defecto." << std::endl;
+            std::cout << "Utilizando valor por defecto.\n";
         }
     }
 }
@@ -312,17 +312,17 @@ int main(int argc, char const *argv[]) {
 
     //Se consigio una solucion
     if (plan != NULL) {
-        std::cout << "Plan encontrado: " << std::endl;
+        std::cout << "Plan encontrado: \n";
         int plan_size = plan->size();
         //Mostrar plan encontrado.
         for (int i =  0; i < plan_size; i++) {
             std::cout << plan->front() << " ";
             plan->pop();
         }
-        std::cout << std::endl;
+        std::cout << "\n";
     } else {
     //No se consiguio solucion
-        std::cout << "Plan no encontrado" << std::endl;
+        std::cout << "Plan no encontrado\n";
     }
 
     delete(plan);
