@@ -56,6 +56,8 @@ int main(int argc, char const *argv[]) {
     std::queue<std::string> *plan;
 
     load_pdb("../pdbs/", 1);
+    std::cout << " loaded the PDBs...\n";
+
     plan = IDA();
 
     //Se consigio una solucion
@@ -117,6 +119,11 @@ int h_value(Cube * c) {
     values[2] = e2pdb.value(c);
 
     int value = *std::max_element(values, values+3);
+
+    if (value == 127) {
+        error("How in the hell would 127 appear?\n", __LINE__, __FILE__);
+        throw -1;
+    }
 
     return value;
 }
@@ -350,7 +357,7 @@ bool get_option() {
             std::cout << "All done!\n";
             exit(0);
         case(4):
-            std::cout << "Proceeding with cube solving...\n";
+            std::cout << "Proceeding with cube solving...";
             return true;
         default:
             return false;
@@ -374,12 +381,15 @@ Cube* gen_random_cube(int moves) {
         switch(facelet) {
             case(0):
                 cube->clock(faces[faceIndex]);
+                std::cout << faces[faceIndex] << "- " << std::flush;
                 break;
             case(1):
                 cube->counter(faces[faceIndex]);
+                std::cout << faces[faceIndex] << "+ " << std::flush;
                 break;
             case(2):
                 cube->hundred(faces[faceIndex]);
+                std::cout << faces[faceIndex] << "++ " << std::flush;
                 break;
         }
     }
