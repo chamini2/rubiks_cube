@@ -308,11 +308,16 @@ bool applicable(int what, int last) {
     int face_what = what / 3;
     int face_last = last / 3;
 
+    // if no move ever done
+    if (last == -1) {
+        return true;
+    }
+
     if (face_last == face_what) {
         return false;
     }
 
-    if (face_last % 2 == 0 && face_last + 1 == face_what) {
+    if (face_last % 2 == 1 && face_last == face_what + 1) {
         return false;
     }
 

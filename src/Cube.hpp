@@ -9,6 +9,69 @@ int str_to_last(std::string last);
 bool applicable(int what, int last);
 
 class Cube {
+    public:
+        // Constructor
+        Cube();
+        Cube(int corners, int edges, int last, int low, int quan);
+        void reset_last();
+        ~Cube();
+        Cube* clone();
+
+        std::string to_string();
+        std::string corners_to_string();
+        std::string edges_to_string();
+        std::string printable();
+
+        bool equals(Cube* other);
+
+        // operations on the cube
+        void apply(int val);
+        void apply_inverse(int last);
+
+        void clock(char face);
+        void counter(char face);
+        void hundred(char face);
+
+        std::queue<Cube*>* succ();
+
+        int get_last();
+        int* get_corners();
+        int* get_edges();
+        bool equals_corners(int *other);
+        bool permutation_parity();
+        bool corner_parity();
+        bool edge_parity();
+        bool valid();
+
+    private:
+        int *corners;
+        int *edges;
+        int last;
+
+        int* switch_get(char chr);
+        void switch_set(char chr, int* face);
+
+        // getters and setters for the faces of the cube
+        int* get_face(int *face);
+        void set_face(int *face, int* poss);
+
+        int* get_front();
+        void set_front(int* face);
+        int* get_back();
+        void set_back(int* face);
+        int* get_right();
+        void set_right(int* face);
+        int* get_left();
+        void set_left(int* face);
+        int* get_top();
+        void set_top(int* face);
+        int* get_down();
+        void set_down(int* face);
+        int sum_of_face(char face);
+
+        std::string color_face(int* face, char chr);
+};
+
 /*
     We will begin by defining that a cube has the following faces and colors:
         front = white
@@ -72,65 +135,3 @@ class Cube {
     B -> goal orientation for other 4 edges
  */
 
-    public:
-        // Constructor
-        Cube();
-        Cube(int corners, int edges, int last, int low, int quan);
-        void reset_last();
-        ~Cube();
-        Cube* clone();
-
-        std::string to_string();
-        std::string corners_to_string();
-        std::string edges_to_string();
-        std::string printable();
-
-        bool equals(Cube* other);
-
-        // operations on the cube
-        void apply(int val);
-        void apply_inverse(int last);
-
-        void clock(char face);
-        void counter(char face);
-        void hundred(char face);
-
-        std::queue<Cube*>* succ();
-
-        int get_last();
-        int* get_corners();
-        int* get_edges();
-        bool equals_corners(int *other);
-        bool permutation_parity();
-        bool corner_parity();
-        bool edge_parity();
-        bool valid();
-
-    private:
-        int *corners;
-        int *edges;
-        int last;
-
-        int* switch_get(char chr);
-        void switch_set(char chr, int* face);
-
-        // getters and setters for the faces of the cube
-        int* get_face(int *face);
-        void set_face(int *face, int* poss);
-
-        int* get_front();
-        void set_front(int* face);
-        int* get_back();
-        void set_back(int* face);
-        int* get_right();
-        void set_right(int* face);
-        int* get_left();
-        void set_left(int* face);
-        int* get_top();
-        void set_top(int* face);
-        int* get_down();
-        void set_down(int* face);
-        int sum_of_face(char face);
-
-        std::string color_face(int* face, char chr);
-};

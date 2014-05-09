@@ -49,7 +49,7 @@ int main(int argc, char const *argv[]) {
     sol = IDA();
 
     if (sol) {
-        std::cout << "Plan encontrado: \n";
+        std::cout << "path found: \n";
         while (path.size() > 0) {
             tmp = path.back();
             path.pop_back();
@@ -57,7 +57,7 @@ int main(int argc, char const *argv[]) {
         }
         std::cout << "\n";
     } else {
-        std::cout << "Plan no encontrado\n";
+        std::cout << "no path found. :(\n";
     }
     return 0;
 }
@@ -160,15 +160,15 @@ std::pair<int,bool> bounded_dfs(int g, int t) {
 
     int new_t = std::numeric_limits<int>::max();
 
-    for( int i = 0; i < 18; ++i ) {
-        if( applicable(path.back(), i) ) {
+    for (int i = 0; i < 18; ++i) {
+        if (applicable(i, path.back())) {
             rubik.apply(i);
             path.push_back(i);
             std::pair<int,bool> r = bounded_dfs(g+1, t);
             rubik.apply_inverse(i);
 
             // consiguió solución
-            if( r.second ) return r;
+            if (r.second) return r;
 
             path.pop_back();
             new_t = r.first < new_t ? r.first : new_t;
