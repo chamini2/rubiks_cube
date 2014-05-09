@@ -159,9 +159,16 @@ std::pair<int,bool> bounded_dfs(int g, int t) {
     if( h == 0 ) return std::make_pair(g, true);
 
     int new_t = std::numeric_limits<int>::max();
+    int last;
+
+    if (path.size() == 0) {
+        last = -1;
+    } else {
+        last = path.back();
+    }
 
     for (int i = 0; i < 18; ++i) {
-        if (applicable(i, path.back())) {
+        if (applicable(i, last)) {
             rubik.apply(i);
             path.push_back(i);
             std::pair<int,bool> r = bounded_dfs(g+1, t);
