@@ -171,7 +171,9 @@ std::pair<int,bool> bounded_dfs(int g, int t) {
         if (applicable(i, last)) {
             rubik.apply(i);
             path.push_back(i);
+
             std::pair<int,bool> r = bounded_dfs(g+1, t);
+
             rubik.apply_inverse(i);
 
             // consiguió solución

@@ -294,13 +294,16 @@ void Cube::apply_inverse(int last) {
     int face = last / 3;
     int move = last % 3;
 
-    if (move == 0) {
-        move = 1;
-    } else if (move == 1) {
-        move = 0;
+    if (last == -1) {
+        return;
     }
 
-    apply(face + move);
+    // not (hundred)
+    if (move != 2) {
+        move = (move + 1) % 2;
+    }
+
+    apply(face * 3 + move);
 
 }
 

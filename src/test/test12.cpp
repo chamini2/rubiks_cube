@@ -9,6 +9,7 @@ int main(int argc, char const *argv[]) {
 
     std::cout << "size = " << size << "\n";
     std::cout << "test = " << (-1/3) << "\n";
+    std::cout << "cube = " << cube->to_string() << "\n";
 
     for (int i = 0; i < size; ++i) {
         delete cube;
@@ -16,6 +17,9 @@ int main(int argc, char const *argv[]) {
         q->pop();
     }
 
+    std::cout << "cube = " << cube->to_string() << "\n";
+    cube->apply_inverse(cube->get_last());
+    std::cout << "cube = " << cube->to_string() << "\n";
 
     return 0;
 }
