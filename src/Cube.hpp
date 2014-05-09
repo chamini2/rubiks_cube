@@ -6,6 +6,8 @@ std::string last_to_str(int last);
 std::string pretty_last_to_str(int last);
 int str_to_last(std::string last);
 
+bool applicable(int what, int last);
+
 class Cube {
 /*
     We will begin by defining that a cube has the following faces and colors:
@@ -70,7 +72,6 @@ class Cube {
     B -> goal orientation for other 4 edges
  */
 
-
     public:
         // Constructor
         Cube();
@@ -87,7 +88,9 @@ class Cube {
         bool equals(Cube* other);
 
         // operations on the cube
-        void move(int val);
+        void apply(int val);
+        void apply_inverse(int last);
+
         void clock(char face);
         void counter(char face);
         void hundred(char face);

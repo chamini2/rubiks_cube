@@ -19,7 +19,8 @@ Set::Set(int type) {
         // Edges
         this->max_size = 42577920;
     } else if (type == 3) {
-        this->max_size = 510935040;
+        // this->max_size = 510935040;
+        this->max_size = 42577920;
     }
     this->table = new int8_t[max_size];
     std::fill_n(table, max_size, 127);
@@ -95,6 +96,8 @@ int Set::rank_it(Cube* cube) {
         // Edges PDB
         case 2:
             return rank(12, cube->get_edges(), 6, 6, 2);
+        case 3:
+            return rank(12, cube->get_edges(), 0, 6, 2);
         default:
             error("rank_it | type = " + int_to_string(type), __LINE__, __FILE__);
             throw -1;

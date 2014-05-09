@@ -1,6 +1,10 @@
 #include <algorithm>
 #include "rank.hpp"
 
+int array[20];
+int inverse[20];
+int aux[20];
+
 void aux_unrank(int n, int r, int *array, int low) {
     if (n > low) {
         array_swap(array[n-1], array[r % n]);
@@ -8,10 +12,8 @@ void aux_unrank(int n, int r, int *array, int low) {
     }
 }
 
-int aux_rank(int n, int *array, int *inverse, int low);
-
 int *unrank(int n, int value, int low, int quan, int factor) {
-    int *array = new int[n];
+    int *array;
     int d, r, power = pow(factor, quan);
     int upp = low + quan;
     int new_low = n - quan;
@@ -21,58 +23,24 @@ int *unrank(int n, int value, int low, int quan, int factor) {
 
     // Identity array
     for (int i = 0; i < n; ++i) {
-        array[i] = i;
+        aux[i] = i;
     }
 
-    /*
-     * NEEDS TO BE GENERALIZED
-     */
-    if (low == 0 && quan == 6 && factor == 2) {
-        int *array_aux = new int[12];
+    array = new int[n];
 
-        aux_unrank(12, r, array, 6);
+    aux_unrank(n, r, aux, new_low);
+    swap_entire_array(n, aux, upp, array);
 
-        for (int i = 0; i < 6; ++i) {
-            array_aux[i+6] = array[i];
+    for (int i = upp - 1; i >= low; --i) {
+        if (factor == 3) {
+            array[i] += orien_to_axis(d % factor);
+        } else {
+            array[i] += edge_orien_to_axis(d % factor, i, array[i]);
         }
-
-        for (int i = 0; i < 6; ++i) {
-            array_aux[i] = array[i+6];
-        }
-
-        delete[] array;
-
-        for (int i = upp - 1; i >= low; --i) {
-            array_aux[i] += edge_orien_to_axis(d % factor, i, array_aux[i]);
-            d = d / factor;
-        }
-
-        return array_aux;
-    } else {
-        aux_unrank(upp, r, array, low);
-
-        // std::cout << "(unrank) n = " << n << ", new_low = " << new_low ;
-        int *inverse = inv_array(array, n);
-        int *array_copy = new int[12];
-        for (int i = 0; i < n; ++i) {
-            array_copy[i] = array[i];
-        }
-        // std::cout << ", rank  = " << aux_rank(n, array_copy, inverse, new_low) << "\n";
-        delete[] inverse;
-        delete[] array_copy;
-
-
-        for (int i = upp - 1; i >= low; --i) {
-            if (factor == 3) {
-                array[i] += orien_to_axis(d % factor);
-            } else {
-                array[i] += edge_orien_to_axis(d % factor, i, array[i]);
-            }
-            d = d / factor;
-        }
-
-        return array;
+        d = d / factor;
     }
+
+    return array;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -100,19 +68,17 @@ int aux_rank(int n, int *array, int *inverse, int low) {
  * irrelevant.
  */
 int rank(int n, int *array, int low, int quan, int factor) {
-    int *inverse;
-    int *aux;
     int value, orientation = 0;
     int upp = quan + low;
     int new_low = n - quan;
 
-    aux = swap_entire_array(n, array, upp);
+    swap_entire_array(n, array, upp, aux);
 
     for (int i = 0; i < n; ++i) {
         aux[i] = cubie_to_pos(aux[i]);
     }
 
-    inverse = inv_array(aux, n);
+    inv_array(aux, n, inverse);
     value = aux_rank(n, aux, inverse, new_low);
 
     value *= pow(factor, quan);
@@ -124,10 +90,6 @@ int rank(int n, int *array, int low, int quan, int factor) {
         }
     }
     value += orientation;
-
-    delete[] array;
-    delete[] aux;
-    delete[] inverse;
 
     return value;
 }

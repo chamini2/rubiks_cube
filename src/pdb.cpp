@@ -2,7 +2,7 @@
 
 void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor);
 
-int get_pdb(int which) {
+void get_pdb(int which) {
     FILE *file;
     int end = -1;
 
@@ -28,12 +28,10 @@ int get_pdb(int which) {
             if (file == NULL) {
                 error("main | file e2PDB did not open correctly", __LINE__, __FILE__);
             }
-            BFS(file, end, 2, 12, 0, 6, 2);
+            BFS(file, end, 3, 12, 0, 6, 2);
             fclose(file);
             break;
     }
-
-    return 0;
 }
 
 void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor) {
@@ -43,7 +41,7 @@ void BFS(FILE *file, int end, int type, int n, int low, int quan, int factor) {
 
     Cube* cube = new Cube;
     int info, size;
-    int8_t level = 0, last_level = -1;
+    int8_t level = 0, last_level = -2;
     int *array;
     int last;
     std::tuple<int, int, int8_t> node;

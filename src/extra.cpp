@@ -24,31 +24,24 @@ void array_swap(int &a, int &b) {
 }
 
 /* Swaps array, form the 'cut' position
- * swap_entire_array(8, [0,1,2,3,4,5,6,7], 5) = [5,6,7,0,1,2,3,4]
+ * swap_entire_array(8, [0,1,2,3,4,5,6,7], 5, [5,6,7,0,1,2,3,4])
  */
-int* swap_entire_array(int n, int *array, int cut) {
-    int *temp = new int[n];
+void swap_entire_array(int n, int *array, int cut, int *aux) {
     int right = n - cut;
 
     for (int i = 0; i < cut; ++i) {
-        temp[i+right] = array[i];
+        aux[i+right] = array[i];
     }
 
     for (int i = 0; i < right; ++i) {
-        temp[i] = array[i+cut];
+        aux[i] = array[i+cut];
     }
-
-    return temp;
 }
 
-int* inv_array(int* array, int size) {
-    int *inverse = new int[size];
-
+void inv_array(int* array, int size, int *inverse) {
     for (int i = 0; i < size; ++i) {
         inverse[array[i]] = i;
     }
-
-    return inverse;
 }
 
 

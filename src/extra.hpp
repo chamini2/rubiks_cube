@@ -8,8 +8,8 @@
 std::string int_to_string(int number);
 std::string array_to_string(int *array, int size);
 void array_swap(int &a, int &b);
-int* swap_entire_array(int n, int *array, int cut);
-int* inv_array(int* array, int size);
+void swap_entire_array(int n, int *array, int cut, int *aux);
+void inv_array(int* array, int size, int *inverse);
 void array_reverse(int* array, int size);
 void subarray_reverse(int *array, int i, int j);
 int factorial(int n);
